@@ -28,3 +28,9 @@ pnpm-debug.log*
 
 # Claude Code local overrides (machine-specific)
 .claude/settings.local.json
+
+# Playwright MCP artifacts
+.playwright-mcp/
+
+# Do not use claudedocs (project convention: docs/)
+claudedocs/

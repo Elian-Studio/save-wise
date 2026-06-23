@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청년도약계좌 ↔ 청년미래적금 갈아타기 계산기</title>
+<style>
+  :root{
+    --navy:#16284a; --navy2:#1f3a66; --blue:#2563eb; --blue-soft:#e8f0fe;
+    --green:#15803d; --green-soft:#e7f6ec; --amber:#b45309; --amber-soft:#fdf2e2;
+    --red:#b91c1c; --red-soft:#fdeaea; --ink:#1c2530; --muted:#5f6b7a;
+    --line:#e3e8ef; --bg:#f4f6f9; --card:#ffffff; --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); line-height:1.6;
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 18px 80px;}
+  header.top{background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff; padding:30px 0 26px; margin-bottom:26px;}
+  header.top .wrap{padding-bottom:0;}
+  header.top h1{font-size:24px; margin:0 0 8px; letter-spacing:-.4px;}
+  header.top p{margin:0; color:#c7d2e4; font-size:14px;}
+  .badges{margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;}
+  .badge{font-size:12.5px; padding:5px 11px; border-radius:999px; font-weight:600;}
+  .badge.dday{background:#ffe2e2; color:#a01616;}
+  .badge.base{background:#ffffff22; color:#fff; border:1px solid #ffffff44;}
+  .badge.live{background:#16a34a; color:#fff;}
+  h2.sec{font-size:18px; margin:30px 0 14px; padding-left:11px; border-left:4px solid var(--blue); letter-spacing:-.3px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:0 1px 2px #0b1b3a08;}
+  .grid{display:grid; gap:16px;}
+  .grid.cols3{grid-template-columns:repeat(3,1fr);}
+  .grid.cols2{grid-template-columns:repeat(2,1fr);}
+  .grid.cols4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:820px){.grid.cols3,.grid.cols2,.grid.cols4{grid-template-columns:1fr;}}
+  .field{margin-bottom:14px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{display:block; font-size:13.5px; font-weight:600; margin-bottom:6px; color:var(--ink);}
+  .field .hint{font-weight:400; color:var(--muted); font-size:12px;}
+  input[type=number],input[type=month],input[type=date],select{
+    width:100%; padding:10px 12px; border:1px solid #cfd6e0; border-radius:9px; font-size:14.5px;
+    background:#fff; color:var(--ink); font-family:inherit;
+  }
+  input:focus,select:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-soft);}
+  .row{display:flex; gap:10px; align-items:center;}
+  .check{display:flex; align-items:flex-start; gap:9px; padding:10px 12px; border:1px solid #cfd6e0; border-radius:9px; cursor:pointer; font-size:13.5px;}
+  .check input{margin-top:3px; width:16px; height:16px; flex:0 0 auto;}
+  .check .ck-sub{color:var(--muted); font-size:12px; display:block; margin-top:2px;}
+  .card .card-title{font-size:14px; font-weight:700; color:var(--navy); margin:0 0 14px; display:flex; align-items:center; gap:7px;}
+  .chip{display:inline-block; font-size:11.5px; padding:2px 8px; border-radius:6px; background:var(--blue-soft); color:var(--blue); font-weight:600;}
+  .verdict{border-radius:var(--radius); padding:24px; color:#fff; margin-bottom:6px;}
+  .verdict.switch{background:linear-gradient(135deg,#15803d,#0f6b32);}
+  .verdict.stay{background:linear-gradient(135deg,#1d4ed8,#1739a8);}
+  .verdict.close{background:linear-gradient(135deg,#b45309,#92420a);}
+  .verdict .vlabel{font-size:13px; opacity:.85; margin:0;}
+  .verdict .vmain{font-size:26px; font-weight:800; margin:4px 0 6px; letter-spacing:-.5px;}
+  .verdict .vsum{font-size:14.5px; opacity:.95; margin:0;}
+  .reasons{list-style:none; padding:0; margin:14px 0 0; display:grid; gap:7px;}
+  .reasons li{background:#ffffff1f; border-radius:8px; padding:9px 12px; font-size:13.5px;}
+  .panel{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+  .panel .ph{padding:14px 18px; font-weight:700; font-size:15px; color:#fff;}
+  .panel.stay .ph{background:var(--navy2);}
+  .panel.switch .ph{background:var(--green);}
+  .panel .pb{padding:18px;}
+  .bignum{font-size:24px; font-weight:800; letter-spacing:-.5px;}
+  .bignum.green{color:var(--green);} .bignum.blue{color:var(--blue);}
+  .kv{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dashed var(--line); font-size:13.5px;}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--muted);} .kv .v{font-weight:600;}
+  .eff{margin-top:12px; background:#f6f8fc; border-radius:9px; padding:10px 13px; font-size:13px; color:var(--muted);}
+  .eff b{color:var(--ink); font-size:15px;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{padding:9px 10px; text-align:right; border-bottom:1px solid var(--line);}
+  th:first-child,td:first-child{text-align:left;}
+  th:nth-child(3),td:nth-child(3){text-align:left;}
+  thead th{background:#f1f4f9; color:var(--navy); font-weight:700; font-size:12.5px;}
+  tr.me{background:var(--blue-soft);}
+  tr.best{background:var(--green-soft);}
+  .tag{font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:6px; white-space:nowrap;}
+  .tag.s{background:var(--green-soft); color:var(--green);}
+  .tag.k{background:var(--blue-soft); color:var(--blue);}
+  .tag.c{background:var(--amber-soft); color:var(--amber);}
+  .tag.g{background:#eef1f5; color:var(--muted);}
+  .note{background:var(--amber-soft); border:1px solid #f0d9b0; border-radius:10px; padding:13px 15px; font-size:13px; color:#6b4310; margin-top:14px;}
+  .note b{color:#7a3b06;}
+  .steps{counter-reset:s; list-style:none; padding:0; margin:0; display:grid; gap:8px;}
+  .steps li{counter-increment:s; padding:10px 12px 10px 42px; position:relative; background:#f6f8fc; border-radius:9px; font-size:13.5px;}
+  .steps li::before{content:counter(s); position:absolute; left:11px; top:50%; transform:translateY(-50%); width:22px; height:22px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;}
+  .src{font-size:12.5px; color:var(--muted);}
+  .src a{color:var(--blue); text-decoration:none;}
+  .src a:hover{text-decoration:underline;}
+  footer{margin-top:36px; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+  .disc{background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px 16px; font-size:12.5px; color:var(--muted); margin-top:16px;}
+  .mini{font-size:12px; color:var(--muted); margin-top:4px;}
+  .pill-rate{font-size:12px; color:var(--green); font-weight:700;}
+  .bestbox{background:var(--green-soft); border:1px solid #bfe3c9; border-radius:10px; padding:12px 15px; font-size:13.5px; margin-top:14px;}
+  .bestbox b{color:var(--green);}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>청년도약계좌 ↔ 청년미래적금 갈아타기 계산기</h1>
+    <p>내 상황과 거래은행을 넣으면 <b>유지/전환</b> 결론과 <b>나에게 가장 유리한 은행</b>을 찾아줍니다.</p>
+    <div class="badges">
+      <span class="badge base">기준일 2026-06-23</span>
+      <span class="badge dday" id="ddayBadge">신청 마감 D-…</span>
+      <span class="badge live">출처: 금융위·은행연합회·카드고릴라</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h2 class="sec">1. 내 상황 입력</h2>
+  <div class="grid cols3">
+    <div class="card">
+      <p class="card-title">👤 공통</p>
+      <div class="field">
+        <label>생년월일 <span class="hint">(병역기간 최대 6년 제외)</span></label>
+        <input type="date" id="birth" value="1997-05-10" min="1986-01-01" max="2010-12-31">
+        <div class="mini" id="ageLabel"></div>
+      </div>
+      <div class="field">
+        <label>연 총급여 <span class="hint">(만원)</span></label>
+        <input type="number" id="salary" value="3000" min="0" step="100">
+        <div class="mini" id="bracketLabel"></div>
+      </div>
+      <div class="field">
+        <label>저축 목적</label>
+        <select id="goal">
+          <option value="amount">목돈 최대화</option>
+          <option value="liquid">유동성·짧은 만기 선호</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">🏦 청년도약계좌 <span class="chip">현재 보유</span></p>
+      <div class="field">
+        <label>가입 시기</label>
+        <input type="month" id="leapStart" value="2024-12">
+        <div class="mini" id="elapsedLabel"></div>
+      </div>
+      <div class="field">
+        <label>그동안 회당(월) 납입액 <span class="hint">(만원, 최대 70)</span></label>
+        <input type="number" id="leapMonthly" value="70" min="0" max="70" step="1">
+      </div>
+      <div class="field">
+        <label>그동안 납입 횟수 <span class="hint">(회)</span></label>
+        <input type="number" id="paidCount" value="18" min="0" max="60" step="1">
+        <div class="mini" id="paidNote"></div>
+      </div>
+      <div class="eff" id="totalPaidBox" style="margin:0 0 14px;"></div>
+      <div class="field">
+        <label>현재 적용 금리 <span class="hint">(%, 기본+우대)</span></label>
+        <input type="number" id="leapRate" value="4.5" min="0" max="6" step="0.1">
+        <div class="mini">최초 3년 고정 → 이후 1년마다 변동(보도: 변동분 4.5%→3.0%대 하락)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">✨ 청년미래적금 <span class="chip">전환 대상</span></p>
+      <div class="field">
+        <label>월 납입액 <span class="hint">(만원, 최대 50)</span></label>
+        <input type="number" id="miraeMonthly" value="50" min="0" max="50" step="1">
+      </div>
+      <div class="field" style="margin-top:10px;">
+        <label class="check" for="advisory">
+          <input type="checkbox" id="advisory">
+          <span>서민금융진흥원 ‘청년 재무상담’ 이수 <span class="ck-sub">전 은행 공통 +0.2%p</span></span>
+        </label>
+      </div>
+      <div class="bestbox" id="bestBox"></div>
+    </div>
+  </div>
+
+  <!-- 우대형 자가진단 -->
+  <div class="card" style="margin-top:16px;">
+    <p class="card-title">🎯 정부기여금 유형 — 우대형(12%) 자격 자가진단</p>
+    <div class="grid cols2">
+      <label class="check" for="smeNew">
+        <input type="checkbox" id="smeNew" checked>
+        <span><b>중소기업 신규취업자</b>에 해당
+          <span class="ck-sub">전년도(2025.1~12) 최초 취업 + 현재 중소기업 재직. 생애최초가 아니어도 해당 기업 취업 전 고용보험 합산 1년 미만이면 인정.</span>
+        </span>
+      </label>
+      <div class="card" style="background:#f6f8fc; box-shadow:none; display:flex; align-items:center;">
+        <div>현재 적용 유형:
+          <span id="typeLabel" class="pill-rate" style="font-size:15px;">우대형 (납입액의 12%)</span>
+          <div class="mini">일반형은 납입액의 6%, 우대형은 12%를 정부가 매월 매칭 지급합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 내 거래현황 (우대금리 매칭) -->
+  <div class="card" style="margin-top:16px;">
+    <p class="card-title">💳 내 거래현황 — 은행별 우대금리 매칭용</p>
+    <div class="grid cols4">
+      <div class="field">
+        <label>급여이체(주거래) 은행</label>
+        <select id="payBank"></select>
+        <div class="mini">급여이체+자동이체 충족 시 그 은행 ‘최대 우대’ 적용</div>
+      </div>
+      <div class="field">
+        <label>주 사용 카드사</label>
+        <select id="cardCo"></select>
+        <div class="mini" id="cardCondNote"></div>
+      </div>
+      <div class="field">
+        <label class="check" for="cardSpend" style="margin-top:24px;">
+          <input type="checkbox" id="cardSpend" checked>
+          <span>카드 월 실적 충족 가능</span>
+        </label>
+      </div>
+      <div class="field">
+        <label class="check" for="autoTransfer" style="margin-top:24px;">
+          <input type="checkbox" id="autoTransfer" checked>
+          <span>적금 자동이체 등 주거래 조건 충족 가능</span>
+        </label>
+      </div>
+    </div>
+    <div class="mini" style="margin-top:6px;">은행을 직접 고르지 않아도 됩니다 — 위 거래현황으로 14개 은행 중 <b>내가 가장 높은 금리를 받을 수 있는 곳</b>을 자동으로 찾습니다.</div>
+  </div>
+
+  <h2 class="sec">2. 결론 — 유지할까, 갈아탈까</h2>
+  <div id="verdict"></div>
+
+  <h2 class="sec">3. 두 선택 비교</h2>
+  <div class="mini" style="margin:-6px 0 14px;">“만기 수령액”은 각 상품을 만기까지 채웠을 때 받는 금액(원금+정부기여금+이자, 모두 비과세)입니다.</div>
+  <div class="grid cols2">
+    <div class="panel stay">
+      <div class="ph">① 그대로 유지 — 청년도약계좌(5년)</div>
+      <div class="pb" id="stayBody"></div>
+    </div>
+    <div class="panel switch">
+      <div class="ph">② 전환 — 청년미래적금(3년)</div>
+      <div class="pb" id="switchBody"></div>
+    </div>
+  </div>
+  <div class="note" id="fairNote"></div>
+
+  <h2 class="sec">4. 내 거래현황으로 본 은행별 적용금리 랭킹</h2>
+  <div class="card">
+    <table id="bankTable">
+      <thead><tr><th>은행</th><th>적용금리</th><th>우대 적용 근거</th><th>카드 실적조건(공시)</th><th>3년 만기수령</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="mini" style="margin-top:10px;" id="bankTableNote"></div>
+  </div>
+
+  <h2 class="sec">5. 시나리오별 결론 (변수 하나씩 바꿔보기)</h2>
+  <div class="grid cols2">
+    <div class="card">
+      <p class="card-title">소득구간별</p>
+      <table id="scnIncome"><thead><tr><th>총급여(만원)</th><th>도약 월기여금</th><th>3년 순이익 차액</th><th>추천</th></tr></thead><tbody></tbody></table>
+      <div class="mini" style="margin-top:8px;">유형·거래현황 고정. 차액 = 같은 월납입 3년 기준 (미래적금 − 도약).</div>
+    </div>
+    <div class="card">
+      <p class="card-title">도약계좌 경과기간별</p>
+      <table id="scnElapsed"><thead><tr><th>경과(개월)</th><th>잔여</th><th>해지환급금</th><th>추천</th></tr></thead><tbody></tbody></table>
+      <div class="mini" style="margin-top:8px;">만기 임박일수록 ‘마무리 유지’ 신호가 강해집니다.</div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <p class="card-title">유형별 (일반형 6% vs 우대형 12%)</p>
+    <table id="scnType"><thead><tr><th>유형</th><th>미래 적용금리</th><th>미래 연 실질효과율</th><th>3년 순이익 차액</th><th>추천</th></tr></thead><tbody></tbody></table>
+  </div>
+
+  <h2 class="sec">6. 갈아탄다면 — 순서를 반드시 지키세요</h2>
+  <div class="card">
+    <ol class="steps">
+      <li><b>청년미래적금 가입 신청</b> (2026.6.22~7.3, 첫 주는 출생연도 끝자리 5부제)</li>
+      <li><b>심사·가입대상 통보 확인</b> (7.6~7.24)</li>
+      <li><b>청년미래적금 계좌 개설</b> (7.27~8.7)</li>
+      <li><b>청년도약계좌 ‘특별중도해지’ 신청</b> — 반드시 미래적금 계좌 개설 <u>후</u></li>
+      <li><b>청년미래적금 납입 개시</b></li>
+    </ol>
+    <div class="note"><b>⚠️ 순서 주의:</b> 도약계좌를 <u>먼저</u> 해지하면 갈아타기 특례가 사라져 정부기여금·비과세 혜택을 잃습니다. ‘특별중도해지’를 거치면 기존 납입분의 기여금·비과세가 <b>손실 없이 환급</b>됩니다. 단 해지수령금을 미래적금에 <b>일시납입(이월)하는 것은 불가</b> — 도약계좌의 원금·납입기간은 승계되지 않고 현금으로 돌려받습니다(신용점수 가점만 합산). 갈아타기는 <b>2026년 6월 최초 가입기간에만</b> 가능한 일회성 기회입니다.</div>
+  </div>
+
+  <h2 class="sec">7. 상품 기본 비교</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>구분</th><th>청년도약계좌</th><th>청년미래적금</th></tr></thead>
+      <tbody>
+        <tr><td>만기</td><td>5년 (60개월)</td><td>3년 (36개월)</td></tr>
+        <tr><td>월 납입한도</td><td>70만원</td><td>50만원</td></tr>
+        <tr><td>금리</td><td>기본 3년 고정 후 변동 (최대 ~6%)</td><td>기본 5% + 우대(3년 고정), 최고 7~8%</td></tr>
+        <tr><td>정부기여금</td><td>소득구간별 월 최대 2.1~3.3만원</td><td>납입액의 6%(일반)·12%(우대) 월 매칭</td></tr>
+        <tr><td>비과세</td><td>O</td><td>O</td></tr>
+        <tr><td>참여기관</td><td>—</td><td>14개 기관(+토스 12월)</td></tr>
+        <tr><td>실질효과(광고)</td><td>최대 연 9.5%대</td><td>일반형 13~14% · 우대형 18~19%대</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="sec">참고 출처</h2>
+  <div class="card src">
+    <p style="margin-top:0;">모든 수치는 <b>2026-06-23 기준</b>입니다. 가입 전 은행·서민금융진흥원·은행연합회 포털에서 최신값을 재확인하세요.</p>
+    <ul>
+      <li>금융위원회: <a href="https://www.fsc.go.kr/no010101/87005" target="_blank" rel="noopener">87005(은행별 금리)</a> · <a href="https://www.fsc.go.kr/no010101/87106" target="_blank" rel="noopener">87106(갈아타기)</a> · <a href="https://www.fsc.go.kr/no010101/86767" target="_blank" rel="noopener">86767</a> · <a href="https://www.fsc.go.kr/edu/news/83782" target="_blank" rel="noopener">83782(도약 기여금 확대)</a></li>
+      <li>은행연합회 소비자포털: <a href="https://portal.kfb.or.kr/compare/receiving_youth_future_2.php" target="_blank" rel="noopener">청년미래적금 금리·우대조건 비교</a></li>
+      <li>은행별 카드 우대조건: <a href="https://www.card-gorilla.com/contents/detail/4278" target="_blank" rel="noopener">카드고릴라 — 청년미래적금 은행별 금리 비교</a></li>
+      <li>서민금융진흥원: <a href="https://www.kinfa.or.kr/financialProduct/youthFutureSavings.do" target="_blank" rel="noopener">청년미래적금</a></li>
+    </ul>
+  </div>
+
+  <div class="disc" id="disclaimer"></div>
+
+  <footer>
+    <p>본 계산기는 공개 자료 기반 <b>참고용 추정</b>입니다. 이자·실질효과율은 단리 적금 환산 가정이며, 은행별 우대금리는 ‘주거래 충족 시 기관 최대 우대 도달’로 단순화했습니다(항목별 세부 %p는 은행연합회 포털·각 은행 확인). 카드 우대는 카드고릴라 공시(5개 은행) 기준입니다. 최종 결정 전 반드시 해당 은행과 서민금융진흥원에 확인하세요. 세무·금융 자문이 아닙니다.</p>
+  </footer>
+</div>
+
+<script>
+const MAN = 10000;
+function simpleInterest(m, n, r){ return m * r * (n*(n+1)/2) / 12; }
+
+function leapContribMonthly(income, monthlyWon){
+  const m = monthlyWon / MAN; let c;
+  if(income <= 2400)      c = Math.min(m,40)*0.060 + Math.max(0,Math.min(m,70)-40)*0.030;
+  else if(income <= 3600) c = Math.min(m,50)*0.046 + Math.max(0,Math.min(m,70)-50)*0.030;
+  else if(income <= 4800) c = Math.min(m,60)*0.037 + Math.max(0,Math.min(m,70)-60)*0.030;
+  else if(income <= 6000) c = Math.min(m,70)*0.030;
+  else                    c = 0;
+  return c * MAN;
+}
+function miraeContribMonthly(monthlyWon, type){ return monthlyWon * (type==='pref'?0.12:0.06); }
+
+// 청년미래적금 참여 14개 기관 (FSC: 3%p그룹 최고8% / 2%p그룹 최고7%)
+// cardPref: 카드 우대금리(검증, 카드고릴라). null = 공시 미확인
+const BANKS = [
+  {id:'ibk',     name:'IBK기업',   grp:3, cardPref:0.005, cardCond:'카드 만기까지 월평균 30만원↑'},
+  {id:'nh',      name:'NH농협',    grp:3, cardPref:0.007, cardCond:'카드 만기 전전월말까지 월평균 20만원↑'},
+  {id:'shinhan', name:'신한',      grp:3, cardPref:0.002, cardCond:'가입기간 중 18개월↑ 신한카드 사용'},
+  {id:'woori',   name:'우리',      grp:3, cardPref:0.005, cardCond:'만기 전전월말까지 우리카드 사용'},
+  {id:'hana',    name:'하나',      grp:3, cardPref:0.006, cardCond:'하나카드 결제 24회차↑'},
+  {id:'kb',      name:'KB국민',    grp:3, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'post',    name:'우체국',    grp:3, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'im',      name:'iM뱅크',    grp:2, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'busan',   name:'BNK부산',   grp:2, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'gyeongnam',name:'BNK경남',  grp:2, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'gwangju', name:'광주',      grp:2, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'jeonbuk', name:'전북',      grp:2, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'suhyup',  name:'수협',      grp:2, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'},
+  {id:'kakao',   name:'카카오뱅크', grp:2, cardPref:null,  cardCond:'카드 우대조건 공시 미확인'}
+];
+
+// 내 거래현황 → 은행 적용금리
+function bankRate(bank, I){
+  const base = 0.05;
+  const groupMax = bank.grp===3 ? 0.03 : 0.02;
+  let inst = 0, tier = '기본금리만';
+  if(I.payBank===bank.id && I.autoTransfer){ inst = groupMax; tier = '주거래 최대우대'; }
+  else if(I.cardCo===bank.id && I.cardSpend && bank.cardPref!=null){ inst = bank.cardPref; tier = '카드 우대'; }
+  else if(I.payBank===bank.id){ inst = 0; tier = '급여이체(자동이체 필요)'; }
+  inst = Math.min(inst, groupMax);
+  let common = 0;
+  if(I.salary<=3600) common += 0.005;
+  if(I.advisory)     common += 0.002;
+  return {r: base+inst+common, inst, common, tier, groupMax};
+}
+function bestBank(I){
+  let best=null;
+  BANKS.forEach(b=>{ const x=bankRate(b,I); if(!best || x.r>best.r) best={bank:b, ...x}; });
+  return best;
+}
+
+function product(monthlyWon, n, r, contribMonthlyWon){
+  const principal = monthlyWon * n;
+  const contrib   = contribMonthlyWon * n;
+  const interest  = simpleInterest(monthlyWon, n, r) + simpleInterest(contribMonthlyWon, n, r);
+  const benefit   = contrib + interest;
+  const total     = principal + benefit;
+  const avgYears  = ((n+1)/2)/12;
+  const eff       = principal>0 ? benefit/(principal*avgYears) : 0;
+  return {principal, contrib, interest, benefit, total, eff, n};
+}
+
+function won2man(won){ return Math.round(won/MAN); }
+function fmtMoney(won){
+  const man = Math.round(won/MAN);
+  if(Math.abs(man) >= 10000){
+    const eok = Math.trunc(man/10000), rem = Math.abs(man%10000);
+    return eok + '억' + (rem? ' ' + rem.toLocaleString('ko-KR') + '만' : '') + '원';
+  }
+  return man.toLocaleString('ko-KR') + '만원';
+}
+function pct(x){ return (x*100).toFixed(1) + '%'; }
+
+function readInputs(){
+  const BASE = new Date(2026, 5, 23);
+  const salary = +document.getElementById('salary').value || 0;
+
+  const birth = document.getElementById('birth').value;
+  let age = 0;
+  if(birth){
+    const [by,bm,bd] = birth.split('-').map(Number);
+    age = BASE.getFullYear()-by - (((BASE.getMonth()+1) < bm || ((BASE.getMonth()+1)===bm && BASE.getDate()<bd)) ? 1 : 0);
+  }
+
+  const leapStart = document.getElementById('leapStart').value;
+  let elapsed = 18;
+  if(leapStart){
+    const [y,m] = leapStart.split('-').map(Number);
+    elapsed = (BASE.getFullYear()-y)*12 + (BASE.getMonth()-(m-1));
+  }
+  elapsed = Math.max(0, Math.min(60, elapsed));
+
+  return {
+    age, salary,
+    goal:document.getElementById('goal').value,
+    elapsed,
+    paidCount: Math.max(0, Math.min(60, +document.getElementById('paidCount').value||0)),
+    leapMonthly:(+document.getElementById('leapMonthly').value||0)*MAN,
+    leapRate:(+document.getElementById('leapRate').value||0)/100,
+    miraeMonthly:(+document.getElementById('miraeMonthly').value||0)*MAN,
+    payBank:document.getElementById('payBank').value,
+    cardCo:document.getElementById('cardCo').value,
+    cardSpend:document.getElementById('cardSpend').checked,
+    autoTransfer:document.getElementById('autoTransfer').checked,
+    advisory:document.getElementById('advisory').checked,
+    type:document.getElementById('smeNew').checked ? 'pref' : 'gen'
+  };
+}
+
+function bracketName(s){
+  if(s<=2400) return '2,400만원 이하 (기여금 매칭률 최고)';
+  if(s<=3600) return '2,400~3,600만원';
+  if(s<=4800) return '3,600~4,800만원';
+  if(s<=6000) return '4,800~6,000만원';
+  if(s<=7500) return '6,000~7,500만원 (도약 기여금 0·비과세만)';
+  return '7,500만원 초과 (가입 불가 구간)';
+}
+
+function compute(I){
+  const bb = bestBank(I);
+  const bank = bb.bank, rMirae = bb.r;
+
+  const leapContrib = leapContribMonthly(I.salary, I.leapMonthly);
+  const remaining = 60 - I.elapsed;
+  const k = Math.min(I.paidCount, 60);
+  const nStay = Math.min(k + remaining, 60);
+
+  const stay   = product(I.leapMonthly, nStay, I.leapRate, leapContrib);
+  const refund = product(I.leapMonthly, k, I.leapRate, leapContrib);
+
+  const miraeContrib = miraeContribMonthly(I.miraeMonthly, I.type);
+  const mirae = product(I.miraeMonthly, 36, rMirae, miraeContrib);
+
+  const X = I.miraeMonthly;
+  const leap36 = product(X, 36, I.leapRate, leapContribMonthly(I.salary, X));
+  const mirae36 = product(X, 36, rMirae, miraeContribMonthly(X, I.type));
+  const diff3yr = mirae36.benefit - leap36.benefit;
+
+  return {bb, bank, rMirae, stay, mirae, refund, leap36, mirae36, diff3yr, remaining, leapContrib, k, nStay, totalPaid:I.leapMonthly*k};
+}
+
+function recommend(I, C){
+  const reasons = []; let score = 0;
+  if(I.type==='pref'){ score += 2; reasons.push('우대형(12%) 자격 → 정부기여금이 일반형의 2배. 전환의 가장 강력한 이유.'); }
+  if(C.diff3yr > 0){ score += 1.2; reasons.push('같은 돈을 3년 넣을 때 미래적금이 도약 대비 약 <b>'+fmtMoney(C.diff3yr)+'</b> 더 이득(기여금+이자).'); }
+  else { score -= 1.2; reasons.push('같은 돈 3년 기준 도약이 약 <b>'+fmtMoney(-C.diff3yr)+'</b> 더 이득 — 유지가 유리.'); }
+  if(I.salary > 6000){ score += 1.2; reasons.push('총급여 6,000만원 초과 → 도약은 정부기여금 0(비과세만). 미래적금 기여금이 큰 이점.'); }
+  if(C.rMirae >= I.leapRate + 0.01){ score += 0.6; reasons.push('내 거래현황 기준 미래적금 적용금리 '+pct(C.rMirae)+'('+C.bank.name+') ≥ 현재 도약 금리 '+pct(I.leapRate)+'.'); }
+  if(C.remaining <= 12){ score -= 1.5; reasons.push('도약 만기까지 '+C.remaining+'개월 — 거의 마무리 단계. 전환은 새로 3년 시작이라 실익이 줄어 <b>유지 후 만기 수령</b>이 무난.'); }
+  else if(C.remaining >= 42){ score += 0.5; reasons.push('도약 잔여 '+C.remaining+'개월로 길어 5년 묶임 부담이 큼 — 3년 만기 전환 매력.'); }
+  if(I.goal==='liquid'){ score += 0.4; reasons.push('유동성 선호 → 만기가 5년→3년으로 짧아지는 전환이 목적에 부합.'); }
+
+  let cls, main;
+  if(score >= 1.0){ cls='switch'; main='청년미래적금으로 전환을 권장'; }
+  else if(score <= -1.0){ cls='stay'; main='청년도약계좌 유지를 권장'; }
+  else { cls='close'; main='접전 — 우선순위(목돈 vs 유동성)로 결정'; }
+  return {cls, main, reasons:reasons.slice(0,4), score};
+}
+
+function panelStay(C, I){
+  return `
+    <div class="bignum">${fmtMoney(C.stay.total)}</div>
+    <div class="mini" style="margin:2px 0 12px;">5년 만기 수령액 (총 ${C.nStay}회 납입 가정 · 원금+기여금+이자)</div>
+    <div class="kv"><span class="k">내 납입원금 (총 ${C.nStay}회)</span><span class="v">${fmtMoney(C.stay.principal)}</span></div>
+    <div class="kv"><span class="k">정부기여금 (월 ${fmtMoney(C.leapContrib)})</span><span class="v">${fmtMoney(C.stay.contrib)}</span></div>
+    <div class="kv"><span class="k">이자 (비과세)</span><span class="v">${fmtMoney(C.stay.interest)}</span></div>
+    <div class="kv"><span class="k">순이익(혜택) 합계</span><span class="v" style="color:var(--blue)">${fmtMoney(C.stay.benefit)}</span></div>
+    <div class="eff">연 실질효과율 <b class="bignum blue" style="font-size:18px;">${pct(C.stay.eff)}</b> · 잔여 의무기간 <b>${C.remaining}개월</b></div>`;
+}
+function panelSwitch(C, I){
+  return `
+    <div class="bignum green">${fmtMoney(C.mirae.total)}</div>
+    <div class="mini" style="margin:2px 0 12px;">미래적금 3년 만기 수령액 · 내 최적 은행 <b>${C.bank.name}</b> (적용금리 ${pct(C.rMirae)}, ${C.bb.tier})</div>
+    <div class="kv"><span class="k">내 납입원금</span><span class="v">${fmtMoney(C.mirae.principal)}</span></div>
+    <div class="kv"><span class="k">정부기여금 (${I.type==='pref'?'우대 12%':'일반 6%'})</span><span class="v">${fmtMoney(C.mirae.contrib)}</span></div>
+    <div class="kv"><span class="k">이자 (비과세)</span><span class="v">${fmtMoney(C.mirae.interest)}</span></div>
+    <div class="kv"><span class="k">순이익(혜택) 합계</span><span class="v" style="color:var(--green)">${fmtMoney(C.mirae.benefit)}</span></div>
+    <div class="eff">연 실질효과율 <b class="bignum green" style="font-size:18px;">${pct(C.mirae.eff)}</b> · 의무기간 <b>36개월</b>
+      <div style="margin-top:8px; color:var(--ink);">＋ 도약계좌 해지환급금 <b>${fmtMoney(C.refund.total)}</b> 별도 수령<br>
+        <span class="mini">그동안 ${C.k}회 납입분(원금 ${fmtMoney(C.refund.principal)} + 기여금 ${fmtMoney(C.refund.contrib)} + 이자 ${fmtMoney(C.refund.interest)}) — 기여금·비과세 보존, 손실 0</span></div>
+    </div>`;
+}
+
+function renderBankTable(I){
+  const tbody = document.querySelector('#bankTable tbody'); tbody.innerHTML='';
+  const best = bestBank(I);
+  const rows = BANKS.map(b=>{
+    const x = bankRate(b,I);
+    const p = product(I.miraeMonthly,36,x.r,miraeContribMonthly(I.miraeMonthly,I.type));
+    return {b,x,total:p.total};
+  }).sort((a,b)=> b.x.r-a.x.r || (a.b.grp-b.b.grp));
+  rows.forEach(row=>{
+    const tr=document.createElement('tr');
+    if(row.b.id===best.bank.id) tr.className='best';
+    const tierTag = row.x.tier.includes('최대')?'<span class="tag s">'+row.x.tier+'</span>'
+      : row.x.tier.includes('카드')?'<span class="tag k">'+row.x.tier+'</span>'
+      : '<span class="tag g">'+row.x.tier+'</span>';
+    tr.innerHTML=`<td>${row.b.name}<span class="mini"> (최고 ${row.b.grp===3?'8':'7'}%)</span>${row.b.id===best.bank.id?' <span class="tag s">최적</span>':''}</td>
+      <td><b>${pct(row.x.r)}</b></td><td>${tierTag}</td>
+      <td style="font-size:12px;color:var(--muted)">${row.b.cardPref!=null?row.b.cardCond+' (+'+(row.b.cardPref*100).toFixed(1)+'%p)':'<i>공시 미확인</i>'}</td>
+      <td>${fmtMoney(row.total)}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('bankTableNote').innerHTML =
+    '‘주거래 최대우대’ = 급여이체 은행 지정 + 자동이체 충족 시 그 은행의 기관 최대 우대(3%p/2%p)까지 도달 가정. 카드 우대는 카드고릴라 공시(5개 은행) 기준이며, 항목별 세부 %p와 미공시 은행은 <a href="https://portal.kfb.or.kr/compare/receiving_youth_future_2.php" target="_blank" rel="noopener">은행연합회 소비자포털</a>에서 확인하세요.';
+}
+
+function recTag(score){
+  if(score>=1.0) return '<span class="tag s">전환</span>';
+  if(score<=-1.0) return '<span class="tag k">유지</span>';
+  return '<span class="tag c">접전</span>';
+}
+
+function renderScenarios(I){
+  const incs=[2000,3000,4200,5400,6500];
+  const tb1=document.querySelector('#scnIncome tbody'); tb1.innerHTML='';
+  incs.forEach(s=>{
+    const J={...I,salary:s}; const C=compute(J); const R=recommend(J,C);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${s.toLocaleString()}</td><td>${fmtMoney(C.leapContrib)}</td>
+      <td>${C.diff3yr>=0?'+':''}${fmtMoney(C.diff3yr)}</td><td>${recTag(R.score)}</td>`;
+    tb1.appendChild(tr);
+  });
+  const els=[6,18,30,42,54];
+  const tb2=document.querySelector('#scnElapsed tbody'); tb2.innerHTML='';
+  els.forEach(e=>{
+    const J={...I,elapsed:e,paidCount:e}; const C=compute(J); const R=recommend(J,C);
+    const tr=document.createElement('tr');
+    if(e===I.elapsed) tr.className='me';
+    tr.innerHTML=`<td>${e}</td><td>${60-e}</td><td>${fmtMoney(C.refund.total)}</td><td>${recTag(R.score)}</td>`;
+    tb2.appendChild(tr);
+  });
+  const tb3=document.querySelector('#scnType tbody'); tb3.innerHTML='';
+  [['gen','일반형 (6%)'],['pref','우대형 (12%)']].forEach(([t,label])=>{
+    const J={...I,type:t}; const C=compute(J); const R=recommend(J,C);
+    const tr=document.createElement('tr');
+    if(t===I.type) tr.className='me';
+    tr.innerHTML=`<td>${label}</td><td>${pct(C.rMirae)}</td><td>${pct(C.mirae.eff)}</td>
+      <td>${C.diff3yr>=0?'+':''}${fmtMoney(C.diff3yr)}</td><td>${recTag(R.score)}</td>`;
+    tb3.appendChild(tr);
+  });
+}
+
+function render(){
+  const I=readInputs();
+  const C=compute(I);
+  const R=recommend(I,C);
+
+  const ageOk = I.age>=19 && I.age<=34;
+  document.getElementById('ageLabel').innerHTML = '만 <b>'+I.age+'세</b> · 가입연령(만 19~34) '+
+    (ageOk ? '충족' : '<span style="color:var(--amber)">초과 — 병역기간만큼 차감 시 가능할 수 있음</span>');
+  document.getElementById('bracketLabel').textContent='소득구간: '+bracketName(I.salary);
+  document.getElementById('elapsedLabel').textContent='경과 '+I.elapsed+'개월 · 만기까지 '+C.remaining+'개월';
+  document.getElementById('typeLabel').textContent = I.type==='pref' ? '우대형 (납입액의 12%)' : '일반형 (납입액의 6%)';
+
+  document.getElementById('totalPaidBox').innerHTML =
+    '그동안 납입한 총 원금 <b class="bignum blue" style="font-size:18px;">'+fmtMoney(C.totalPaid)+'</b>'+
+    '<div class="mini" style="margin-top:2px;">회당 '+won2man(I.leapMonthly)+'만원 × '+C.k+'회</div>';
+  const pn = document.getElementById('paidNote');
+  if(I.paidCount > I.elapsed) pn.innerHTML = '<span style="color:var(--amber)">⚠ 가입 경과('+I.elapsed+'개월)보다 납입 횟수가 많습니다 — 확인해 주세요.</span>';
+  else pn.textContent = '자유적립식이라 매월 납입하지 않았다면 실제 횟수를 입력하세요.';
+
+  // 카드사 조건 안내
+  const cc = BANKS.find(b=>b.id===I.cardCo);
+  document.getElementById('cardCondNote').textContent = cc ? cc.cardCond : '카드사를 고르면 우대조건이 표시됩니다.';
+
+  // 최적 은행 박스
+  document.getElementById('bestBox').innerHTML =
+    '내 거래현황 기준 <b>최적 은행</b><br><b style="font-size:16px;">'+C.bank.name+' · '+pct(C.rMirae)+'</b>'+
+    '<div class="mini" style="margin-top:2px;">'+C.bb.tier+(C.bb.common>0?' + 공통우대 '+(C.bb.common*100).toFixed(1)+'%p':'')+'</div>';
+
+  const v=document.getElementById('verdict');
+  v.innerHTML=`<div class="verdict ${R.cls}">
+      <p class="vlabel">내 상황 기준 추천</p>
+      <p class="vmain">${R.main}</p>
+      <p class="vsum">유지 시 만기수령 <b>${fmtMoney(C.stay.total)}</b> · 전환 시 미래적금 만기 <b>${fmtMoney(C.mirae.total)}</b>(${C.bank.name}) + 도약 환급 <b>${fmtMoney(C.refund.total)}</b></p>
+      <ul class="reasons">${R.reasons.map(x=>'<li>'+x+'</li>').join('')}</ul>
+    </div>`;
+
+  document.getElementById('stayBody').innerHTML=panelStay(C,I);
+  document.getElementById('switchBody').innerHTML=panelSwitch(C,I);
+
+  document.getElementById('fairNote').innerHTML =
+    `<b>공정 비교(같은 돈 기준):</b> 동일하게 <b>월 ${won2man(I.miraeMonthly)}만원을 3년간</b> 넣는다고 하면, 순이익(기여금+이자)은 미래적금 <b>${fmtMoney(C.mirae36.benefit)}</b> vs 도약계좌 <b>${fmtMoney(C.leap36.benefit)}</b> → 미래적금이 ${C.diff3yr>=0?'<b>'+fmtMoney(C.diff3yr)+' 더 이득</b>':'<b>'+fmtMoney(-C.diff3yr)+' 적음</b>'}. `+
+    `다만 ① 도약계좌는 월 70만원까지 납입 가능(미래는 50만), ② 해지환급금은 미래적금에 일시납입이 안 돼 여유자금으로 따로 굴려야 합니다.`;
+
+  renderBankTable(I);
+  renderScenarios(I);
+}
+
+(function init(){
+  // 거래은행/카드사 셀렉트
+  const payBank=document.getElementById('payBank'), cardCo=document.getElementById('cardCo');
+  [['payBank',payBank],['cardCo',cardCo]].forEach(([_,sel])=>{
+    const none=document.createElement('option'); none.value=''; none.textContent='없음/해당없음'; sel.appendChild(none);
+    BANKS.forEach(b=>{ const o=document.createElement('option'); o.value=b.id; o.textContent=b.name+(b.grp===3?' (최고8%)':' (최고7%)'); sel.appendChild(o); });
+  });
+  payBank.value='nh'; cardCo.value='nh';
+
+  const dead=new Date(2026,6,3), base=new Date(2026,5,23);
+  document.getElementById('ddayBadge').textContent='신청 마감(7/3) D-'+Math.round((dead-base)/86400000);
+
+  document.getElementById('disclaimer').innerHTML =
+    '※ 계산 가정: 이자는 <b>단리 적금식·비과세</b>, 정부기여금에도 동일 이자 적용. ‘연 실질효과율’은 (정부기여금+이자)를 단리 적금 수익률로 환산한 값으로 마케팅상 ‘최대 19.4%’ 산정 방식과 다를 수 있습니다. 은행 우대금리는 <b>‘주거래(급여이체+자동이체) 충족 시 기관 최대 우대(3%p/2%p) 도달’</b>로 단순화했고, 카드 우대는 카드고릴라 공시(IBK·NH·신한·우리·하나) 기준입니다. 미공시 은행의 카드·항목별 우대는 은행연합회 포털에서 확인하세요.';
+
+  document.querySelectorAll('input,select').forEach(el=>{
+    el.addEventListener('input',render); el.addEventListener('change',render);
+  });
+  render();
+})();
+</script>
+</body>
+</html>

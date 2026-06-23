@@ -1,0 +1,47 @@
+import { useCallback, useMemo, useState } from 'react';
+import { compute, recommend, type Inputs } from '../lib/calc';
+import { MAN } from '../data/products';
+import { ageFromBirth, elapsedFromMonth } from '../lib/dates';
+
+const DEFAULTS: Inputs = {
+  salary: 3000,
+  goal: 'amount',
+  elapsed: 18,
+  paidCount: 18,
+  leapMonthly: 70 * MAN,
+  leapRate: 0.045,
+  miraeMonthly: 50 * MAN,
+  type: 'pref',
+  payBank: 'nh',
+  mainBank: 'nh',
+  cardCo: 'nh',
+  cardSpend: true,
+  autoTransfer: true,
+  advisory: false,
+  bankMode: 'auto',
+  manualBank: '',
+  investReturn: 0.07,
+};
+
+export function useCalculator() {
+  const [inputs, setInputs] = useState<Inputs>(DEFAULTS);
+  const [birth, setBirth] = useState('1997-05-10');
+  const [leapStart, setLeapStartState] = useState('2024-12');
+
+  const setInput = useCallback(<K extends keyof Inputs>(key: K, value: Inputs[K]) => {
+    setInputs((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  const setLeapStart = useCallback((v: string) => {
+    setLeapStartState(v);
+    setInputs((prev) => ({ ...prev, elapsed: elapsedFromMonth(v) }));
+  }, []);
+
+  const age = useMemo(() => ageFromBirth(birth), [birth]);
+  const result = useMemo(() => compute(inputs), [inputs]);
+  const rec = useMemo(() => recommend(inputs, result), [inputs, result]);
+
+  return { inputs, setInput, birth, setBirth, leapStart, setLeapStart, age, result, rec };
+}
+
+export type CalculatorApi = ReturnType<typeof useCalculator>;
