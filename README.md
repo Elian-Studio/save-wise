@@ -8,14 +8,14 @@
 
 ## 상태
 
-- 🚧 개발 전 단계 — 계산 Spec 초안만 존재 (`claudedocs/calc-spec-draft.md`)
+- 🚧 개발 전 단계 — 계산 Spec 초안만 존재 (`docs/calc-spec-draft.md`)
 - 일부 계산 규칙(`[R]` 표시)은 deep-research 결과로 확정 예정
 - 완료 시 **Vercel** 배포 예정
 
 ## 구조
 
 ```
-claudedocs/   설계·계산 Spec 문서
+docs/   설계·계산 Spec 문서
 ```
 
 > 코드는 Spec 확정 후 추가된다.
