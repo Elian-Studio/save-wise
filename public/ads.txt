@@ -1,6 +1,5 @@
 # save-wise 광고 인증 판매자 목록 (ads.txt)
-# 가입 후 실제 publisher ID로 XXXX를 교체하고 주석(#)을 해제하세요.
-# 구글 애드센스:
-# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
-# 카카오 애드핏:
+# 구글 애드센스 — 소유자 본인 퍼블리셔 계정
+google.com, pub-7278925724289481, DIRECT, f08c47fec0942fa0
+# 카카오 애드핏 — 광고단위(SSP) 발급 후 아래 주석 해제하고 ID 입력
 # kakao.com, 00000, DIRECT
