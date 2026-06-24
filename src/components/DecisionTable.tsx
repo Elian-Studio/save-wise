@@ -19,6 +19,45 @@ function Side({ f, side }: { f: DecisionFactor; side: 'stay' | 'switch' }) {
   );
 }
 
+function MobileFactor({ f }: { f: DecisionFactor }) {
+  return (
+    <div className="rounded-xl border p-3">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-bold">{f.label}</span>
+        {f.favors !== 'neutral' && (
+          <Badge variant={f.favors === 'switch' ? 'green' : 'blue'}>
+            {f.favors === 'switch' ? '전환' : '유지'} +{f.weight.toFixed(1)}
+          </Badge>
+        )}
+      </div>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <div
+          className={cn('rounded-lg border p-2 text-[13px]', f.favors === 'stay' && 'border-fin-blue bg-fin-blue-soft')}
+        >
+          <div className="text-[11px] text-muted-foreground">① 유지·도약</div>
+          <div className={cn('mt-0.5', f.favors === 'stay' && 'font-bold text-fin-blue')}>
+            {f.favors === 'stay' && '✓ '}
+            {f.stayText}
+          </div>
+        </div>
+        <div
+          className={cn(
+            'rounded-lg border p-2 text-[13px]',
+            f.favors === 'switch' && 'border-fin-green bg-fin-green-soft',
+          )}
+        >
+          <div className="text-[11px] text-muted-foreground">② 전환·미래</div>
+          <div className={cn('mt-0.5', f.favors === 'switch' && 'font-bold text-fin-green')}>
+            {f.favors === 'switch' && '✓ '}
+            {f.switchText}
+          </div>
+        </div>
+      </div>
+      <div className="mini">{f.why}</div>
+    </div>
+  );
+}
+
 export function DecisionTable({ rec }: { rec: Recommendation }) {
   const recStay = rec.verdict === 'stay';
   const recSwitch = rec.verdict === 'switch';
@@ -33,45 +72,55 @@ export function DecisionTable({ rec }: { rec: Recommendation }) {
       </p>
       <Card>
         <CardContent className="pt-5">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[36%]">판단 요인</TableHead>
-                <TableHead className={cn('text-right', recStay && 'text-fin-blue')}>
-                  ① 유지 · 도약(5년)
-                  {recStay && (
-                    <Badge variant="blue" className="ml-1">
-                      추천
-                    </Badge>
-                  )}
-                </TableHead>
-                <TableHead className={cn('text-right', recSwitch && 'text-fin-green')}>
-                  ② 전환 · 미래(3년)
-                  {recSwitch && (
-                    <Badge variant="green" className="ml-1">
-                      추천
-                    </Badge>
-                  )}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rec.factors.map((f, i) => (
-                <TableRow key={i}>
-                  <TableCell className="align-top">
-                    <div className="font-semibold">{f.label}</div>
-                    <div className="mini">{f.why}</div>
-                  </TableCell>
-                  <TableCell className={cn('text-right align-top', f.favors === 'stay' && 'bg-fin-blue-soft')}>
-                    <Side f={f} side="stay" />
-                  </TableCell>
-                  <TableCell className={cn('text-right align-top', f.favors === 'switch' && 'bg-fin-green-soft')}>
-                    <Side f={f} side="switch" />
-                  </TableCell>
+          {/* 모바일: 요인별 카드 */}
+          <div className="grid gap-2 md:hidden">
+            {rec.factors.map((f, i) => (
+              <MobileFactor key={i} f={f} />
+            ))}
+          </div>
+
+          {/* 데스크톱: 비교 테이블 */}
+          <div className="hidden md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[36%]">판단 요인</TableHead>
+                  <TableHead className={cn('text-right', recStay && 'text-fin-blue')}>
+                    ① 유지 · 도약(5년)
+                    {recStay && (
+                      <Badge variant="blue" className="ml-1">
+                        추천
+                      </Badge>
+                    )}
+                  </TableHead>
+                  <TableHead className={cn('text-right', recSwitch && 'text-fin-green')}>
+                    ② 전환 · 미래(3년)
+                    {recSwitch && (
+                      <Badge variant="green" className="ml-1">
+                        추천
+                      </Badge>
+                    )}
+                  </TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {rec.factors.map((f, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="align-top">
+                      <div className="font-semibold">{f.label}</div>
+                      <div className="mini">{f.why}</div>
+                    </TableCell>
+                    <TableCell className={cn('text-right align-top', f.favors === 'stay' && 'bg-fin-blue-soft')}>
+                      <Side f={f} side="stay" />
+                    </TableCell>
+                    <TableCell className={cn('text-right align-top', f.favors === 'switch' && 'bg-fin-green-soft')}>
+                      <Side f={f} side="switch" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted px-4 py-3 text-sm">
             <span className="text-muted-foreground">종합 점수 (전환 +, 유지 −)</span>
