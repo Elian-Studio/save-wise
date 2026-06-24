@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { BANKS, getBank, NON_PARTICIPATING_NOTE } from '../data/banks';
 import { MAN } from '../data/products';
 import { fmtMoney, pct, won2man } from '../lib/format';
@@ -27,6 +27,7 @@ function CardTitle({ children }: { children: ReactNode }) {
   return <p className="mb-3.5 flex items-center gap-1.5 text-sm font-bold text-navy">{children}</p>;
 }
 
+/** 라벨-입력 연결: useId로 id를 만들어 Label htmlFor + children(id)으로 입력에 부여 */
 function Field({
   label,
   hint,
@@ -35,15 +36,16 @@ function Field({
 }: {
   label: ReactNode;
   hint?: ReactNode;
-  children: ReactNode;
+  children: (id: string) => ReactNode;
   foot?: ReactNode;
 }) {
+  const id = useId();
   return (
     <div className="mb-3.5 last:mb-0">
-      <Label className="mb-1.5 block">
+      <Label htmlFor={id} className="mb-1.5 block">
         {label} {hint && <span className="text-xs font-normal text-muted-foreground">{hint}</span>}
       </Label>
-      {children}
+      {children(id)}
       {foot}
     </div>
   );
@@ -71,10 +73,10 @@ function Check({
   );
 }
 
-function MainBankSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function MainBankSelect({ id, value, onChange }: { id?: string; value: string; onChange: (v: string) => void }) {
   return (
     <Select value={value || NONE} onValueChange={(v) => onChange(v === NONE ? '' : v)}>
-      <SelectTrigger>
+      <SelectTrigger id={id}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
@@ -113,38 +115,46 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
                 </div>
               }
             >
-              <Input
-                type="date"
-                value={birth}
-                min="1986-01-01"
-                max="2010-12-31"
-                autoComplete="off"
-                onChange={(e) => setBirth(e.target.value)}
-              />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="date"
+                  value={birth}
+                  min="1986-01-01"
+                  max="2010-12-31"
+                  autoComplete="off"
+                  onChange={(e) => setBirth(e.target.value)}
+                />
+              )}
             </Field>
             <Field label="연 총급여" hint="(만원)" foot={<div className="mini">소득구간: {bracketName(I.salary)}</div>}>
-              <Input
-                type="number"
-                value={I.salary}
-                min={0}
-                step={100}
-                autoComplete="off"
-                onChange={(e) => setInput('salary', readNumberInput(e))}
-              />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="number"
+                  value={I.salary}
+                  min={0}
+                  step={100}
+                  autoComplete="off"
+                  onChange={(e) => setInput('salary', readNumberInput(e))}
+                />
+              )}
             </Field>
             <Field label="저축 목적">
-              <Select value={I.goal} onValueChange={(v) => setInput('goal', v as 'amount' | 'liquid')}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="amount">목돈 최대화</SelectItem>
-                  <SelectItem value="liquid">유동성·짧은 만기 선호</SelectItem>
-                </SelectContent>
-              </Select>
+              {(id) => (
+                <Select value={I.goal} onValueChange={(v) => setInput('goal', v as 'amount' | 'liquid')}>
+                  <SelectTrigger id={id}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="amount">목돈 최대화</SelectItem>
+                    <SelectItem value="liquid">유동성·짧은 만기 선호</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
             </Field>
             <Field label="주거래 은행" hint="(주로 쓰는 은행)">
-              <MainBankSelect value={I.mainBank} onChange={(v) => setInput('mainBank', v)} />
+              {(id) => <MainBankSelect id={id} value={I.mainBank} onChange={(v) => setInput('mainBank', v)} />}
             </Field>
             <Field
               label="월급(급여이체) 은행"
@@ -157,7 +167,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
                 </div>
               }
             >
-              <MainBankSelect value={I.payBank} onChange={(v) => setInput('payBank', v)} />
+              {(id) => <MainBankSelect id={id} value={I.payBank} onChange={(v) => setInput('payBank', v)} />}
             </Field>
           </CardContent>
         </Card>
@@ -176,17 +186,28 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
                 </div>
               }
             >
-              <Input type="month" value={leapStart} autoComplete="off" onChange={(e) => setLeapStart(e.target.value)} />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="month"
+                  value={leapStart}
+                  autoComplete="off"
+                  onChange={(e) => setLeapStart(e.target.value)}
+                />
+              )}
             </Field>
             <Field label="그동안 회당(월) 납입액" hint="(만원, 최대 70)">
-              <Input
-                type="number"
-                value={won2man(I.leapMonthly)}
-                min={0}
-                max={70}
-                autoComplete="off"
-                onChange={(e) => setInput('leapMonthly', readNumberInput(e) * MAN)}
-              />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="number"
+                  value={won2man(I.leapMonthly)}
+                  min={0}
+                  max={70}
+                  autoComplete="off"
+                  onChange={(e) => setInput('leapMonthly', readNumberInput(e) * MAN)}
+                />
+              )}
             </Field>
             <Field
               label="그동안 납입 횟수"
@@ -203,14 +224,17 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
                 </div>
               }
             >
-              <Input
-                type="number"
-                value={I.paidCount}
-                min={0}
-                max={60}
-                autoComplete="off"
-                onChange={(e) => setInput('paidCount', Math.max(0, Math.min(60, readNumberInput(e))))}
-              />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="number"
+                  value={I.paidCount}
+                  min={0}
+                  max={60}
+                  autoComplete="off"
+                  onChange={(e) => setInput('paidCount', Math.max(0, Math.min(60, readNumberInput(e))))}
+                />
+              )}
             </Field>
             <div className="mb-3.5 rounded-lg bg-muted px-3 py-2.5 text-[13px] text-muted-foreground">
               그동안 납입한 총 원금 <b className="text-lg text-fin-blue">{fmtMoney(C.totalPaid)}</b>
@@ -223,15 +247,18 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               hint="(%, 기본+우대)"
               foot={<div className="mini">최초 3년 고정 → 이후 1년마다 변동(보도: 변동분 4.5%→3.0%대 하락)</div>}
             >
-              <Input
-                type="number"
-                value={+(I.leapRate * 100).toFixed(2)}
-                min={0}
-                max={6}
-                step={0.1}
-                autoComplete="off"
-                onChange={(e) => setInput('leapRate', readNumberInput(e) / 100)}
-              />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="number"
+                  value={+(I.leapRate * 100).toFixed(2)}
+                  min={0}
+                  max={6}
+                  step={0.1}
+                  autoComplete="off"
+                  onChange={(e) => setInput('leapRate', readNumberInput(e) / 100)}
+                />
+              )}
             </Field>
           </CardContent>
         </Card>
@@ -243,14 +270,17 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               ✨ 청년미래적금 <Badge variant="blue">전환 대상</Badge>
             </CardTitle>
             <Field label="월 납입액" hint="(만원, 최대 50)">
-              <Input
-                type="number"
-                value={won2man(I.miraeMonthly)}
-                min={0}
-                max={50}
-                autoComplete="off"
-                onChange={(e) => setInput('miraeMonthly', readNumberInput(e) * MAN)}
-              />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="number"
+                  value={won2man(I.miraeMonthly)}
+                  min={0}
+                  max={50}
+                  autoComplete="off"
+                  onChange={(e) => setInput('miraeMonthly', readNumberInput(e) * MAN)}
+                />
+              )}
             </Field>
             <div className="mb-3.5">
               <Check id="advisory" checked={I.advisory} onChange={(v) => setInput('advisory', v)}>
@@ -263,15 +293,18 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               hint="(%, 비보장)"
               foot={<div className="mini">아래 ‘투자 대비’ 비교에 쓰입니다.</div>}
             >
-              <Input
-                type="number"
-                value={+(I.investReturn * 100).toFixed(1)}
-                min={0}
-                max={30}
-                step={0.5}
-                autoComplete="off"
-                onChange={(e) => setInput('investReturn', readNumberInput(e) / 100)}
-              />
+              {(id) => (
+                <Input
+                  id={id}
+                  type="number"
+                  value={+(I.investReturn * 100).toFixed(1)}
+                  min={0}
+                  max={30}
+                  step={0.5}
+                  autoComplete="off"
+                  onChange={(e) => setInput('investReturn', readNumberInput(e) / 100)}
+                />
+              )}
             </Field>
             <div className="rounded-[10px] border border-[#bfe3c9] bg-fin-green-soft px-[15px] py-3 text-[13.5px]">
               내 거래현황 기준 <b className="text-fin-green">최적 은행</b>
@@ -318,42 +351,48 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
           <CardTitle>💳 카드·자동이체 — 은행별 우대금리 매칭용</CardTitle>
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="주 사용 카드사">
-              <Select value={I.cardCo || NONE} onValueChange={(v) => setInput('cardCo', v === NONE ? '' : v)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={NONE}>없음</SelectItem>
-                  {BANKS.map((b) => (
-                    <SelectItem key={b.id} value={b.id}>
-                      {b.name}
-                      {b.cardPref != null ? ` (카드우대 +${(b.cardPref * 100).toFixed(1)}%p)` : ' (우대 미공시)'}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {cardCo && cardCo.cardPref != null ? (
-                <div className="mt-2">
-                  <Check id="cardSpend" checked={I.cardSpend} onChange={(v) => setInput('cardSpend', v)}>
-                    실적 조건 충족 가능 → 카드 우대 +{(cardCo.cardPref * 100).toFixed(1)}%p
-                    <span className="mt-0.5 block text-xs text-muted-foreground">충족 조건: {cardCo.cardCond}</span>
-                  </Check>
-                </div>
-              ) : (
-                <div className="mini">
-                  {cardCo
-                    ? `${cardCo.name}는 카드 우대조건이 공시되지 않아 카드 우대를 반영하지 않습니다(가입 은행에서 직접 확인 필요).`
-                    : '카드사를 선택하면 해당 카드의 실적 조건과 우대 폭(%p)이 표시됩니다.'}
-                </div>
+              {(id) => (
+                <>
+                  <Select value={I.cardCo || NONE} onValueChange={(v) => setInput('cardCo', v === NONE ? '' : v)}>
+                    <SelectTrigger id={id}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={NONE}>없음</SelectItem>
+                      {BANKS.map((b) => (
+                        <SelectItem key={b.id} value={b.id}>
+                          {b.name}
+                          {b.cardPref != null ? ` (카드우대 +${(b.cardPref * 100).toFixed(1)}%p)` : ' (우대 미공시)'}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {cardCo && cardCo.cardPref != null ? (
+                    <div className="mt-2">
+                      <Check id="cardSpend" checked={I.cardSpend} onChange={(v) => setInput('cardSpend', v)}>
+                        실적 조건 충족 가능 → 카드 우대 +{(cardCo.cardPref * 100).toFixed(1)}%p
+                        <span className="mt-0.5 block text-xs text-muted-foreground">충족 조건: {cardCo.cardCond}</span>
+                      </Check>
+                    </div>
+                  ) : (
+                    <div className="mini">
+                      {cardCo
+                        ? `${cardCo.name}는 카드 우대조건이 공시되지 않아 카드 우대를 반영하지 않습니다(가입 은행에서 직접 확인 필요).`
+                        : '카드사를 선택하면 해당 카드의 실적 조건과 우대 폭(%p)이 표시됩니다.'}
+                    </div>
+                  )}
+                </>
               )}
             </Field>
             <Field label="적금 자동이체">
-              <Check id="autoTransfer" checked={I.autoTransfer} onChange={(v) => setInput('autoTransfer', v)}>
-                월급/주거래 은행으로 자동이체 등 주거래 조건 충족 가능
-                <span className="mt-0.5 block text-xs text-muted-foreground">
-                  충족 시 그 은행의 기관 최대 우대(3%p/2%p)까지 적용
-                </span>
-              </Check>
+              {() => (
+                <Check id="autoTransfer" checked={I.autoTransfer} onChange={(v) => setInput('autoTransfer', v)}>
+                  월급/주거래 은행으로 자동이체 등 주거래 조건 충족 가능
+                  <span className="mt-0.5 block text-xs text-muted-foreground">
+                    충족 시 그 은행의 기관 최대 우대(3%p/2%p)까지 적용
+                  </span>
+                </Check>
+              )}
             </Field>
           </div>
           <p className="mini mt-1.5">
@@ -368,7 +407,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
           <CardTitle>🎚️ 전환 대상 은행</CardTitle>
           <div className="flex flex-wrap items-center gap-3.5">
             <Tabs value={I.bankMode} onValueChange={(v) => setInput('bankMode', v as 'auto' | 'manual')}>
-              <TabsList>
+              <TabsList aria-label="전환 대상 은행 선택 방식">
                 <TabsTrigger value="auto">자동(최적)</TabsTrigger>
                 <TabsTrigger value="manual">수동 선택</TabsTrigger>
               </TabsList>
@@ -376,7 +415,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
             {I.bankMode === 'manual' && (
               <div className="w-[240px]">
                 <Select value={I.manualBank || NONE} onValueChange={(v) => setInput('manualBank', v === NONE ? '' : v)}>
-                  <SelectTrigger>
+                  <SelectTrigger aria-label="전환 대상 은행 선택">
                     <SelectValue placeholder="은행 선택…" />
                   </SelectTrigger>
                   <SelectContent>
