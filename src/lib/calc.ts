@@ -42,8 +42,7 @@ export interface ProductResult {
 
 export interface BankRateResult {
   r: number;
-  inst: number; // 기관 우대분
-  common: number; // 공통 우대분
+  pref: number; // 적용 우대 합계(소수, groupMax로 캡)
   tier: string;
   groupMax: number;
 }
@@ -76,25 +75,37 @@ export function miraeContribMonthly(monthlyWon: number, type: MiraeType): number
 export function bankRate(bank: Bank, I: Inputs): BankRateResult {
   const base = MIRAE.baseRate;
   const groupMax = bank.grp === 3 ? 0.03 : 0.02;
-  // 월급(급여이체) 은행 또는 주거래 은행이 이 은행이면 주거래 우대 대상
+  // 월급(급여이체) 은행 또는 주거래 은행이 이 은행이면 급여이체 우대 대상
   const isMain = I.payBank === bank.id || I.mainBank === bank.id;
-  let inst = 0;
-  let tier = '기본금리만';
+  let pref = 0;
+  let tier: string;
   if (isMain && I.autoTransfer) {
-    inst = groupMax;
+    // 급여이체+자동이체 등 대부분 충족 → 기관 최고 우대(공통 포함, 최고 8%/7%)
+    pref = groupMax;
     tier = '주거래 최대우대';
-  } else if (I.cardCo === bank.id && I.cardSpend && bank.cardPref != null) {
-    inst = bank.cardPref;
-    tier = '카드 우대';
-  } else if (isMain) {
-    inst = 0;
-    tier = '급여이체(자동이체 필요)';
+  } else {
+    const parts: string[] = [];
+    if (isMain && bank.salaryPref != null) {
+      pref += bank.salaryPref;
+      parts.push('급여이체');
+    }
+    if (I.cardCo === bank.id && I.cardSpend && bank.cardPref != null) {
+      pref += bank.cardPref;
+      parts.push('카드');
+    }
+    if (I.salary <= MIRAE.lowIncomeThreshold) {
+      pref += MIRAE.lowIncomeBonus;
+      parts.push('저소득');
+    }
+    if (I.advisory) {
+      pref += MIRAE.advisoryBonus;
+      parts.push('재무상담');
+    }
+    tier = parts.length ? parts.join('+') + ' 우대' : '기본금리만';
   }
-  inst = Math.min(inst, groupMax);
-  let common = 0;
-  if (I.salary <= MIRAE.lowIncomeThreshold) common += MIRAE.lowIncomeBonus;
-  if (I.advisory) common += MIRAE.advisoryBonus;
-  return { r: base + inst + common, inst, common, tier, groupMax };
+  // 공통우대(소득·재무상담)도 기관 우대 상한 '안에' 포함 → 총 우대는 groupMax로 캡
+  pref = Math.min(pref, groupMax);
+  return { r: base + pref, pref, tier, groupMax };
 }
 
 export function bestBank(I: Inputs): BestBank {

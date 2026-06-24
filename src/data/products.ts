@@ -2,7 +2,7 @@
 // 출처: 금융위 86767/87005/87106/87158, korea.kr 정책브리핑, FSC 83782(도약 기여금 확대),
 //       은행연합회 소비자포털, 토스뱅크 상품설명.
 
-export const DATA_AS_OF = '2026-06-23';
+export const DATA_AS_OF = '2026-06-24';
 
 /** 단위 규약: 금액=원, 소득(salary)=만원, 금리(rate)=소수 */
 export const MAN = 10000;

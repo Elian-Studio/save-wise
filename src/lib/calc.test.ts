@@ -67,34 +67,46 @@ describe('FSC 예시 대조', () => {
 });
 
 describe('은행 적용금리 매칭 (bankRate / bestBank)', () => {
-  it('주거래+자동이체 → 기관 최대우대', () => {
-    const nh = getBank('nh')!;
-    const x = bankRate(nh, { ...base, payBank: 'nh', autoTransfer: true });
+  it('주거래+자동이체 → 기관 최대(공통 포함, 캡) 8.0%', () => {
+    const x = bankRate(getBank('nh')!, { ...base, payBank: 'nh', autoTransfer: true });
     expect(x.tier).toBe('주거래 최대우대');
-    expect(x.r).toBeCloseTo(0.05 + 0.03 + 0.005, 6); // 8.5% (저소득 3000)
+    expect(x.r).toBeCloseTo(0.05 + 0.03, 6); // 8.0% — 공통우대는 3%p 상한 안에 포함
   });
-  it('카드만(자동이체 X) → 카드 우대 검증값', () => {
-    const sh = getBank('shinhan')!;
-    const x = bankRate(sh, { ...base, payBank: '', cardCo: 'shinhan', autoTransfer: false });
-    expect(x.tier).toBe('카드 우대');
-    expect(x.r).toBeCloseTo(0.05 + 0.002 + 0.005, 6); // 5.7%
+  it('공통우대는 그룹상한을 넘지 못함 (2%p 그룹 캡 7.0%)', () => {
+    const x = bankRate(getBank('kakao')!, { ...base, payBank: 'kakao', autoTransfer: true });
+    expect(x.r).toBeCloseTo(0.07, 6); // 5%+2%p, 공통 포함 캡
   });
-  it('미공시 은행 카드 → 기본금리만', () => {
-    const x = bankRate(getBank('kakao')!, { ...base, payBank: '', cardCo: 'kakao', autoTransfer: false });
+  it('월급 은행 매칭 → 급여이체 우대(salaryPref) 적용', () => {
+    const x = bankRate(getBank('woori')!, { ...base, payBank: 'woori', cardCo: '', autoTransfer: false, salary: 5000 });
+    expect(x.tier).toContain('급여이체');
+    expect(x.r).toBeCloseTo(0.05 + 0.015, 6); // 우리 급여이체 1.5%p
+  });
+  it('카드만(자동이체 X) → 카드+저소득 우대', () => {
+    const x = bankRate(getBank('shinhan')!, { ...base, payBank: '', cardCo: 'shinhan', autoTransfer: false });
+    expect(x.tier).toContain('카드');
+    expect(x.r).toBeCloseTo(0.05 + 0.002 + 0.005, 6); // 신한카드 0.2%p + 저소득 0.5%p
+  });
+  it('카드 우대 없는 은행 + 고소득 → 기본금리만', () => {
+    const x = bankRate(getBank('gwangju')!, {
+      ...base,
+      payBank: '',
+      cardCo: 'gwangju',
+      autoTransfer: false,
+      salary: 5000,
+      advisory: false,
+    });
     expect(x.tier).toBe('기본금리만');
+    expect(x.r).toBeCloseTo(0.05, 6);
   });
   it('bestBank는 14개 중 최고 금리 은행', () => {
-    const b = bestBank({ ...base, payBank: 'nh', autoTransfer: true });
-    expect(b.bank.id).toBe('nh');
+    expect(bestBank({ ...base, payBank: 'nh', autoTransfer: true }).bank.id).toBe('nh');
   });
   it('주거래 은행(mainBank)+자동이체도 최대우대 부여', () => {
-    const hana = getBank('hana')!;
-    const x = bankRate(hana, { ...base, payBank: '', mainBank: 'hana', cardCo: '', autoTransfer: true });
+    const x = bankRate(getBank('hana')!, { ...base, payBank: '', mainBank: 'hana', cardCo: '', autoTransfer: true });
     expect(x.tier).toBe('주거래 최대우대');
   });
-  it('월급 은행이 미참여(etc)면 어느 참여은행도 주거래 우대 없음', () => {
-    const b = bestBank({ ...base, payBank: 'etc', mainBank: 'etc', cardCo: '', autoTransfer: true });
-    // 카드/주거래 매칭 없음 → 기본금리(+공통)만, tier는 기본금리만
+  it('월급/주거래 미참여(etc)+고소득 → 기본금리만', () => {
+    const b = bestBank({ ...base, payBank: 'etc', mainBank: 'etc', cardCo: '', autoTransfer: true, salary: 5000 });
     expect(b.tier).toBe('기본금리만');
   });
 });

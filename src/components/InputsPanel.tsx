@@ -219,8 +219,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               {C.bb.bank.name} · {pct(C.bb.r)}
             </b>
             <div className="mini" style={{ marginTop: 2 }}>
-              {C.bb.tier}
-              {C.bb.common > 0 ? ` + 공통우대 ${(C.bb.common * 100).toFixed(1)}%p` : ''}
+              {C.bb.tier} (우대 +{(C.bb.pref * 100).toFixed(1)}%p)
             </div>
           </div>
         </div>

@@ -59,12 +59,13 @@ export function BankRanking({ I }: { I: Inputs }) {
           </tbody>
         </table>
         <div className="mini" style={{ marginTop: 10 }}>
-          ‘주거래 최대우대’ = 급여이체 은행 지정 + 자동이체 충족 시 그 은행의 기관 최대 우대(3%p/2%p)까지 도달 가정.
-          카드 우대는 카드고릴라 공시(5개 은행) 기준이며, 항목별 세부 %p와 미공시 은행은{' '}
+          ‘주거래 최대우대’ = 월급/주거래 은행 + 자동이체 충족 시 기관 최고금리(공통우대 포함, 8%/7% 상한). 그 외엔
+          은행별 급여이체·카드 우대 + 공통우대(소득 0.5%p·재무상담 0.2%p)를 합산하되 기관 상한으로 캡합니다. 항목별 %p는
+          금융위·은행연합회·각 은행 상품설명서·언론 종합값으로 충족조건(금액·횟수·기간)은 은행별로 달라{' '}
           <a href="https://portal.kfb.or.kr/compare/receiving_youth_future_2.php" target="_blank" rel="noopener">
             은행연합회 소비자포털
           </a>
-          에서 확인하세요.
+          에서 가입 전 재확인하세요.
         </div>
       </div>
     </>
