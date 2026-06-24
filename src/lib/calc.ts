@@ -211,10 +211,17 @@ export function recommend(I: Inputs, C: ComputeResult): Recommendation {
       `내 거래현황 기준 미래적금 적용금리 ${pct(C.rMirae)}(${C.bank.name}) ≥ 현재 도약 금리 ${pct(I.leapRate)}.`,
     );
   }
-  if (C.remaining <= 12) {
+  if (C.remaining <= 6 && I.type === 'gen') {
+    // 코앞 만기 + 일반형: 전환 실익이 작아 마무리(유지) 쪽으로 강하게
+    score -= 2.5;
+    reasons.push(
+      `도약 만기까지 ${C.remaining}개월 + 일반형 — 전환은 새로 3년 약정 시작이라 실익이 작음. 유지 후 만기 수령을 권장.`,
+    );
+  } else if (C.remaining <= 12) {
+    // 만기 임박이지만 우대형·금리차가 크면 전환 실익이 남아 과하게 깎지 않음
     score -= 1.5;
     reasons.push(
-      `도약 만기까지 ${C.remaining}개월 — 거의 마무리 단계. 전환은 새로 3년 시작이라 실익이 줄어 유지 후 만기 수령이 무난.`,
+      `도약 만기까지 ${C.remaining}개월 — 거의 마무리 단계. (우대형이거나 미래적금 금리차가 크면 전환 실익은 남음)`,
     );
   } else if (C.remaining >= 42) {
     score += 0.5;

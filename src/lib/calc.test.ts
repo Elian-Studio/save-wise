@@ -113,6 +113,28 @@ describe('추천 로직 분기 (compute + recommend)', () => {
     expect(score({ ...base, salary: 6500, type: 'gen' })).toBeGreaterThanOrEqual(1.0));
 });
 
+describe('만기 임박 유지 보정', () => {
+  const verdict = (I: Inputs) => recommend(I, compute(I)).verdict;
+  // 일반형 + 코앞 만기(잔여4) + 은행우대 없음 + 도약 고금리 → 전환 실익 작음
+  const nearGen: Inputs = {
+    ...base,
+    type: 'gen',
+    elapsed: 56,
+    paidCount: 56,
+    salary: 5500,
+    leapRate: 0.06,
+    miraeMonthly: 10 * MAN,
+    payBank: '',
+    mainBank: '',
+    cardCo: '',
+    autoTransfer: false,
+    cardSpend: false,
+    advisory: false,
+  };
+  it('일반형 + 만기 코앞 + 전환 실익 작음 → 유지', () => expect(verdict(nearGen)).toBe('stay'));
+  it('우대형은 만기 임박이어도 전환 유지(보호)', () => expect(verdict({ ...nearGen, type: 'pref' })).toBe('switch'));
+});
+
 describe('전환 은행 수동 선택 (bankMode)', () => {
   it('manual 지정 시 해당 은행으로 계산', () => {
     const C = compute({
