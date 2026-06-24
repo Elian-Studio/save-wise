@@ -198,57 +198,80 @@ export interface Recommendation {
   score: number;
 }
 
+// 추천 가중치·임계값 — 튜닝 단일 출처. 값 의미는 docs/calc-spec.md 참조.
+// score = Σ(아래 가중치) → score≥switchAt:전환 / score≤stayAt:유지 / 그 외:접전
+export const RECOMMEND = {
+  prefBonus: 2, // 우대형(12%) 자격
+  diffBonus: 1.2, // 같은 돈 3년, 미래적금 우위
+  diffPenalty: 1.2, // 같은 돈 3년, 도약 우위
+  highIncomeBonus: 1.2, // 총급여 > contribCap → 도약 기여금 0
+  rateBonus: 0.6, // 미래 적용금리 ≥ 도약 + rateGap
+  rateGap: 0.01,
+  nearGenPenalty: 2.5, // 잔여 ≤ nearGenMonths & 일반형
+  nearGenMonths: 6,
+  nearPenalty: 1.5, // 잔여 ≤ nearMonths
+  nearMonths: 12,
+  longBonus: 0.5, // 잔여 ≥ longMonths
+  longMonths: 42,
+  liquidBonus: 0.4, // 유동성 선호 목적
+  switchAt: 1.0, // score ≥ → 전환
+  stayAt: -1.0, // score ≤ → 유지
+} as const;
+
 export function recommend(I: Inputs, C: ComputeResult): Recommendation {
+  const W = RECOMMEND;
   const reasons: string[] = [];
   let score = 0;
   if (I.type === 'pref') {
-    score += 2;
+    score += W.prefBonus;
     reasons.push('우대형(12%) 자격 → 정부기여금이 일반형의 2배. 전환의 가장 강력한 이유.');
   }
   if (C.diff3yr > 0) {
-    score += 1.2;
+    score += W.diffBonus;
     reasons.push(`같은 돈을 3년 넣을 때 미래적금이 도약 대비 약 ${fmtMoney(C.diff3yr)} 더 이득(기여금+이자).`);
   } else {
-    score -= 1.2;
+    score -= W.diffPenalty;
     reasons.push(`같은 돈 3년 기준 도약이 약 ${fmtMoney(-C.diff3yr)} 더 이득 — 유지가 유리.`);
   }
   if (I.salary > INCOME.contribCap) {
-    score += 1.2;
-    reasons.push('총급여 6,000만원 초과 → 도약은 정부기여금 0(비과세만). 미래적금 기여금이 큰 이점.');
+    score += W.highIncomeBonus;
+    reasons.push(
+      `총급여 ${INCOME.contribCap.toLocaleString()}만원 초과 → 도약은 정부기여금 0(비과세만). 미래적금 기여금이 큰 이점.`,
+    );
   }
-  if (C.rMirae >= I.leapRate + 0.01) {
-    score += 0.6;
+  if (C.rMirae >= I.leapRate + W.rateGap) {
+    score += W.rateBonus;
     reasons.push(
       `내 거래현황 기준 미래적금 적용금리 ${pct(C.rMirae)}(${C.bank.name}) ≥ 현재 도약 금리 ${pct(I.leapRate)}.`,
     );
   }
-  if (C.remaining <= 6 && I.type === 'gen') {
+  if (C.remaining <= W.nearGenMonths && I.type === 'gen') {
     // 코앞 만기 + 일반형: 전환 실익이 작아 마무리(유지) 쪽으로 강하게
-    score -= 2.5;
+    score -= W.nearGenPenalty;
     reasons.push(
       `도약 만기까지 ${C.remaining}개월 + 일반형 — 전환은 새로 3년 약정 시작이라 실익이 작음. 유지 후 만기 수령을 권장.`,
     );
-  } else if (C.remaining <= 12) {
+  } else if (C.remaining <= W.nearMonths) {
     // 만기 임박이지만 우대형·금리차가 크면 전환 실익이 남아 과하게 깎지 않음
-    score -= 1.5;
+    score -= W.nearPenalty;
     reasons.push(
       `도약 만기까지 ${C.remaining}개월 — 거의 마무리 단계. (우대형이거나 미래적금 금리차가 크면 전환 실익은 남음)`,
     );
-  } else if (C.remaining >= 42) {
-    score += 0.5;
+  } else if (C.remaining >= W.longMonths) {
+    score += W.longBonus;
     reasons.push(`도약 잔여 ${C.remaining}개월로 길어 5년 묶임 부담이 큼 — 3년 만기 전환 매력.`);
   }
   if (I.goal === 'liquid') {
-    score += 0.4;
+    score += W.liquidBonus;
     reasons.push('유동성 선호 → 만기가 5년→3년으로 짧아지는 전환이 목적에 부합.');
   }
 
   let verdict: Recommendation['verdict'];
   let main: string;
-  if (score >= 1.0) {
+  if (score >= W.switchAt) {
     verdict = 'switch';
     main = '청년미래적금으로 전환을 권장';
-  } else if (score <= -1.0) {
+  } else if (score <= W.stayAt) {
     verdict = 'stay';
     main = '청년도약계좌 유지를 권장';
   } else {
