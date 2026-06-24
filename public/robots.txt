@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://save-wise.vercel.app/sitemap.xml
+Sitemap: https://wise-selection.vercel.app/sitemap.xml
