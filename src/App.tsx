@@ -13,6 +13,7 @@ import { ProductCompare } from './components/ProductCompare';
 import { Sources } from './components/Sources';
 import { Disclaimer } from './components/Disclaimer';
 import { Ad } from './components/AdSlot';
+import { Analytics } from '@vercel/analytics/react';
 
 function ddayTo(date: string): number {
   const dead = new Date(`${date}T23:59:59+09:00`).getTime();
@@ -58,6 +59,7 @@ export default function App() {
         <Ad slot="foot" />
         <Disclaimer />
       </main>
+      <Analytics />
     </>
   );
 }
