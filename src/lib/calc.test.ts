@@ -186,3 +186,27 @@ describe('경계값 안정성 (유한·비음수)', () => {
     }
   });
 });
+
+describe('추천 요인 분해 (factors)', () => {
+  it('score = Σ(switch:+weight / stay:-weight / neutral:0)', () => {
+    const r = recommend(base, compute(base));
+    const sum = r.factors.reduce(
+      (s, f) => s + (f.favors === 'switch' ? f.weight : f.favors === 'stay' ? -f.weight : 0),
+      0,
+    );
+    expect(sum).toBeCloseTo(r.score, 6);
+  });
+  it('항상 6개 요인을 제시', () => {
+    expect(recommend(base, compute(base)).factors).toHaveLength(6);
+  });
+  it('우대형이면 정부기여금 유형 요인이 전환을 지지', () => {
+    const f = recommend(base, compute(base)).factors.find((x) => x.label === '정부기여금 유형')!;
+    expect(f.favors).toBe('switch');
+    expect(f.weight).toBeGreaterThan(0);
+  });
+  it('고소득(6500)+일반형이면 소득구간 요인이 전환을 지지', () => {
+    const I: Inputs = { ...base, salary: 6500, type: 'gen' };
+    const f = recommend(I, compute(I)).factors.find((x) => x.label === '내 소득구간 기여금')!;
+    expect(f.favors).toBe('switch');
+  });
+});

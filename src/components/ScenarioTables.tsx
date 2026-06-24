@@ -1,10 +1,14 @@
 import { compute, recommend, type Inputs } from '../lib/calc';
 import { fmtMoney, pct } from '../lib/format';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 function recTag(score: number) {
-  if (score >= 1) return <span className="tag s">전환</span>;
-  if (score <= -1) return <span className="tag k">유지</span>;
-  return <span className="tag c">접전</span>;
+  if (score >= 1) return <Badge variant="green">전환</Badge>;
+  if (score <= -1) return <Badge variant="blue">유지</Badge>;
+  return <Badge variant="amber">접전</Badge>;
 }
 
 const TYPES: ReadonlyArray<readonly ['gen' | 'pref', string]> = [
@@ -18,106 +22,108 @@ export function ScenarioTables({ I }: { I: Inputs }) {
   return (
     <>
       <h2 className="sec">5. 시나리오별 결론 (변수 하나씩 바꿔보기)</h2>
-      <div className="grid cols2">
-        <div className="card">
-          <p className="card-title">소득구간별</p>
-          <table>
-            <thead>
-              <tr>
-                <th>총급여(만원)</th>
-                <th>도약 월기여금</th>
-                <th>3년 순이익 차액</th>
-                <th>추천</th>
-              </tr>
-            </thead>
-            <tbody>
-              {incomes.map((s) => {
-                const J = { ...I, salary: s };
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardContent className="pt-5">
+            <p className="mb-2 font-bold text-navy">소득구간별</p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>총급여(만원)</TableHead>
+                  <TableHead className="text-right">도약 월기여금</TableHead>
+                  <TableHead className="text-right">3년 순이익 차액</TableHead>
+                  <TableHead className="text-right">추천</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {incomes.map((s) => {
+                  const J = { ...I, salary: s };
+                  const C = compute(J);
+                  const R = recommend(J, C);
+                  return (
+                    <TableRow key={s}>
+                      <TableCell>{s.toLocaleString()}</TableCell>
+                      <TableCell className="text-right">{fmtMoney(C.leapContrib)}</TableCell>
+                      <TableCell className="text-right">
+                        {C.diff3yr >= 0 ? '+' : ''}
+                        {fmtMoney(C.diff3yr)}
+                      </TableCell>
+                      <TableCell className="text-right">{recTag(R.score)}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            <p className="mini mt-2">유형·거래현황 고정. 차액 = 같은 월납입 3년 기준 (미래적금 − 도약).</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-5">
+            <p className="mb-2 font-bold text-navy">도약계좌 경과기간별</p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>경과(개월)</TableHead>
+                  <TableHead className="text-right">잔여</TableHead>
+                  <TableHead className="text-right">해지환급금</TableHead>
+                  <TableHead className="text-right">추천</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {elapses.map((e) => {
+                  const J = { ...I, elapsed: e, paidCount: e };
+                  const C = compute(J);
+                  const R = recommend(J, C);
+                  return (
+                    <TableRow key={e} className={cn(e === I.elapsed && 'bg-fin-blue-soft')}>
+                      <TableCell>{e}</TableCell>
+                      <TableCell className="text-right">{60 - e}</TableCell>
+                      <TableCell className="text-right">{fmtMoney(C.refund.total)}</TableCell>
+                      <TableCell className="text-right">{recTag(R.score)}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            <p className="mini mt-2">만기 임박일수록 ‘마무리 유지’ 신호가 강해집니다.</p>
+          </CardContent>
+        </Card>
+      </div>
+      <Card className="mt-4">
+        <CardContent className="pt-5">
+          <p className="mb-2 font-bold text-navy">유형별 (일반형 6% vs 우대형 12%)</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>유형</TableHead>
+                <TableHead className="text-right">미래 적용금리</TableHead>
+                <TableHead className="text-right">미래 연 실질효과율</TableHead>
+                <TableHead className="text-right">3년 순이익 차액</TableHead>
+                <TableHead className="text-right">추천</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {TYPES.map(([t, label]) => {
+                const J = { ...I, type: t };
                 const C = compute(J);
                 const R = recommend(J, C);
                 return (
-                  <tr key={s}>
-                    <td>{s.toLocaleString()}</td>
-                    <td>{fmtMoney(C.leapContrib)}</td>
-                    <td>
+                  <TableRow key={t} className={cn(t === I.type && 'bg-fin-blue-soft')}>
+                    <TableCell>{label}</TableCell>
+                    <TableCell className="text-right">{pct(C.rMirae)}</TableCell>
+                    <TableCell className="text-right">{pct(C.mirae.eff)}</TableCell>
+                    <TableCell className="text-right">
                       {C.diff3yr >= 0 ? '+' : ''}
                       {fmtMoney(C.diff3yr)}
-                    </td>
-                    <td>{recTag(R.score)}</td>
-                  </tr>
+                    </TableCell>
+                    <TableCell className="text-right">{recTag(R.score)}</TableCell>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
-          <div className="mini" style={{ marginTop: 8 }}>
-            유형·거래현황 고정. 차액 = 같은 월납입 3년 기준 (미래적금 − 도약).
-          </div>
-        </div>
-        <div className="card">
-          <p className="card-title">도약계좌 경과기간별</p>
-          <table>
-            <thead>
-              <tr>
-                <th>경과(개월)</th>
-                <th>잔여</th>
-                <th>해지환급금</th>
-                <th>추천</th>
-              </tr>
-            </thead>
-            <tbody>
-              {elapses.map((e) => {
-                const J = { ...I, elapsed: e, paidCount: e };
-                const C = compute(J);
-                const R = recommend(J, C);
-                return (
-                  <tr key={e} className={e === I.elapsed ? 'me' : undefined}>
-                    <td>{e}</td>
-                    <td>{60 - e}</td>
-                    <td>{fmtMoney(C.refund.total)}</td>
-                    <td>{recTag(R.score)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <div className="mini" style={{ marginTop: 8 }}>
-            만기 임박일수록 ‘마무리 유지’ 신호가 강해집니다.
-          </div>
-        </div>
-      </div>
-      <div className="card" style={{ marginTop: 16 }}>
-        <p className="card-title">유형별 (일반형 6% vs 우대형 12%)</p>
-        <table>
-          <thead>
-            <tr>
-              <th>유형</th>
-              <th>미래 적용금리</th>
-              <th>미래 연 실질효과율</th>
-              <th>3년 순이익 차액</th>
-              <th>추천</th>
-            </tr>
-          </thead>
-          <tbody>
-            {TYPES.map(([t, label]) => {
-              const J = { ...I, type: t };
-              const C = compute(J);
-              const R = recommend(J, C);
-              return (
-                <tr key={t} className={t === I.type ? 'me' : undefined}>
-                  <td>{label}</td>
-                  <td>{pct(C.rMirae)}</td>
-                  <td>{pct(C.mirae.eff)}</td>
-                  <td>
-                    {C.diff3yr >= 0 ? '+' : ''}
-                    {fmtMoney(C.diff3yr)}
-                  </td>
-                  <td>{recTag(R.score)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </>
   );
 }

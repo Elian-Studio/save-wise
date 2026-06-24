@@ -1,19 +1,30 @@
+import { CONTACT_EMAIL } from '../config/ads';
+
 export function Disclaimer() {
   return (
     <>
-      <div className="disc">
+      <div className="mt-4 rounded-[10px] border bg-card px-4 py-3.5 text-xs text-muted-foreground">
         ※ 계산 가정: 이자는 <b>단리 적금식·비과세</b>, 정부기여금에도 동일 이자 적용. ‘연 실질효과율’은
         (정부기여금+이자)를 단리 적금 수익률로 환산한 값으로 마케팅상 ‘최대 19.4%’ 산정 방식과 다를 수 있습니다. 은행
         우대금리는 은행별 급여이체·카드 우대 %p와 공통우대(소득 0.5%p·재무상담 0.2%p)를 합산하되{' '}
         <b>기관 상한(3%p/2%p)으로 캡</b>합니다(공통우대도 상한 안에 포함 → 최고 8%/7%). 항목별 %p는 금융위·은행연합회·각
         은행 상품설명서·언론 종합값이며 충족조건은 은행별로 달라 가입 전 재확인이 필요합니다.
       </div>
-      <footer>
+      <footer className="mt-9 border-t pt-5 text-xs text-muted-foreground">
         <p>
           본 계산기는 공개 자료 기반 <b>참고용 추정</b>입니다. 이자·실질효과율은 단리 적금 환산 가정이며, 투자 비교
           수익률은
           <b>가정치이며 보장되지 않습니다</b>. 최종 결정 전 반드시 해당 은행과 서민금융진흥원에 확인하세요. 본 서비스는
           투자·금융 자문이 아닙니다.
+        </p>
+        <p className="mt-3">
+          <a className="underline hover:text-foreground" href="/privacy.html">
+            개인정보처리방침
+          </a>
+          <span className="mx-2">·</span>
+          <a className="underline hover:text-foreground" href={`mailto:${CONTACT_EMAIL}`}>
+            문의
+          </a>
         </p>
       </footer>
     </>
