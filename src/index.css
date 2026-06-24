@@ -1,0 +1,80 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* 금융 디자인 토큰을 shadcn CSS 변수로 매핑 (라이트) */
+:root {
+  --radius: 0.625rem;
+  --background: #f4f6f9;
+  --foreground: #1c2530;
+  --card: #ffffff;
+  --card-foreground: #1c2530;
+  --popover: #ffffff;
+  --popover-foreground: #1c2530;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #eef1f5;
+  --secondary-foreground: #16284a;
+  --muted: #f1f4f9;
+  --muted-foreground: #5f6b7a;
+  --accent: #e8f0fe;
+  --accent-foreground: #16284a;
+  --destructive: #b91c1c;
+  --destructive-foreground: #ffffff;
+  --border: #e3e8ef;
+  --input: #cfd6e0;
+  --ring: #2563eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* 금융 시맨틱 컬러 (verdict·패널 의미 보존) + 한국형 폰트 */
+  --color-navy: #16284a;
+  --color-navy2: #1f3a66;
+  --color-ink: #1c2530;
+  --color-line: #e3e8ef;
+  --color-fin-green: #15803d;
+  --color-fin-green-soft: #e7f6ec;
+  --color-fin-blue: #2563eb;
+  --color-fin-blue-soft: #e8f0fe;
+  --color-fin-amber: #b45309;
+  --color-fin-amber-soft: #fdf2e2;
+  --font-sans:
+    'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
