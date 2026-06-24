@@ -168,7 +168,7 @@ export function compute(I: Inputs): ComputeResult {
 
   const leapContrib = leapContribMonthly(I.salary, I.leapMonthly);
   const remaining = LEAP.termMonths - I.elapsed;
-  const k = Math.min(I.paidCount, LEAP.termMonths);
+  const k = Math.min(I.paidCount, I.elapsed, LEAP.termMonths); // 납입 횟수는 경과 개월을 넘을 수 없음(환급금 과대계상 방지)
   const nStay = Math.min(k + remaining, LEAP.termMonths);
 
   const stay = product(I.leapMonthly, nStay, I.leapRate, leapContrib);

@@ -230,3 +230,46 @@ describe('추천 요인 분해 (factors)', () => {
     expect(f.favors).toBe('switch');
   });
 });
+
+describe('paidCount 클램프 (경과 개월 초과 방지)', () => {
+  it('paidCount > elapsed → k를 elapsed로 클램프', () => {
+    expect(compute({ ...base, elapsed: 18, paidCount: 30 }).k).toBe(18);
+  });
+  it('paidCount ≤ elapsed → 그대로', () => {
+    expect(compute({ ...base, elapsed: 30, paidCount: 24 }).k).toBe(24);
+  });
+  it('해지환급금 원금이 경과 개월 × 월납입을 넘지 않음', () => {
+    const C = compute({ ...base, elapsed: 12, paidCount: 40, leapMonthly: 50 * MAN });
+    expect(C.refund.principal).toBe(12 * 50 * MAN);
+  });
+});
+
+describe('verdict ↔ 점수 임계값 매핑', () => {
+  const cases: Partial<Inputs>[] = [
+    {},
+    { type: 'gen' },
+    { salary: 6500, type: 'gen' },
+    { elapsed: 54, paidCount: 54 },
+    { goal: 'liquid' },
+    {
+      type: 'gen',
+      elapsed: 50,
+      paidCount: 50,
+      salary: 3000,
+      leapRate: 0.08,
+      payBank: '',
+      cardCo: '',
+      autoTransfer: false,
+      cardSpend: false,
+    },
+  ];
+  it('모든 입력에서 verdict가 switchAt(+1)/stayAt(−1) 임계값과 일치', () => {
+    for (const e of cases) {
+      const I: Inputs = { ...base, ...e };
+      const r = recommend(I, compute(I));
+      if (r.score >= 1) expect(r.verdict).toBe('switch');
+      else if (r.score <= -1) expect(r.verdict).toBe('stay');
+      else expect(r.verdict).toBe('close');
+    }
+  });
+});

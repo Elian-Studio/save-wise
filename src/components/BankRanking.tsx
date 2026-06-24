@@ -11,16 +11,18 @@ import { cn } from '@/lib/utils';
 const TOP_N = 5;
 type Variant = 'green' | 'blue' | 'muted';
 
-const GRADE: Record<string, { cls: string; title: string }> = {
-  verified: { cls: 'text-fin-green', title: '데이터: 은행연합회 포털 정본(verified)' },
-  press: { cls: 'text-fin-amber', title: '데이터: 언론 교차확인(press)' },
-  unknown: { cls: 'text-muted-foreground', title: '데이터: 미확인(unknown)' },
+const GRADE: Record<string, { cls: string; sym: string; title: string }> = {
+  verified: { cls: 'text-fin-green', sym: '✓', title: '데이터: 은행연합회 포털 정본(verified)' },
+  press: { cls: 'text-fin-amber', sym: '⚠', title: '데이터: 언론 교차확인(press)' },
+  unknown: { cls: 'text-muted-foreground', sym: '?', title: '데이터: 미확인(unknown)' },
 };
+// 색만으로 등급을 구분하지 않도록 기호(✓/⚠/?)를 함께 노출하고, 스크린리더용 텍스트를 별도 제공
 function GradeDot({ g }: { g: keyof typeof GRADE }) {
   const m = GRADE[g] ?? GRADE.unknown;
   return (
-    <span className={cn('ml-1 align-middle text-[10px]', m.cls)} title={m.title} aria-label={m.title}>
-      ●
+    <span className={cn('ml-1 align-middle text-[11px] font-bold', m.cls)} title={m.title}>
+      <span aria-hidden>{m.sym}</span>
+      <span className="sr-only">{m.title}</span>
     </span>
   );
 }
