@@ -1,7 +1,7 @@
 {
   "name": "save-wise",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.2.0",
   "type": "module",
   "description": "청년도약계좌 ↔ 청년미래적금 갈아타기 계산기",
   "engines": {
