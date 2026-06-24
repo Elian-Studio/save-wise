@@ -10,6 +10,7 @@ import { StepsGuide } from './components/StepsGuide';
 import { ProductCompare } from './components/ProductCompare';
 import { Sources } from './components/Sources';
 import { Disclaimer } from './components/Disclaimer';
+import { Ad } from './components/AdSlot';
 
 function ddayTo(date: string): number {
   const dead = new Date(`${date}T23:59:59+09:00`).getTime();
@@ -42,12 +43,15 @@ export default function App() {
         <InputsPanel api={api} />
         <VerdictCard C={result} rec={rec} />
         <ComparePanels I={inputs} C={result} />
+        <Ad slot="top" />
         <BankRanking I={inputs} />
         <ScenarioTables I={inputs} />
         <InvestmentCompare I={inputs} C={result} />
+        <Ad slot="mid" />
         <StepsGuide />
         <ProductCompare />
         <Sources />
+        <Ad slot="foot" />
         <Disclaimer />
       </main>
     </>

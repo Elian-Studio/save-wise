@@ -1,0 +1,6 @@
+# save-wise 광고 인증 판매자 목록 (ads.txt)
+# 가입 후 실제 publisher ID로 XXXX를 교체하고 주석(#)을 해제하세요.
+# 구글 애드센스:
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+# 카카오 애드핏:
+# kakao.com, 00000, DIRECT
