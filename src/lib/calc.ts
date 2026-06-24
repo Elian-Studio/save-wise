@@ -2,7 +2,7 @@
 // 정본: docs/calc-spec.md. 모든 이자는 단리 적금식·비과세 가정.
 // 단위: 금액=원, salary=만원, rate=소수.
 
-import { BANKS, getBank, type Bank } from '../data/banks';
+import { BANKS, getBank, type Bank, type BankGrade } from '../data/banks';
 import { LEAP, LEAP_CONTRIB_TIERS, LEAP_EXCESS_RATE, MIRAE, INCOME, MAN } from '../data/products';
 import { fmtMoney, pct } from './format';
 
@@ -45,6 +45,7 @@ export interface BankRateResult {
   pref: number; // 적용 우대 합계(소수, groupMax로 캡)
   tier: string;
   groupMax: number;
+  grade: BankGrade; // 데이터 신뢰등급 (UI 노출용)
 }
 export interface BestBank extends BankRateResult {
   bank: Bank;
@@ -71,41 +72,49 @@ export function miraeContribMonthly(monthlyWon: number, type: MiraeType): number
   return monthlyWon * (type === 'pref' ? MIRAE.contribPref : MIRAE.contribGen);
 }
 
-// 내 거래현황 → 은행 적용금리
+// 내 거래현황 → 은행 적용금리.
+// 이 앱은 도약 보유자(갈아타기) 전용 → switchPref·launchBonus는 전 사용자 자동 가산.
+// 항목별 %p는 은행연합회 소비자포털 정본(banks.ts). 총 우대는 기관 상한(groupMax)으로 캡.
 export function bankRate(bank: Bank, I: Inputs): BankRateResult {
   const base = MIRAE.baseRate;
   const groupMax = bank.grp === 3 ? 0.03 : 0.02;
-  // 월급(급여이체) 은행 또는 주거래 은행이 이 은행이면 급여이체 우대 대상
   const isMain = I.payBank === bank.id || I.mainBank === bank.id;
   let pref = 0;
-  let tier: string;
-  if (isMain && I.autoTransfer) {
-    // 급여이체+자동이체 등 대부분 충족 → 기관 최고 우대(공통 포함, 최고 8%/7%)
-    pref = groupMax;
-    tier = '주거래 최대우대';
-  } else {
-    const parts: string[] = [];
-    if (isMain && bank.salaryPref != null) {
-      pref += bank.salaryPref;
-      parts.push('급여이체');
-    }
-    if (I.cardCo === bank.id && I.cardSpend && bank.cardPref != null) {
-      pref += bank.cardPref;
-      parts.push('카드');
-    }
-    if (I.salary <= MIRAE.lowIncomeThreshold) {
-      pref += MIRAE.lowIncomeBonus;
-      parts.push('저소득');
-    }
-    if (I.advisory) {
-      pref += MIRAE.advisoryBonus;
-      parts.push('재무상담');
-    }
-    tier = parts.length ? parts.join('+') + ' 우대' : '기본금리만';
+  const parts: string[] = [];
+
+  // 갈아타기 자동충족 (도약 연계가입/예적금미보유) + 출시·한시 우대
+  if (bank.switchPref != null) {
+    pref += bank.switchPref;
+    parts.push('도약연계');
   }
-  // 공통우대(소득·재무상담)도 기관 우대 상한 '안에' 포함 → 총 우대는 groupMax로 캡
-  pref = Math.min(pref, groupMax);
-  return { r: base + pref, pref, tier, groupMax };
+  if (bank.launchBonus > 0) {
+    pref += bank.launchBonus;
+    parts.push('출시');
+  }
+
+  // 거래현황 기반: 급여이체 / 카드·출금실적
+  if (isMain && bank.salaryPref != null) {
+    pref += bank.salaryPref;
+    parts.push('급여이체');
+  }
+  if (bank.cardPref != null && ((I.cardCo === bank.id && I.cardSpend) || (isMain && I.autoTransfer))) {
+    pref += bank.cardPref;
+    parts.push('카드');
+  }
+
+  // 공통우대 (전 기관 동일, MIRAE 상수)
+  if (I.salary <= MIRAE.lowIncomeThreshold) {
+    pref += MIRAE.lowIncomeBonus;
+    parts.push('저소득');
+  }
+  if (I.advisory) {
+    pref += MIRAE.advisoryBonus;
+    parts.push('재무상담');
+  }
+
+  pref = Math.min(pref, groupMax); // 공통우대 포함 기관 상한으로 캡
+  const tier = parts.length ? parts.join('+') + ' 우대' : '기본금리만';
+  return { r: base + pref, pref, tier, groupMax, grade: bank.grade };
 }
 
 export function bestBank(I: Inputs): BestBank {

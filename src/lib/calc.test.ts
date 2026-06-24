@@ -66,48 +66,68 @@ describe('FSC 예시 대조', () => {
   });
 });
 
+// 거래 무관 입력(갈아타기 자동충족만 보기 위함)
+const noTxn = {
+  payBank: '',
+  mainBank: '',
+  cardCo: '',
+  cardSpend: false,
+  autoTransfer: false,
+};
+
 describe('은행 적용금리 매칭 (bankRate / bestBank)', () => {
-  it('주거래+자동이체 → 기관 최대(공통 포함, 캡) 8.0%', () => {
-    const x = bankRate(getBank('nh')!, { ...base, payBank: 'nh', autoTransfer: true });
-    expect(x.tier).toBe('주거래 최대우대');
-    expect(x.r).toBeCloseTo(0.05 + 0.03, 6); // 8.0% — 공통우대는 3%p 상한 안에 포함
+  it('갈아타기 자동충족: switchPref + 공통(저소득)이 거래 없이도 가산 (KB)', () => {
+    // KB switchPref 0.5%p(도약 가입이력) + 저소득 0.5%p
+    const x = bankRate(getBank('kb')!, { ...base, ...noTxn, salary: 3000, advisory: false });
+    expect(x.tier).toContain('도약연계');
+    expect(x.r).toBeCloseTo(0.05 + 0.005 + 0.005, 6); // 6.0%
   });
-  it('공통우대는 그룹상한을 넘지 못함 (2%p 그룹 캡 7.0%)', () => {
-    const x = bankRate(getBank('kakao')!, { ...base, payBank: 'kakao', autoTransfer: true });
-    expect(x.r).toBeCloseTo(0.07, 6); // 5%+2%p, 공통 포함 캡
-  });
-  it('월급 은행 매칭 → 급여이체 우대(salaryPref) 적용', () => {
-    const x = bankRate(getBank('woori')!, { ...base, payBank: 'woori', cardCo: '', autoTransfer: false, salary: 5000 });
-    expect(x.tier).toContain('급여이체');
-    expect(x.r).toBeCloseTo(0.05 + 0.015, 6); // 우리 급여이체 1.5%p
-  });
-  it('카드만(자동이체 X) → 카드+저소득 우대', () => {
-    const x = bankRate(getBank('shinhan')!, { ...base, payBank: '', cardCo: 'shinhan', autoTransfer: false });
-    expect(x.tier).toContain('카드');
-    expect(x.r).toBeCloseTo(0.05 + 0.002 + 0.005, 6); // 신한카드 0.2%p + 저소득 0.5%p
-  });
-  it('카드 우대 없는 은행 + 고소득 → 기본금리만', () => {
-    const x = bankRate(getBank('gwangju')!, {
-      ...base,
-      payBank: '',
-      cardCo: 'gwangju',
-      autoTransfer: false,
-      salary: 5000,
-      advisory: false,
-    });
+  it('switchPref 없는 은행 + 거래 없음 + 고소득 → 기본금리만 (수협)', () => {
+    const x = bankRate(getBank('suhyup')!, { ...base, ...noTxn, salary: 5000, advisory: false });
     expect(x.tier).toBe('기본금리만');
     expect(x.r).toBeCloseTo(0.05, 6);
+  });
+  it('출시·한시 우대(launchBonus)는 거래 없이도 자동 가산 (우체국 이벤트 1.0%p)', () => {
+    const x = bankRate(getBank('post')!, { ...base, ...noTxn, salary: 5000, advisory: false });
+    expect(x.tier).toContain('출시');
+    expect(x.r).toBeCloseTo(0.05 + 0.01, 6); // 6.0%
+  });
+  it('월급 은행 매칭 → 급여이체 우대(salaryPref) 가산 (우리, 고소득)', () => {
+    const x = bankRate(getBank('woori')!, { ...base, ...noTxn, payBank: 'woori', salary: 5000 });
+    expect(x.tier).toContain('급여이체');
+    // 우리: switch 0.5 + 출시 0.3 + 급여 1.5 = 2.3%p
+    expect(x.r).toBeCloseTo(0.05 + 0.005 + 0.003 + 0.015, 6);
+  });
+  it('카드사 매칭 → 카드 우대 가산 (신한, 저소득)', () => {
+    const x = bankRate(getBank('shinhan')!, { ...base, ...noTxn, cardCo: 'shinhan', cardSpend: true, salary: 3000 });
+    expect(x.tier).toContain('카드');
+    // 신한: switch 0.3 + 카드 0.2 + 저소득 0.5 = 1.0%p
+    expect(x.r).toBeCloseTo(0.05 + 0.003 + 0.002 + 0.005, 6);
+  });
+  it('우대 합이 그룹상한을 넘으면 캡 (우리, 모든 거래 충족 → 8.0%)', () => {
+    const x = bankRate(getBank('woori')!, {
+      ...base,
+      payBank: 'woori',
+      mainBank: 'woori',
+      cardCo: 'woori',
+      cardSpend: true,
+      autoTransfer: true,
+      salary: 3000,
+      advisory: true,
+    });
+    // switch0.5+출시0.3+급여1.5+카드0.5+저소득0.5+재무0.2 = 3.5%p → 3.0%p 캡
+    expect(x.r).toBeCloseTo(0.08, 6);
+  });
+  it('데이터 신뢰등급(grade)을 반환', () => {
+    expect(bankRate(getBank('kb')!, base).grade).toBe('verified');
   });
   it('bestBank는 14개 중 최고 금리 은행', () => {
     expect(bestBank({ ...base, payBank: 'nh', autoTransfer: true }).bank.id).toBe('nh');
   });
-  it('주거래 은행(mainBank)+자동이체도 최대우대 부여', () => {
-    const x = bankRate(getBank('hana')!, { ...base, payBank: '', mainBank: 'hana', cardCo: '', autoTransfer: true });
-    expect(x.tier).toBe('주거래 최대우대');
-  });
-  it('월급/주거래 미참여(etc)+고소득 → 기본금리만', () => {
-    const b = bestBank({ ...base, payBank: 'etc', mainBank: 'etc', cardCo: '', autoTransfer: true, salary: 5000 });
-    expect(b.tier).toBe('기본금리만');
+  it('거래 미참여(etc)여도 갈아타기 자동우대(출시 1.0%p)로 우체국이 최고', () => {
+    const b = bestBank({ ...base, ...noTxn, payBank: 'etc', mainBank: 'etc', salary: 5000 });
+    expect(b.bank.id).toBe('post');
+    expect(b.tier).not.toBe('기본금리만');
   });
 });
 

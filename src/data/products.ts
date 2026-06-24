@@ -57,11 +57,13 @@ export const SCHEDULE = {
 } as const;
 
 export const SOURCES: Array<{ label: string; url: string }> = [
-  { label: '금융위 87005 (은행별 금리)', url: 'https://www.fsc.go.kr/no010101/87005' },
-  { label: '금융위 87106 (갈아타기)', url: 'https://www.fsc.go.kr/no010101/87106' },
-  { label: '금융위 86767', url: 'https://www.fsc.go.kr/no010101/86767' },
+  {
+    label: '은행연합회 소비자포털 — 청년미래적금 비교공시(은행별 우대 정본)',
+    url: 'https://portal.kfb.or.kr/compare/receiving_youth_future_2.php',
+  },
+  { label: '금융위 87005 (은행별 금리 공시)', url: 'https://www.fsc.go.kr/no010101/87005' },
+  { label: '금융위 87106 (갈아타기 절차)', url: 'https://www.fsc.go.kr/no010101/87106' },
+  { label: '금융위 87158 (청년미래적금 출시)', url: 'https://www.fsc.go.kr/no010101/87158' },
   { label: '금융위 83782 (도약 기여금 확대)', url: 'https://www.fsc.go.kr/edu/news/83782' },
-  { label: '은행연합회 소비자포털', url: 'https://portal.kfb.or.kr/compare/receiving_youth_future_2.php' },
-  { label: '카드고릴라 (은행별 카드 우대)', url: 'https://www.card-gorilla.com/contents/detail/4278' },
   { label: '서민금융진흥원 청년미래적금', url: 'https://www.kinfa.or.kr/financialProduct/youthFutureSavings.do' },
 ];
