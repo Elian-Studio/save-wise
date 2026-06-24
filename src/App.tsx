@@ -2,6 +2,7 @@ import { useCalculator } from './hooks/useCalculator';
 import { DATA_AS_OF } from './data/products';
 import { InputsPanel } from './components/InputsPanel';
 import { VerdictCard } from './components/VerdictCard';
+import { DecisionTable } from './components/DecisionTable';
 import { ComparePanels } from './components/ComparePanels';
 import { BankRanking } from './components/BankRanking';
 import { ScenarioTables } from './components/ScenarioTables';
@@ -42,6 +43,7 @@ export default function App() {
       <main className="mx-auto max-w-[1080px] px-[18px] pb-20">
         <InputsPanel api={api} />
         <VerdictCard C={result} rec={rec} />
+        <DecisionTable rec={rec} />
         <ComparePanels I={inputs} C={result} />
         <Ad slot="top" />
         <BankRanking I={inputs} />
