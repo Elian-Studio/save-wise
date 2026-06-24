@@ -24,7 +24,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.test.ts'],
+    // shadcn ui 컴포넌트는 컴포넌트 + variants(cva)를 함께 export하는 표준 패턴
+    files: ['src/components/ui/**'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
+  {
+    files: ['**/*.test.{ts,tsx}'],
     languageOptions: { globals: globals.node },
   },
 );

@@ -1,3 +1,6 @@
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 export function ProductCompare() {
   const rows: Array<[string, string, string]> = [
     ['만기', '5년 (60개월)', '3년 (36개월)'],
@@ -11,26 +14,28 @@ export function ProductCompare() {
   return (
     <>
       <h2 className="sec">8. 상품 기본 비교</h2>
-      <div className="card">
-        <table>
-          <thead>
-            <tr>
-              <th>구분</th>
-              <th>청년도약계좌</th>
-              <th>청년미래적금</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(([k, a, b]) => (
-              <tr key={k}>
-                <td>{k}</td>
-                <td>{a}</td>
-                <td>{b}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Card>
+        <CardContent className="pt-5">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>구분</TableHead>
+                <TableHead>청년도약계좌</TableHead>
+                <TableHead>청년미래적금</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {rows.map(([k, a, b]) => (
+                <TableRow key={k}>
+                  <TableCell className="font-medium">{k}</TableCell>
+                  <TableCell>{a}</TableCell>
+                  <TableCell>{b}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </>
   );
 }

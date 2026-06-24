@@ -78,3 +78,13 @@
     -webkit-font-smoothing: antialiased;
   }
 }
+
+/* 마이그레이션 공통 헬퍼 (섹션 제목·작은 보조문구) */
+@layer components {
+  .sec {
+    @apply mt-7 mb-3.5 border-l-4 border-primary pl-3 text-lg font-semibold tracking-tight;
+  }
+  .mini {
+    @apply mt-1 text-xs leading-relaxed text-muted-foreground;
+  }
+}
