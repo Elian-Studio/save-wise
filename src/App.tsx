@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react';
+import { track } from '@vercel/analytics';
+import { Analytics } from '@vercel/analytics/react';
 import { useCalculator } from './hooks/useCalculator';
 import { DATA_AS_OF } from './data/products';
 import { InputsPanel } from './components/InputsPanel';
@@ -19,10 +22,39 @@ function ddayTo(date: string): number {
   return Math.ceil((dead - Date.now()) / 86_400_000);
 }
 
+// 소득을 원시값 대신 구간으로 (집계 용이·민감도 완화). 도약/미래 소득경계 기준.
+function salaryBand(man: number): string {
+  if (man <= 2400) return '≤2400';
+  if (man <= 3600) return '2400-3600';
+  if (man <= 4800) return '3600-4800';
+  if (man <= 6000) return '4800-6000';
+  if (man <= 7500) return '6000-7500';
+  return '7500+';
+}
+
 export default function App() {
   const api = useCalculator();
   const { inputs, result, rec } = api;
   const d = ddayTo('2026-07-03');
+
+  // 추천 결과 기록 (Vercel Analytics 커스텀 이벤트).
+  // ponytail: 라이브 계산이라 1.5s 디바운스 + 동일 결과 중복제거 — 타이핑 중 폭주 방지.
+  const lastTracked = useRef('');
+  useEffect(() => {
+    const key = `${rec.verdict}|${result.bb.bank.id}|${inputs.type}|${inputs.goal}|${salaryBand(inputs.salary)}`;
+    const t = setTimeout(() => {
+      if (key === lastTracked.current) return;
+      lastTracked.current = key;
+      track('recommend', {
+        verdict: rec.verdict, // switch / stay / close
+        bank: result.bb.bank.id, // 추천 1위 은행
+        type: inputs.type, // gen / pref
+        goal: inputs.goal, // amount / liquid
+        salaryBand: salaryBand(inputs.salary),
+      });
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [rec.verdict, result.bb.bank.id, inputs.type, inputs.goal, inputs.salary]);
 
   return (
     <>
@@ -58,6 +90,7 @@ export default function App() {
         <Ad slot="foot" />
         <Disclaimer />
       </main>
+      <Analytics />
     </>
   );
 }
