@@ -76,6 +76,9 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /* 한글은 단어(어절) 단위로만 줄바꿈 — 'NH농협', '도약 월 3만원' 같은 중간 깨짐 방지 */
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
 }
 
