@@ -12,9 +12,9 @@ describe('App 스모크 (렌더 회귀 가드)', () => {
     expect(container.querySelectorAll('h2.sec').length).toBe(11);
     // 결론 카드: 전환/유지/접전 중 하나
     expect(container.querySelector('[data-testid="verdict-main"]')?.textContent).toMatch(/전환|유지|접전/);
-    // 은행 랭킹표 14행
-    const bankTbl = [...container.querySelectorAll('table')].find((t) => t.querySelectorAll('thead th').length === 5);
-    expect(bankTbl?.querySelectorAll('tbody tr').length).toBe(14);
+    // 은행 랭킹표: 기본 상위 5행 (전체 보기 토글 전)
+    const bankTbl = [...container.querySelectorAll('table')].find((t) => t.querySelectorAll('thead th').length === 6);
+    expect(bankTbl?.querySelectorAll('tbody tr').length).toBe(5);
   });
 
   it('입력 폼(number/날짜 입력 + Radix 셀렉트)이 렌더된다', () => {
