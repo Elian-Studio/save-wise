@@ -23,7 +23,12 @@ export function BankRanking({ I }: { I: Inputs }) {
     ...r,
     i,
     isBest: r.b.id === bestId,
-    variant: (r.x.tier.includes('최대') ? 'green' : r.x.tier.includes('카드') ? 'blue' : 'muted') as Variant,
+    switchAuto: (r.b.switchPref ?? 0) + r.b.launchBonus, // 갈아타기 시 거래 없이 자동 가산되는 우대
+    variant: (r.x.tier.includes('도약연계')
+      ? 'green'
+      : r.x.tier.includes('급여이체') || r.x.tier.includes('카드')
+        ? 'blue'
+        : 'muted') as Variant,
   }));
 
   return (
@@ -33,7 +38,7 @@ export function BankRanking({ I }: { I: Inputs }) {
         <CardContent className="pt-5">
           {/* 모바일: 카드 (가로 스크롤·욱여넣기 대신) */}
           <div className="grid gap-2 md:hidden">
-            {shown.map(({ b, x, total, i, isBest, variant }) => (
+            {shown.map(({ b, x, total, i, isBest, variant, switchAuto }) => (
               <div key={b.id} className={cn('rounded-xl border p-3', isBest && 'border-fin-green bg-fin-green-soft')}>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -61,6 +66,11 @@ export function BankRanking({ I }: { I: Inputs }) {
                 </div>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   <Badge variant={variant}>{x.tier}</Badge>
+                  {switchAuto > 0 ? (
+                    <Badge variant="green">갈아타기 자동 +{(switchAuto * 100).toFixed(1)}%p</Badge>
+                  ) : (
+                    <Badge variant="muted">갈아타기 자동우대 없음</Badge>
+                  )}
                   <span className="text-xs text-muted-foreground">
                     {b.cardPref != null
                       ? `카드 ${b.cardCond} (+${(b.cardPref * 100).toFixed(1)}%p)`
@@ -79,13 +89,14 @@ export function BankRanking({ I }: { I: Inputs }) {
                   <TableHead className="w-10 text-center">순위</TableHead>
                   <TableHead>은행</TableHead>
                   <TableHead className="text-right">적용금리</TableHead>
+                  <TableHead className="text-right">갈아타기 자동</TableHead>
                   <TableHead>우대 적용 근거</TableHead>
                   <TableHead>카드 실적조건(공시)</TableHead>
                   <TableHead className="text-right">3년 만기수령</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {shown.map(({ b, x, total, i, isBest, variant }) => (
+                {shown.map(({ b, x, total, i, isBest, variant, switchAuto }) => (
                   <TableRow key={b.id} className={cn(isBest && 'bg-fin-green-soft')}>
                     <TableCell className="text-center font-bold text-muted-foreground">{i + 1}</TableCell>
                     <TableCell>
@@ -99,6 +110,13 @@ export function BankRanking({ I }: { I: Inputs }) {
                     </TableCell>
                     <TableCell className="text-right">
                       <b>{pct(x.r)}</b>
+                    </TableCell>
+                    <TableCell className="text-right text-xs">
+                      {switchAuto > 0 ? (
+                        <span className="font-semibold text-fin-green">+{(switchAuto * 100).toFixed(1)}%p</span>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Badge variant={variant}>{x.tier}</Badge>
@@ -120,10 +138,9 @@ export function BankRanking({ I }: { I: Inputs }) {
           </div>
 
           <p className="mini mt-2.5">
-            내 거래현황 기준 적용금리 높은 순. ‘주거래 최대우대’ = 월급/주거래 은행 + 자동이체 충족 시 기관
-            최고금리(공통우대 포함, 8%/7% 상한). 그 외엔 은행별 급여이체·카드 우대 + 공통우대(소득 0.5%p·재무상담
-            0.2%p)를 합산하되 기관 상한으로 캡합니다. 항목별 %p는 금융위·은행연합회·각 은행 상품설명서·언론 종합값으로
-            충족조건(금액·횟수·기간)은 은행별로 달라{' '}
+            내 거래현황 기준 적용금리 높은 순. ‘갈아타기 자동’ = 도약계좌 보유자가 거래 없이도 받는 우대(도약 연계가입·예적금
+            미보유 + 출시·한시 우대). 여기에 급여이체·카드 우대 + 공통우대(소득 0.5%p·재무상담 0.2%p)를 합산하되 기관
+            상한(8%/7%)으로 캡합니다. 항목별 %p·충족조건은 은행연합회 소비자포털 비교공시 정본 기준(2026-06)이며 가입 전{' '}
             <a
               className="text-primary hover:underline"
               href="https://portal.kfb.or.kr/compare/receiving_youth_future_2.php"

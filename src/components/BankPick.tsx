@@ -35,8 +35,8 @@ export function BankPick({ I, C }: { I: Inputs; C: ComputeResult }) {
 
           <div className="mt-4 grid gap-2">
             <Crit label="선정 기준">
-              참여 14개 은행은 우대조건(주거래·급여이체·카드·저소득·재무상담)이 제각각이라, 입력하신 거래현황을 각 은행
-              규칙에 대입해 <b>적용금리가 가장 높은 곳</b>을 추천합니다.
+              참여 14개 은행은 우대조건(<b>도약 연계가입(갈아타기 자동충족)</b>·급여이체·카드·저소득·재무상담·출시)이
+              제각각이라, 입력하신 거래현황을 각 은행 규칙에 대입해 <b>적용금리가 가장 높은 곳</b>을 추천합니다.
             </Crit>
             <Crit label="적용금리 구성">
               기본 {pct(MIRAE.baseRate)} + 우대 <b>+{(C.bb.pref * 100).toFixed(1)}%p</b> = <b>{pct(C.bb.r)}</b> (기관
