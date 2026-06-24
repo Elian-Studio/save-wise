@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://save-wise.vercel.app/sitemap.xml

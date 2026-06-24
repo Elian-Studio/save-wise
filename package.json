@@ -1,0 +1,43 @@
+{
+  "name": "save-wise",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "청년도약계좌 ↔ 청년미래적금 갈아타기 계산기",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/react": "16.3.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "6.0.2",
+    "eslint": "10.5.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.3",
+    "globals": "17.6.0",
+    "jsdom": "29.1.1",
+    "prettier": "3.8.4",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.61.1",
+    "vite": "8.0.16",
+    "vitest": "4.1.9"
+  }
+}
