@@ -1,6 +1,7 @@
 import { BANKS, getBank, NON_PARTICIPATING_NOTE } from '../data/banks';
 import { MAN } from '../data/products';
 import { fmtMoney, pct, won2man } from '../lib/format';
+import { readNumberInput } from '../lib/num';
 import type { CalculatorApi } from '../hooks/useCalculator';
 
 function bracketName(s: number): string {
@@ -64,7 +65,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               min={0}
               step={100}
               autoComplete="off"
-              onChange={(e) => setInput('salary', Number(e.target.value) || 0)}
+              onChange={(e) => setInput('salary', readNumberInput(e))}
             />
             <div className="mini">소득구간: {bracketName(I.salary)}</div>
           </div>
@@ -120,7 +121,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               min={0}
               max={70}
               autoComplete="off"
-              onChange={(e) => setInput('leapMonthly', (Number(e.target.value) || 0) * MAN)}
+              onChange={(e) => setInput('leapMonthly', readNumberInput(e) * MAN)}
             />
           </div>
           <div className="field">
@@ -133,7 +134,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               min={0}
               max={60}
               autoComplete="off"
-              onChange={(e) => setInput('paidCount', Math.max(0, Math.min(60, Number(e.target.value) || 0)))}
+              onChange={(e) => setInput('paidCount', Math.max(0, Math.min(60, readNumberInput(e))))}
             />
             <div className="mini">
               {I.paidCount > I.elapsed ? (
@@ -165,7 +166,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               max={6}
               step={0.1}
               autoComplete="off"
-              onChange={(e) => setInput('leapRate', (Number(e.target.value) || 0) / 100)}
+              onChange={(e) => setInput('leapRate', readNumberInput(e) / 100)}
             />
             <div className="mini">최초 3년 고정 → 이후 1년마다 변동(보도: 변동분 4.5%→3.0%대 하락)</div>
           </div>
@@ -186,7 +187,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               min={0}
               max={50}
               autoComplete="off"
-              onChange={(e) => setInput('miraeMonthly', (Number(e.target.value) || 0) * MAN)}
+              onChange={(e) => setInput('miraeMonthly', readNumberInput(e) * MAN)}
             />
           </div>
           <div className="field" style={{ marginTop: 10 }}>
@@ -208,7 +209,7 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
               max={30}
               step={0.5}
               autoComplete="off"
-              onChange={(e) => setInput('investReturn', (Number(e.target.value) || 0) / 100)}
+              onChange={(e) => setInput('investReturn', readNumberInput(e) / 100)}
             />
             <div className="mini">아래 ‘투자 대비’ 비교에 쓰입니다.</div>
           </div>
