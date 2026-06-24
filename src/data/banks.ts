@@ -83,7 +83,7 @@ export const BANKS: Bank[] = [
     cardPref: 0.002,
     cardCond: '신한카드 18개월↑',
     switchPref: 0.003,
-    switchCond: '6개월 예적금 미보유 또는 신한도약 연계 (신한도약 보유자 한시 +1.0%p[R] 별도)',
+    switchCond: '6개월 예적금 미보유 또는 신한도약 연계가입',
     launchBonus: 0,
     marketingReq: false,
     grade: 'verified',

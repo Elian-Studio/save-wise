@@ -47,6 +47,18 @@ export function BankPick({ I, C }: { I: Inputs; C: ComputeResult }) {
               {C.bb.tier === '기본금리만' &&
                 ' — 우대조건 미충족이라 기본금리만 적용됩니다. 급여이체·자동이체를 이 은행으로 옮기면 더 올라갑니다.'}
             </Crit>
+            {C.bb.bank.marketingReq && (
+              <Crit label="전제조건">
+                이 은행 우대는 <b>마케팅 수신 동의</b>가 전제입니다. 동의하지 않으면 적용금리가 낮아질 수 있어요.
+              </Crit>
+            )}
+            <Crit label="데이터">
+              {C.bb.grade === 'verified'
+                ? '은행연합회 소비자포털 비교공시 정본(verified)'
+                : C.bb.grade === 'press'
+                  ? '언론 교차확인(press) — 가입 전 재확인'
+                  : '미확인(unknown) — 가입 전 반드시 확인'}
+            </Crit>
           </div>
 
           {manualDiff && (
