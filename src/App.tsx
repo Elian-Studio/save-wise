@@ -3,6 +3,7 @@ import { DATA_AS_OF } from './data/products';
 import { InputsPanel } from './components/InputsPanel';
 import { VerdictCard } from './components/VerdictCard';
 import { DecisionTable } from './components/DecisionTable';
+import { BankPick } from './components/BankPick';
 import { ComparePanels } from './components/ComparePanels';
 import { BankRanking } from './components/BankRanking';
 import { ScenarioTables } from './components/ScenarioTables';
@@ -44,6 +45,7 @@ export default function App() {
         <InputsPanel api={api} />
         <VerdictCard C={result} rec={rec} />
         <DecisionTable rec={rec} />
+        <BankPick I={inputs} C={result} />
         <ComparePanels I={inputs} C={result} />
         <Ad slot="top" />
         <BankRanking I={inputs} />
