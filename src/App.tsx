@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { track } from '@vercel/analytics';
 import { Analytics } from '@vercel/analytics/react';
 import { useCalculator } from './hooks/useCalculator';
@@ -13,6 +13,7 @@ import { ScenarioTables } from './components/ScenarioTables';
 import { InvestmentCompare } from './components/InvestmentCompare';
 import { StepsGuide } from './components/StepsGuide';
 import { ProductCompare } from './components/ProductCompare';
+import { Faq } from './components/Faq';
 import { Sources } from './components/Sources';
 import { Disclaimer } from './components/Disclaimer';
 import { Ad } from './components/AdSlot';
@@ -35,7 +36,12 @@ function salaryBand(man: number): string {
 export default function App() {
   const api = useCalculator();
   const { inputs, result, rec } = api;
-  const d = ddayTo('2026-07-03');
+
+  // ponytail: D-day만 클라 계산 — Date.now() 기반이라 프리렌더(빌드시각)와 불일치.
+  // 나머지 화면은 결정적이라 프리렌더 마크업과 그대로 일치한다.
+  const [d, setD] = useState<number | null>(null);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- 마운트 1회 클라 전용값(D-day), 의도된 단일 추가 렌더
+  useEffect(() => setD(ddayTo('2026-07-03')), []);
 
   // 추천 결과 기록 (Vercel Analytics 커스텀 이벤트).
   // ponytail: 라이브 계산이라 1.5s 디바운스 + 동일 결과 중복제거 — 타이핑 중 폭주 방지.
@@ -66,9 +72,11 @@ export default function App() {
           </p>
           <div className="mt-3.5 flex flex-wrap gap-2 text-[12.5px] font-semibold">
             <span className="rounded-full border border-white/25 bg-white/15 px-2.5 py-1">기준일 {DATA_AS_OF}</span>
-            <span className="rounded-full bg-[#ffe2e2] px-2.5 py-1 text-[#a01616]">
-              {d > 0 ? `신청 마감(7/3) D-${d}` : '청년미래적금 신청기간 종료'}
-            </span>
+            {d !== null && (
+              <span className="rounded-full bg-[#ffe2e2] px-2.5 py-1 text-[#a01616]">
+                {d > 0 ? `신청 마감(7/3) D-${d}` : '청년미래적금 신청기간 종료'}
+              </span>
+            )}
             <span className="rounded-full bg-[#16a34a] px-2.5 py-1">출처: 금융위·은행연합회·카드고릴라</span>
           </div>
         </div>
@@ -86,6 +94,7 @@ export default function App() {
         <Ad slot="mid" />
         <StepsGuide />
         <ProductCompare />
+        <Faq />
         <Sources />
         <Ad slot="foot" />
         <Disclaimer />
