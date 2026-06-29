@@ -140,19 +140,22 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
                 />
               )}
             </Field>
-            <Field label="저축 목적">
-              {(id) => (
-                <Select value={I.goal} onValueChange={(v) => setInput('goal', v as 'amount' | 'liquid')}>
-                  <SelectTrigger id={id}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="amount">목돈 최대화</SelectItem>
-                    <SelectItem value="liquid">유동성·짧은 만기 선호</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            </Field>
+            {/* 저축 목적은 유지/전환 추천(recommend)에만 영향 → 신규 모드엔 결과가 없어 표시하지 않음 */}
+            {I.scenario === 'switch' && (
+              <Field label="저축 목적">
+                {(id) => (
+                  <Select value={I.goal} onValueChange={(v) => setInput('goal', v as 'amount' | 'liquid')}>
+                    <SelectTrigger id={id}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="amount">목돈 최대화</SelectItem>
+                      <SelectItem value="liquid">유동성·짧은 만기 선호</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              </Field>
+            )}
             <Field label="주거래 은행" hint="(주로 쓰는 은행)">
               {(id) => <MainBankSelect id={id} value={I.mainBank} onChange={(v) => setInput('mainBank', v)} />}
             </Field>
@@ -172,7 +175,8 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
           </CardContent>
         </Card>
 
-        {/* 도약계좌 */}
+        {/* 도약계좌 — 갈아타기 모드 전용(신규 가입자는 도약 미보유) */}
+        {I.scenario === 'switch' && (
         <Card>
           <CardContent className="pt-5">
             <CardTitle>
@@ -262,12 +266,13 @@ export function InputsPanel({ api }: { api: CalculatorApi }) {
             </Field>
           </CardContent>
         </Card>
+        )}
 
         {/* 미래적금 */}
         <Card>
           <CardContent className="pt-5">
             <CardTitle>
-              ✨ 청년미래적금 <Badge variant="blue">전환 대상</Badge>
+              ✨ 청년미래적금 <Badge variant="blue">{I.scenario === 'switch' ? '전환 대상' : '신규 가입'}</Badge>
             </CardTitle>
             <Field label="월 납입액" hint="(만원, 최대 50)">
               {(id) => (

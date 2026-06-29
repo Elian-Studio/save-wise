@@ -8,6 +8,7 @@ import { MAN } from '../data/products';
 afterEach(cleanup);
 
 const I: Inputs = {
+  scenario: 'switch',
   salary: 3000,
   goal: 'amount',
   elapsed: 18,

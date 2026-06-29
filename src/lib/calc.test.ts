@@ -16,6 +16,7 @@ import { getBank } from '../data/banks';
 const man = (won: number) => Math.round(won / MAN);
 
 const base: Inputs = {
+  scenario: 'switch',
   salary: 3000,
   goal: 'amount',
   elapsed: 18,
@@ -128,6 +129,35 @@ describe('은행 적용금리 매칭 (bankRate / bestBank)', () => {
     const b = bestBank({ ...base, ...noTxn, payBank: 'etc', mainBank: 'etc', salary: 5000 });
     expect(b.bank.id).toBe('post');
     expect(b.tier).not.toBe('기본금리만');
+  });
+  it('동률이면 BANKS[] 배열 순서상 먼저인 은행이 선택됨 (NH=post=6.5%, NH 먼저)', () => {
+    // noTxn + cardCo:'nh' + 저소득 → NH(switch0.3+card0.7+저소득0.5)=6.5%, 우체국(출시1.0+저소득0.5)=6.5% 동률.
+    // strict '>'라 배열에서 앞선 NH가 유지되어야 함.
+    const b = bestBank({ ...base, scenario: 'switch', ...noTxn, cardCo: 'nh', cardSpend: true, salary: 3000 });
+    expect(b.r).toBeCloseTo(0.065, 6);
+    expect(b.bank.id).toBe('nh');
+  });
+});
+
+describe('신규 가입 모드 (scenario=new) 은행 우대', () => {
+  // switchPref는 도약연계 OR 첫거래(예적금 미보유)의 OR 조건 → 첫거래 신규자도 동일 가산.
+  it('신규 모드: switchPref 우대를 ‘첫거래’ 라벨로 동일 가산 (KB)', () => {
+    const sw = bankRate(getBank('kb')!, { ...base, ...noTxn, scenario: 'switch', salary: 3000 });
+    const nw = bankRate(getBank('kb')!, { ...base, ...noTxn, scenario: 'new', salary: 3000 });
+    expect(nw.r).toBeCloseTo(sw.r, 6); // 첫거래 가정 → 동일 적용금리
+    expect(nw.tier).toContain('첫거래');
+    expect(nw.tier).not.toContain('도약연계');
+  });
+  it('신규 모드: switchPref 없는 은행은 두 모드 동일 (수협)', () => {
+    const sw = bankRate(getBank('suhyup')!, { ...base, ...noTxn, scenario: 'switch', salary: 5000 });
+    const nw = bankRate(getBank('suhyup')!, { ...base, ...noTxn, scenario: 'new', salary: 5000 });
+    expect(nw.r).toBeCloseTo(sw.r, 6);
+  });
+  it('신규 모드: 만기 결과는 동일 금리에서 미래적금 36개월 그대로', () => {
+    const Cnew = compute({ ...base, scenario: 'new' });
+    const Csw = compute({ ...base, scenario: 'switch' });
+    expect(Cnew.mirae.total).toBeCloseTo(Csw.mirae.total, 6);
+    expect(Cnew.mirae.n).toBe(36);
   });
 });
 

@@ -29,6 +29,8 @@ function GradeDot({ g }: { g: keyof typeof GRADE }) {
 
 export function BankRanking({ I }: { I: Inputs }) {
   const [showAll, setShowAll] = useState(false);
+  const isNew = I.scenario === 'new';
+  const autoLabel = isNew ? '첫거래 자동' : '갈아타기 자동';
   const rows = BANKS.map((b) => {
     const x = bankRate(b, I);
     const p = product(I.miraeMonthly, 36, x.r, miraeContribMonthly(I.miraeMonthly, I.type));
@@ -39,8 +41,9 @@ export function BankRanking({ I }: { I: Inputs }) {
     ...r,
     i,
     isBest: r.b.id === bestId,
-    switchAuto: (r.b.switchPref ?? 0) + r.b.launchBonus, // 갈아타기 시 거래 없이 자동 가산되는 우대
-    variant: (r.x.tier.includes('도약연계')
+    // 거래 없이 자동 가산되는 우대 — switchPref(도약연계/첫거래) + 출시. 양 모드 동일 적용.
+    switchAuto: (r.b.switchPref ?? 0) + r.b.launchBonus,
+    variant: (r.x.tier.includes('도약연계') || r.x.tier.includes('첫거래')
       ? 'green'
       : r.x.tier.includes('급여이체') || r.x.tier.includes('카드')
         ? 'blue'
@@ -84,9 +87,11 @@ export function BankRanking({ I }: { I: Inputs }) {
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   <Badge variant={variant}>{x.tier}</Badge>
                   {switchAuto > 0 ? (
-                    <Badge variant="green">갈아타기 자동 +{(switchAuto * 100).toFixed(1)}%p</Badge>
+                    <Badge variant="green">
+                      {autoLabel} +{(switchAuto * 100).toFixed(1)}%p
+                    </Badge>
                   ) : (
-                    <Badge variant="muted">갈아타기 자동우대 없음</Badge>
+                    <Badge variant="muted">{autoLabel} 우대 없음</Badge>
                   )}
                   <span className="text-xs text-muted-foreground">
                     {b.cardPref != null
@@ -107,7 +112,7 @@ export function BankRanking({ I }: { I: Inputs }) {
                   <TableHead className="w-10 text-center">순위</TableHead>
                   <TableHead>은행</TableHead>
                   <TableHead className="text-right">적용금리</TableHead>
-                  <TableHead className="text-right">갈아타기 자동</TableHead>
+                  <TableHead className="text-right">{autoLabel}</TableHead>
                   <TableHead>우대 적용 근거</TableHead>
                   <TableHead>카드 실적조건(공시)</TableHead>
                   <TableHead className="text-right">3년 만기수령</TableHead>
@@ -158,9 +163,11 @@ export function BankRanking({ I }: { I: Inputs }) {
           </div>
 
           <p className="mini mt-2.5">
-            내 거래현황 기준 적용금리 높은 순. ‘갈아타기 자동’ = 도약계좌 보유자가 거래 없이도 받는 우대(도약
-            연계가입·예적금 미보유 + 출시·한시 우대). 여기에 급여이체·카드 우대 + 공통우대(소득 0.5%p·재무상담 0.2%p)를
-            합산하되 기관 상한(8%/7%)으로 캡합니다. 항목별 %p·충족조건은 은행연합회 소비자포털 비교공시 정본
+            내 거래현황 기준 적용금리 높은 순.{' '}
+            {isNew
+              ? '‘첫거래 자동’ = 해당 은행 첫거래(직전 6개월~1년 예적금 미보유) 시 거래 없이 받는 우대 + 출시·한시 우대(기존 예적금 보유 시 일부 미적용).'
+              : '‘갈아타기 자동’ = 도약계좌 보유자가 거래 없이도 받는 우대(도약 연계가입·예적금 미보유 + 출시·한시 우대).'}{' '}
+            여기에 급여이체·카드 우대 + 공통우대(소득 0.5%p·재무상담 0.2%p)를 합산하되 기관 상한(8%/7%)으로 캡합니다. 항목별 %p·충족조건은 은행연합회 소비자포털 비교공시 정본
             기준(2026-06)이며 가입 전{' '}
             <a
               className="text-primary hover:underline"

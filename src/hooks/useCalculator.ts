@@ -4,6 +4,7 @@ import { MAN } from '../data/products';
 import { ageFromBirth, elapsedFromMonth } from '../lib/dates';
 
 const DEFAULTS: Inputs = {
+  scenario: 'switch', // 기본: 갈아타기 — 도메인·SEO 정체성(choicewise.kr 갈아타기 계산기)과 일치. 신규는 토글로 진입.
   salary: 3000,
   goal: 'amount',
   elapsed: 18,
@@ -12,8 +13,8 @@ const DEFAULTS: Inputs = {
   leapRate: 0.045,
   miraeMonthly: 50 * MAN,
   type: 'pref',
-  payBank: 'nh',
-  mainBank: 'nh',
+  payBank: '',
+  mainBank: '',
   cardCo: 'nh',
   cardSpend: true,
   autoTransfer: true,
