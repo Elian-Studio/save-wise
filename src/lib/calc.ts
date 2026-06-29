@@ -9,11 +9,13 @@ import { fmtMoney, pct } from './format';
 export type Goal = 'amount' | 'liquid';
 export type MiraeType = 'gen' | 'pref';
 export type BankMode = 'auto' | 'manual';
+export type Scenario = 'new' | 'switch'; // 신규 가입(미래만) | 갈아타기(도약 보유자)
 
 export interface Inputs {
+  scenario: Scenario; // 'new' = 미래적금 신규, 'switch' = 도약→미래 갈아타기
   salary: number; // 만원
   goal: Goal;
-  elapsed: number; // 도약 경과 개월 0..60
+  elapsed: number; // 도약 경과 개월 0..60 (switch 전용)
   paidCount: number; // 도약 실제 납입 횟수 0..60
   leapMonthly: number; // 원
   leapRate: number; // 소수
@@ -52,6 +54,8 @@ export interface BestBank extends BankRateResult {
 }
 
 // 단리 적금 이자: 월 정액 m(원), n개월, 연리 r(소수)
+// ponytail: 1..n 연속 납입 가정(n(n+1)/2 가중). 납입 누락(paidCount<elapsed)으로
+// STAY가 비연속 스케줄이면 회차별 예치기간이 근사가 됨 — 자유적립 추정기로 허용.
 export function simpleInterest(m: number, n: number, r: number): number {
   return (m * r * (n * (n + 1))) / 2 / 12;
 }
@@ -73,8 +77,9 @@ export function miraeContribMonthly(monthlyWon: number, type: MiraeType): number
 }
 
 // 내 거래현황 → 은행 적용금리.
-// 이 앱은 도약 보유자(갈아타기) 전용 → switchPref·launchBonus는 전 사용자 자동 가산.
-// 항목별 %p는 은행연합회 소비자포털 정본(banks.ts). 총 우대는 기관 상한(groupMax)으로 캡.
+// switchPref는 '도약 연계가입 OR 예적금 미보유/첫거래'의 OR 조건(banks.ts switchCond) → 갈아타기 모드는
+// '도약연계', 신규 모드는 '첫거래(예적금 미보유)'로 충족된다고 가정해 양쪽 동일 가산(라벨만 다름).
+// launchBonus(출시)는 전원 가산. 항목별 %p는 은행연합회 소비자포털 정본(banks.ts). 총 우대는 기관 상한(groupMax)으로 캡.
 export function bankRate(bank: Bank, I: Inputs): BankRateResult {
   const base = MIRAE.baseRate;
   const groupMax = bank.grp === 3 ? 0.03 : 0.02;
@@ -82,11 +87,12 @@ export function bankRate(bank: Bank, I: Inputs): BankRateResult {
   let pref = 0;
   const parts: string[] = [];
 
-  // 갈아타기 자동충족 (도약 연계가입/예적금미보유) + 출시·한시 우대
+  // 도약연계(갈아타기) OR 첫거래/예적금 미보유(신규) 자동충족 — 라벨만 모드별로.
   if (bank.switchPref != null) {
     pref += bank.switchPref;
-    parts.push('도약연계');
+    parts.push(I.scenario === 'switch' ? '도약연계' : '첫거래');
   }
+  // 출시·한시 우대 — 신규 포함 전원 적용
   if (bank.launchBonus > 0) {
     pref += bank.launchBonus;
     parts.push('출시');
@@ -121,6 +127,8 @@ export function bestBank(I: Inputs): BestBank {
   let best: BestBank | null = null;
   for (const b of BANKS) {
     const x = bankRate(b, I);
+    // 동률이면 strict '>'로 BANKS[] 배열 순서상 먼저인 은행이 유지됨 → 기본 추천 안정성이
+    // banks.ts 정렬에 의존. 재정렬 시 기본 추천이 바뀔 수 있으니 주의.
     if (!best || x.r > best.r) best = { bank: b, ...x };
   }
   return best as BestBank;

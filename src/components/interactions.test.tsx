@@ -7,11 +7,13 @@ afterEach(cleanup);
 
 describe('폼 라벨 연결 (P1 접근성)', () => {
   it('주요 number/date 입력이 라벨로 접근 가능', () => {
-    const { getByLabelText } = render(<App />);
+    const { getByLabelText, getByRole } = render(<App />);
     expect(getByLabelText(/연 총급여/)).toBeTruthy();
     expect(getByLabelText(/생년월일/)).toBeTruthy();
-    expect(getByLabelText(/현재 적용 금리/)).toBeTruthy();
     expect(getByLabelText(/월 납입액/)).toBeTruthy();
+    // 도약 입력(현재 적용 금리)은 갈아타기 모드에서만 노출
+    fireEvent.click(getByRole('button', { name: /갈아타기/ }));
+    expect(getByLabelText(/현재 적용 금리/)).toBeTruthy();
   });
   it('Select 트리거(combobox)에 id가 부여돼 라벨과 연결 가능', () => {
     const { container } = render(<App />);

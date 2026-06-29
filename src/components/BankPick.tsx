@@ -21,9 +21,10 @@ export function BankPick({ I, C }: { I: Inputs; C: ComputeResult }) {
   const groupMax = C.bb.bank.grp === 3 ? 0.03 : 0.02;
   const manualDiff = I.bankMode === 'manual' && C.bank.id !== C.bb.bank.id;
 
+  const isNew = I.scenario === 'new';
   return (
     <>
-      <h2 className="sec">전환한다면 — 추천 은행과 선정 기준</h2>
+      <h2 className="sec">{isNew ? '추천 은행과 선정 기준' : '전환한다면 — 추천 은행과 선정 기준'}</h2>
       <Card>
         <CardContent className="pt-5">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -35,9 +36,20 @@ export function BankPick({ I, C }: { I: Inputs; C: ComputeResult }) {
 
           <div className="mt-4 grid gap-2">
             <Crit label="선정 기준">
-              참여 14개 은행은 우대조건(<b>도약 연계가입(갈아타기 자동충족)</b>·급여이체·카드·저소득·재무상담·출시)이
-              제각각이라, 입력하신 거래현황을 각 은행 규칙에 대입해 <b>적용금리가 가장 높은 곳</b>을 추천합니다.
+              참여 14개 은행은 우대조건(
+              {isNew ? (
+                <b>첫거래(예적금 미보유)·급여이체·카드·저소득·재무상담·출시</b>
+              ) : (
+                <b>도약 연계가입(갈아타기 자동충족)·급여이체·카드·저소득·재무상담·출시</b>
+              )}
+              )이 제각각이라, 입력하신 거래현황을 각 은행 규칙에 대입해 <b>적용금리가 가장 높은 곳</b>을 추천합니다.
             </Crit>
+            {isNew && (
+              <Crit label="첫거래 가정">
+                해당 은행에 <b>직전 6개월~1년 예적금이 없는 첫거래</b> 기준입니다(은행별 조건 상이). 기존 예적금이 있으면
+                이 우대(약 {((C.bb.bank.switchPref ?? 0) * 100).toFixed(1)}%p)는 빠질 수 있어요.
+              </Crit>
+            )}
             <Crit label="적용금리 구성">
               기본 {pct(MIRAE.baseRate)} + 우대 <b>+{(C.bb.pref * 100).toFixed(1)}%p</b> = <b>{pct(C.bb.r)}</b> (기관
               상한 {(groupMax * 100).toFixed(0)}%p 이내 — 공통우대 포함 캡)
