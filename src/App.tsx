@@ -3,8 +3,10 @@ import { track } from '@vercel/analytics';
 import { Analytics } from '@vercel/analytics/react';
 import { useCalculator } from './hooks/useCalculator';
 import { DATA_AS_OF } from './data/products';
+import { fmtMoney, pct } from './lib/format';
 import { InputsPanel } from './components/InputsPanel';
 import { MiraeSummary } from './components/MiraeSummary';
+import { ShareButton } from './components/ShareButton';
 import { VerdictCard } from './components/VerdictCard';
 import { DecisionTable } from './components/DecisionTable';
 import { BankPick } from './components/BankPick';
@@ -36,8 +38,13 @@ function salaryBand(man: number): string {
 
 export default function App() {
   const api = useCalculator();
-  const { inputs, result, rec, setInput } = api;
+  const { inputs, result, rec, setInput, birth, leapStart } = api;
   const isNew = inputs.scenario === 'new';
+
+  // 공유 텍스트 — 결과 요약(받는 사람이 클릭하도록)
+  const shareSummary = isNew
+    ? `청년미래적금 예상 만기수령액 ${fmtMoney(result.mirae.total)} · 추천 ${result.bb.bank.name} ${pct(result.rMirae)} (내 조건 기준)`
+    : `${rec.main} · 유지 ${fmtMoney(result.stay.total)} vs 미래적금 ${fmtMoney(result.mirae.total)}`;
 
   // ponytail: D-day만 클라 계산 — Date.now() 기반이라 프리렌더(빌드시각)와 불일치.
   // 나머지 화면은 결정적이라 프리렌더 마크업과 그대로 일치한다.
@@ -123,11 +130,13 @@ export default function App() {
         {isNew ? (
           <>
             <MiraeSummary I={inputs} C={result} />
+            <ShareButton state={{ inputs, birth, leapStart }} summary={shareSummary} />
             <StepsGuide scenario={inputs.scenario} />
           </>
         ) : (
           <>
             <VerdictCard C={result} rec={rec} />
+            <ShareButton state={{ inputs, birth, leapStart }} summary={shareSummary} />
             <DecisionTable rec={rec} />
           </>
         )}
