@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Pre-implementation. The repository currently holds only a calculation spec, a README, and git config — **no application code, no `package.json`, no build/lint/test tooling yet.** Do not invent or run build/test commands until the toolchain is actually added.
+Implemented and deployed at **choicewise.kr** (Vercel). Stack: **React 19 + TypeScript + Vite**, Radix/shadcn UI, SCSS-free Tailwind utility classes, build-time **SSG prerender** (`scripts/prerender.mjs` + `entry-server.tsx`), Vercel Web Analytics. Scripts: `npm run dev / build / test / typecheck / lint / format`. Tests are Vitest + Testing Library.
 
-`save-wise` is an interactive web **calculator that compares two Korean youth savings products** — 청년도약계좌 (currently held) vs 청년미래적금 (switch target) — and recommends whether to *stay* or *switch*. It will be deployed to **Vercel** once implemented.
+`save-wise` (brand: **choicewise**) is an interactive web **calculator** with two modes: **갈아타기** (도약계좌 보유자 → 미래적금 전환 유지/전환 추천) and **신규 가입** (미래적금 신규 가입자용 예상 수령액·최적 은행). The pure, framework-free calculation engine lives in `src/lib/calc.ts` with single-source data in `src/data/`.
 
 **Docs location:** all project documents (specs, analyses, reports) live under **`docs/`**. Do not create a `claudedocs/` directory in this repo — it overrides the default global convention.
 

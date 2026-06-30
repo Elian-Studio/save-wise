@@ -13,7 +13,7 @@ export function InvestmentCompare({ I, C }: { I: Inputs; C: ComputeResult }) {
 
   return (
     <>
-      <h2 className="sec">6. 적금 vs 투자 — “청미적을 할까, 투자를 할까?”</h2>
+      <h2 className="sec">적금 vs 투자 — “미래적금을 할까, 투자를 할까?”</h2>
       <Card>
         <CardContent className="pt-5">
           <div className="grid gap-4 md:grid-cols-2">

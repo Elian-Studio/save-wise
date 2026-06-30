@@ -37,8 +37,7 @@ export function useCalculator() {
     const shared = readShareFromUrl(window.location.search);
     if (!shared) return;
     if (shared.inputs) setInputs((prev) => ({ ...prev, ...shared.inputs })); // DEFAULTS 위에 머지 → 스키마 변경에 안전
-    if (shared.birth) setBirth(shared.birth);
-    if (shared.leapStart) setLeapStartState(shared.leapStart);
+    if (shared.leapStart) setLeapStartState(shared.leapStart); // birth는 공유에 미포함(PII) → 수신자는 기본값 표시
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 

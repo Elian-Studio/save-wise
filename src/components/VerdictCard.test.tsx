@@ -58,3 +58,33 @@ describe('VerdictCard verdict별 렌더', () => {
     expect(container.querySelector('[data-testid="verdict"]')?.className).toContain('from-fin-amber');
   });
 });
+
+describe('VerdictCard 순서 경고(해지 순서)', () => {
+  it('switch → 순서 경고 노출', () => {
+    const { queryByTestId } = render(<VerdictCard C={C} rec={rec('switch')} />);
+    expect(queryByTestId('verdict-order-warn')).not.toBeNull();
+  });
+  it('close → 순서 경고 노출(해지 위험군)', () => {
+    const { queryByTestId } = render(<VerdictCard C={C} rec={rec('close')} />);
+    expect(queryByTestId('verdict-order-warn')).not.toBeNull();
+  });
+  it('stay → 순서 경고 미노출', () => {
+    const { queryByTestId } = render(<VerdictCard C={C} rec={rec('stay')} />);
+    expect(queryByTestId('verdict-order-warn')).toBeNull();
+  });
+});
+
+describe('VerdictCard 마감 D-day', () => {
+  it('dday>0 → D-day 표시', () => {
+    const { getByTestId } = render(<VerdictCard C={C} rec={rec('switch')} dday={3} />);
+    expect(getByTestId('verdict').textContent).toContain('D-3');
+  });
+  it('dday 미전달 → 표시 없음', () => {
+    const { getByTestId } = render(<VerdictCard C={C} rec={rec('switch')} />);
+    expect(getByTestId('verdict').textContent).not.toContain('신청 마감');
+  });
+  it('dday<=0(마감) → 표시 없음', () => {
+    const { getByTestId } = render(<VerdictCard C={C} rec={rec('switch')} dday={0} />);
+    expect(getByTestId('verdict').textContent).not.toContain('신청 마감');
+  });
+});

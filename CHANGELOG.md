@@ -5,6 +5,23 @@
 
 배포: https://choicewise.kr
 
+## [1.3.0] — 2026-06-30
+
+### Added
+
+- **결과 공유 링크** ([#19]) — 계산 상태(`inputs`+`leapStart`)를 URL `?s=` 파라미터로 직렬화/복원. 생년월일(PII)은
+  싣지 않고, UTF-8 안전 base64 + URL-safe 인코딩, 손상·악의적 링크는 sanitize(비유한수 드롭·음수 0·경과/납입 0~만기
+  클램프)로 방어. 공유 버튼과 링크 진입 시 자동 복원 포함.
+- **단계형 입력 위저드** ([#19]) — 평면 `InputsPanel`을 스텝 위저드(`StepBadge`/`Slider`/`Segments`/`ToggleCard`)로
+  교체. 모든 스텝을 마운트한 채 `hidden`으로 표시해 빌드 프리렌더의 크롤 가능성을 유지.
+
+### Changed
+
+- **결과 비교를 공정(3년 공통지평) 기준으로 개편** ([#19]) — 만기·납입한도가 다른 두 상품의 만기액 단순 비교 대신
+  같은 월납입·3년 환산 비교를 메인 수치로, 각 상품 만기액은 참고 각주로 강등해 verdict와 일치시켰다.
+- **결론 카드 보강** ([#19]) — 해지 순서 경고·미래적금 마감 D-day 노출, 공유 링크에서 생년월일 제거.
+- 비교 카드 용어 표기 통일 — `실질효과율(광고)`·`정부기여금`·`미래적금`.
+
 ## [1.2.0] — 2026-06-24
 
 ### Changed
@@ -46,6 +63,7 @@
 
 - number 입력에서 선행 0이 지워지지 않던 문제(`04000` → `4000`) ([#2]).
 
+[1.3.0]: https://github.com/Elian-Studio/save-wise/releases/tag/v1.3.0
 [1.2.0]: https://github.com/Elian-Studio/save-wise/releases/tag/v1.2.0
 [1.1.0]: https://github.com/Elian-Studio/save-wise/releases/tag/v1.1.0
 [1.0.0]: https://github.com/Elian-Studio/save-wise/releases/tag/v1.0.0
@@ -55,3 +73,4 @@
 [#4]: https://github.com/Elian-Studio/save-wise/pull/4
 [#5]: https://github.com/Elian-Studio/save-wise/pull/5
 [#6]: https://github.com/Elian-Studio/save-wise/pull/6
+[#19]: https://github.com/Elian-Studio/save-wise/pull/19

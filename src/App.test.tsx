@@ -5,41 +5,28 @@ import App from './App';
 
 afterEach(cleanup);
 
-const clickTab = (getByRole: (role: string, opts: { name: RegExp }) => HTMLElement, name: RegExp) =>
-  fireEvent.click(getByRole('button', { name }));
-const toSwitch = (getByRole: (role: string, opts: { name: RegExp }) => HTMLElement) => clickTab(getByRole, /갈아타기/);
-const toNew = (getByRole: (role: string, opts: { name: RegExp }) => HTMLElement) => clickTab(getByRole, /신규 가입/);
-
-describe('App 스모크 (렌더 회귀 가드)', () => {
-  // 기본 모드는 'switch'(갈아타기) — 도메인·SEO 정체성과 일치. 신규 모드는 토글로 진입.
-  it('신규 모드: 예상 결과 카드 + 은행 14행을 던지지 않고 렌더', () => {
-    const { container, getByRole } = render(<App />);
-    toNew(getByRole);
-    // 신규 모드 결과 카드(유지/전환 verdict 없음)
-    expect(container.querySelector('[data-testid="mirae-summary"]')).toBeTruthy();
-    expect(container.querySelector('[data-testid="verdict-main"]')).toBeNull();
-    // 은행 랭킹표: 기본 상위 5행
-    const bankTbl = [...container.querySelectorAll('table')].find((t) => t.querySelectorAll('thead th').length === 7);
-    expect(bankTbl?.querySelectorAll('tbody tr').length).toBe(5);
+describe('App 스모크 (위저드 렌더 회귀 가드)', () => {
+  it('진입 화면: 보유/미보유 모드 선택 버튼을 던지지 않고 렌더', () => {
+    const { getByRole } = render(<App />);
+    expect(getByRole('button', { name: /보유 중/ })).toBeTruthy();
+    expect(getByRole('button', { name: /미보유/ })).toBeTruthy();
   });
 
-  it('갈아타기 모드 → 결론(verdict) 카드와 추가 섹션이 신규보다 많이 렌더', () => {
-    const { container, getByRole } = render(<App />);
-    toNew(getByRole);
-    const newSecs = container.querySelectorAll('h2.sec').length;
-    toSwitch(getByRole);
-    expect(container.querySelector('[data-testid="verdict-main"]')?.textContent).toMatch(/전환|유지|접전/);
-    // 갈아타기 모드는 비교/요인/단계 섹션이 더 많다
-    expect(container.querySelectorAll('h2.sec').length).toBeGreaterThan(newSecs);
+  it('기본(갈아타기): 결과 verdict가 DOM에 존재 — 스텝 전부 마운트(프리렌더/크롤 유지)', () => {
+    const { container } = render(<App />);
+    // 스텝은 hidden으로 전부 마운트되므로 결과 텍스트가 초기 DOM에 존재해야 한다(SEO 핵심).
+    expect(container.textContent).toMatch(/전환을 권장|유지를 권장|접전/);
+    expect(container.textContent).toContain('은행 추천 TOP 3');
   });
 
-  it('입력 폼(number/날짜 입력 + Radix 셀렉트)이 렌더되고, 갈아타기 시 도약 입력이 추가된다', () => {
-    const { container, getByRole } = render(<App />);
-    toNew(getByRole);
-    expect(container.querySelectorAll('[role="combobox"]').length).toBeGreaterThan(0);
-    const newInputs = container.querySelectorAll('input').length;
-    expect(newInputs).toBeGreaterThan(0);
-    toSwitch(getByRole);
-    expect(container.querySelectorAll('input').length).toBeGreaterThan(newInputs);
+  it('미보유(신규) 선택 → 미래적금 만기 수령액 결과 렌더', () => {
+    const { getByRole, container } = render(<App />);
+    fireEvent.click(getByRole('button', { name: /미보유/ }));
+    expect(container.textContent).toContain('만기 예상 수령액');
+  });
+
+  it('상세 SEO 섹션(은행 순위 자세히)이 위저드 아래 렌더', () => {
+    const { container } = render(<App />);
+    expect(container.textContent).toContain('은행별 적용금리 순위 자세히 보기');
   });
 });

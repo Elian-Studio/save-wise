@@ -52,7 +52,7 @@ export function BankRanking({ I }: { I: Inputs }) {
 
   return (
     <>
-      <h2 className="sec">4. 내 거래현황 기준 추천 은행 (상위 {TOP_N})</h2>
+      <h2 className="sec">내 거래현황 기준 추천 은행 (상위 {TOP_N})</h2>
       <Card>
         <CardContent className="pt-5">
           {/* 모바일: 카드 (가로 스크롤·욱여넣기 대신) */}
