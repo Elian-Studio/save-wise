@@ -344,7 +344,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                 <div className="mt-1 text-[28px] font-extrabold tabular-nums">{fmtMoney(C.stay.total)}</div>
                 <div className="mt-4 flex flex-col gap-2 text-[13px]">
                   <Row k="납입 원금" v={fmtMoney(C.stay.principal)} />
-                  <Row k="정부 기여금" v={`+${fmtMoney(C.stay.contrib)}`} />
+                  <Row k="정부기여금" v={`+${fmtMoney(C.stay.contrib)}`} />
                   <Row k="비과세 이자" v={`+${fmtMoney(C.stay.interest)}`} />
                 </div>
               </aside>
