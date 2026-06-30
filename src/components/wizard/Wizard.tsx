@@ -193,7 +193,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
               은행별 최고금리가 아니라 <b className="text-ink">내가 실제로 받을 금리</b> 기준으로 3분 안에 판단해
               드립니다.
             </p>
-            <p className="mt-7 mb-4 text-[19px] font-extrabold text-navy">1단계 · 도약계좌를 보유 중인가요?</p>
+            <p className="mt-7 mb-4 text-[19px] font-extrabold text-navy">시작하기 · 도약계좌를 보유 중인가요?</p>
             <div className="grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
@@ -460,30 +460,37 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                 </div>
               </section>
 
-              {/* 비교 */}
+              {/* 비교 — 공정 기준(같은 월납입·같은 3년). 만기·한도 차이를 보정해 verdict와 일치시킴 */}
               <section className="mt-4 rounded-2xl border border-line bg-card p-6">
-                <div className="text-[17px] font-extrabold">만기 예상 수령액 비교</div>
+                <div className="text-[17px] font-extrabold">같은 돈·같은 기간(3년) 비교</div>
                 <div className="mb-4 text-[12.5px] text-muted-foreground">
-                  유지=도약 {C.nStay}개월 · 전환=미래 {MIRAE.termMonths}개월 (각 만기 기준)
+                  월 같은 금액을 3년간 넣었다고 보고, 만기·납입한도 차이를 보정한 공정 비교예요.
                 </div>
                 <div className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-3">
                   <CompareCol
-                    title="도약계좌 유지"
-                    total={C.stay.total}
-                    contrib={C.stay.contrib}
-                    interest={C.stay.interest}
+                    title="도약계좌 유지 (3년 환산)"
+                    total={C.leap36.total}
+                    contrib={C.leap36.contrib}
+                    interest={C.leap36.interest}
                     win={C.diff3yr <= 0}
                     tone="navy"
                   />
                   <div className="flex items-center justify-center text-[20px] font-bold text-muted-foreground">vs</div>
                   <CompareCol
                     title={`미래적금 전환 (${C.bank.name})`}
-                    total={C.mirae.total}
-                    contrib={C.mirae.contrib}
-                    interest={C.mirae.interest}
+                    total={C.mirae36.total}
+                    contrib={C.mirae36.contrib}
+                    interest={C.mirae36.interest}
                     win={C.diff3yr > 0}
                     tone="green"
                   />
+                </div>
+                {/* 참고: 각 상품 만기까지 — 강등(작게·muted). 큰 볼드 숫자로 경쟁시키지 않음 */}
+                <div className="mt-4 rounded-xl bg-secondary px-4 py-3 text-[12px] leading-relaxed text-muted-foreground">
+                  참고 · 각 상품 만기까지 채우면 — 도약 유지({C.nStay}개월){' '}
+                  <b className="tabular-nums text-ink">{fmtMoney(C.stay.total)}</b>, 미래적금({MIRAE.termMonths}개월){' '}
+                  <b className="tabular-nums text-ink">{fmtMoney(C.mirae.total)}</b>. 납입기간·한도가 달라 두 만기액의
+                  단순 비교는 의미가 작습니다.
                 </div>
               </section>
             </>
@@ -589,9 +596,11 @@ export function Wizard({ api }: { api: CalculatorApi }) {
           <button
             type="button"
             onClick={next}
-            className="min-h-11 rounded-xl bg-primary px-6 font-bold text-white shadow-sm"
+            className={`min-h-11 rounded-xl px-6 font-bold ${
+              step < lastStep ? 'bg-primary text-white shadow-sm' : 'border border-line bg-card text-muted-foreground'
+            }`}
           >
-            {step < lastStep ? '다음 단계 →' : '처음부터 다시'}
+            {step < lastStep ? '다음 단계 →' : '↻ 처음부터'}
           </button>
         </div>
       )}
