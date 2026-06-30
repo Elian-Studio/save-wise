@@ -186,9 +186,9 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         {/* STEP 0 — 진입: 도약계좌 보유 여부 */}
         <section hidden={cur !== 'entry'}>
           <div className="mx-auto max-w-[640px] py-8 text-center">
-            <h1 className="text-2xl font-extrabold tracking-tight text-navy">
+            <h2 className="text-2xl font-extrabold tracking-tight text-navy">
               청년도약계좌, 미래적금으로 갈아타는 게 유리할까요?
-            </h1>
+            </h2>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
               은행별 최고금리가 아니라 <b className="text-ink">내가 실제로 받을 금리</b> 기준으로 3분 안에 판단해
               드립니다.
