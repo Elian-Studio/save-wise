@@ -41,4 +41,28 @@ describe('공유 상태 직렬화/복원', () => {
   it('readShareFromUrl: 유효한 ?s= 복원', () => {
     expect(readShareFromUrl(`?s=${encodeShare(state)}`)).toEqual(state);
   });
+
+  it('비ASCII 문자열도 라운드트립(UTF-8 안전)', () => {
+    const utf8: ShareState = { ...state, inputs: { ...inputs, manualBank: '한글은행🏦' } };
+    expect(decodeShare(encodeShare(utf8))).toEqual(utf8);
+  });
+
+  it('구버전 링크(필드 누락)는 그대로 부분 복원 — DEFAULTS 머지용', () => {
+    const partial: Partial<Inputs> = { ...inputs };
+    delete partial.investReturn;
+    const link = encodeShare({ ...state, inputs: partial } as unknown as ShareState);
+    const decoded = decodeShare(link);
+    expect(decoded?.inputs).not.toHaveProperty('investReturn');
+    expect(decoded?.inputs?.salary).toBe(inputs.salary);
+  });
+
+  it('손상된 숫자(경계 밖)는 복원 시 클램프', () => {
+    const bad = { ...inputs, elapsed: 9999, paidCount: -5, salary: -100, leapMonthly: -1 };
+    const link = encodeShare({ ...state, inputs: bad } as ShareState);
+    const got = decodeShare(link)?.inputs;
+    expect(got?.elapsed).toBe(60); // 0..60
+    expect(got?.paidCount).toBe(0);
+    expect(got?.salary).toBe(0); // 음수 금액 → 0
+    expect(got?.leapMonthly).toBe(0);
+  });
 });

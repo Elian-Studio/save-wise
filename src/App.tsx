@@ -136,8 +136,8 @@ export default function App() {
         ) : (
           <>
             <VerdictCard C={result} rec={rec} />
-            <ShareButton state={{ inputs, birth, leapStart }} summary={shareSummary} />
             <DecisionTable rec={rec} />
+            <ShareButton state={{ inputs, birth, leapStart }} summary={shareSummary} />
           </>
         )}
         <BankPick I={inputs} C={result} />

@@ -27,11 +27,11 @@ export function ShareButton({ state, summary }: { state: ShareState; summary: st
   };
 
   return (
-    <div className="mt-3 flex items-center justify-center gap-2 text-[13px] text-muted-foreground">
-      <span>내 결과를 친구에게 보내기</span>
-      <Button variant="outline" size="sm" onClick={onShare}>
-        {copied ? '링크 복사됨 ✓' : '🔗 결과 공유'}
+    <div className="mt-4 flex flex-col items-center gap-1.5">
+      <Button onClick={onShare} className="h-11 w-full max-w-xs text-sm font-bold sm:w-auto sm:px-8">
+        {copied ? '링크 복사됨 ✓' : '이 결과 카톡·링크로 공유'}
       </Button>
+      <span className="text-xs text-muted-foreground">내 조건이 담긴 링크가 그대로 전달됩니다</span>
     </div>
   );
 }
