@@ -3,18 +3,10 @@ import { track } from '@vercel/analytics';
 import { Analytics } from '@vercel/analytics/react';
 import { useCalculator } from './hooks/useCalculator';
 import { DATA_AS_OF } from './data/products';
-import { fmtMoney, pct } from './lib/format';
-import { InputsPanel } from './components/InputsPanel';
-import { MiraeSummary } from './components/MiraeSummary';
-import { ShareButton } from './components/ShareButton';
-import { VerdictCard } from './components/VerdictCard';
-import { DecisionTable } from './components/DecisionTable';
-import { BankPick } from './components/BankPick';
-import { ComparePanels } from './components/ComparePanels';
+import { Wizard } from './components/wizard/Wizard';
 import { BankRanking } from './components/BankRanking';
 import { ScenarioTables } from './components/ScenarioTables';
 import { InvestmentCompare } from './components/InvestmentCompare';
-import { StepsGuide } from './components/StepsGuide';
 import { ProductCompare } from './components/ProductCompare';
 import { Faq } from './components/Faq';
 import { Sources } from './components/Sources';
@@ -38,13 +30,8 @@ function salaryBand(man: number): string {
 
 export default function App() {
   const api = useCalculator();
-  const { inputs, result, rec, setInput, leapStart } = api;
+  const { inputs, result, rec } = api;
   const isNew = inputs.scenario === 'new';
-
-  // 공유 텍스트 — 결과 요약(받는 사람이 클릭하도록)
-  const shareSummary = isNew
-    ? `청년미래적금 예상 만기수령액 ${fmtMoney(result.mirae.total)} · 추천 ${result.bb.bank.name} ${pct(result.rMirae)} (내 조건 기준)`
-    : `${rec.main} · 유지 ${fmtMoney(result.stay.total)} vs 미래적금 ${fmtMoney(result.mirae.total)}`;
 
   // ponytail: D-day만 클라 계산 — Date.now() 기반이라 프리렌더(빌드시각)와 불일치.
   // 나머지 화면은 결정적이라 프리렌더 마크업과 그대로 일치한다.
@@ -76,46 +63,12 @@ export default function App() {
 
   return (
     <>
-      <header className="bg-gradient-to-br from-navy to-navy2 py-7 text-white">
-        <div className="mx-auto max-w-[1080px] px-[18px]">
-          <h1 className="text-2xl font-extrabold tracking-tight">
+      <header className="bg-gradient-to-br from-navy to-navy2 py-6 text-white">
+        <div className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-3 px-[18px]">
+          <h1 className="text-xl font-extrabold tracking-tight">
             {isNew ? '청년미래적금 계산기 — 신규 가입' : '청년도약계좌 ↔ 청년미래적금 갈아타기 계산기'}
           </h1>
-          <p className="mt-2 text-sm text-[#c7d2e4]">
-            {isNew ? (
-              <>
-                내 거래은행을 넣으면 <b>미래적금 예상 수령액</b>과 <b>나에게 가장 유리한 은행</b>을 찾아줍니다.
-              </>
-            ) : (
-              <>
-                내 상황과 거래은행을 넣으면 <b>유지/전환</b> 결론과 <b>나에게 가장 유리한 은행</b>을 찾아줍니다.
-              </>
-            )}
-          </p>
-          {/* 페이지 전체를 재구성하는 모드 전환 → tabpanel이 아니므로 aria-pressed 토글 버튼이 정직한 시맨틱 */}
-          <div
-            role="group"
-            aria-label="계산 모드"
-            className="mt-3.5 inline-flex rounded-full bg-white/10 p-1 text-[13px] font-bold"
-          >
-            <button
-              type="button"
-              aria-pressed={isNew}
-              onClick={() => setInput('scenario', 'new')}
-              className={`rounded-full px-3.5 py-1.5 transition ${isNew ? 'bg-white text-navy' : 'text-white/80'}`}
-            >
-              신규 가입
-            </button>
-            <button
-              type="button"
-              aria-pressed={!isNew}
-              onClick={() => setInput('scenario', 'switch')}
-              className={`rounded-full px-3.5 py-1.5 transition ${!isNew ? 'bg-white text-navy' : 'text-white/80'}`}
-            >
-              갈아타기(도약 보유자)
-            </button>
-          </div>
-          <div className="mt-3.5 flex flex-wrap gap-2 text-[12.5px] font-semibold">
+          <div className="flex flex-wrap gap-2 text-[12.5px] font-semibold">
             <span className="rounded-full border border-white/25 bg-white/15 px-2.5 py-1">기준일 {DATA_AS_OF}</span>
             {d !== null && (
               <span className="rounded-full bg-[#ffe2e2] px-2.5 py-1 text-[#a01616]">
@@ -125,30 +78,52 @@ export default function App() {
           </div>
         </div>
       </header>
+
       <main className="mx-auto max-w-[1080px] px-[18px] pb-20">
-        <InputsPanel api={api} />
-        {isNew ? (
-          <>
-            <MiraeSummary I={inputs} C={result} />
-            <ShareButton state={{ inputs, leapStart }} summary={shareSummary} />
-            <StepsGuide scenario={inputs.scenario} />
-          </>
-        ) : (
-          <>
-            <VerdictCard C={result} rec={rec} dday={d} />
-            <DecisionTable rec={rec} />
-            <ShareButton state={{ inputs, leapStart }} summary={shareSummary} />
-          </>
-        )}
-        <BankPick I={inputs} C={result} />
-        {!isNew && <ComparePanels I={inputs} C={result} />}
+        {/* 메인 흐름: Switch Advisor 스텝 위저드(실엔진 구동) */}
+        <Wizard api={api} />
+
+        {/* 상세/심화 — 위저드는 요약, 아래는 전체 데이터(SEO 크롤용·기본 닫힘, DOM 유지). */}
         <Ad slot="top" />
-        <BankRanking I={inputs} />
-        {!isNew && <ScenarioTables I={inputs} />}
-        <InvestmentCompare I={inputs} C={result} />
+        <details className="group mt-7">
+          <summary className="disc">
+            <span>은행별 적용금리 순위 자세히 보기</span>
+            <span aria-hidden className="text-muted-foreground transition-transform group-open:rotate-180">
+              ⌄
+            </span>
+          </summary>
+          <BankRanking I={inputs} />
+        </details>
+        {!isNew && (
+          <details className="group mt-7">
+            <summary className="disc">
+              <span>소득·도약 금리별 시나리오 자세히 보기</span>
+              <span aria-hidden className="text-muted-foreground transition-transform group-open:rotate-180">
+                ⌄
+              </span>
+            </summary>
+            <ScenarioTables I={inputs} />
+          </details>
+        )}
+        <details className="group mt-7">
+          <summary className="disc">
+            <span>적금 vs 투자 수익 비교 자세히 보기</span>
+            <span aria-hidden className="text-muted-foreground transition-transform group-open:rotate-180">
+              ⌄
+            </span>
+          </summary>
+          <InvestmentCompare I={inputs} C={result} />
+        </details>
         <Ad slot="mid" />
-        {!isNew && <StepsGuide scenario={inputs.scenario} />}
-        <ProductCompare />
+        <details className="group mt-7">
+          <summary className="disc">
+            <span>두 상품 기본 스펙 비교 자세히 보기</span>
+            <span aria-hidden className="text-muted-foreground transition-transform group-open:rotate-180">
+              ⌄
+            </span>
+          </summary>
+          <ProductCompare />
+        </details>
         <Faq scenario={inputs.scenario} />
         <Sources />
         <Ad slot="foot" />

@@ -21,7 +21,7 @@ export function ScenarioTables({ I }: { I: Inputs }) {
   const elapses = [6, 18, 30, 42, 54];
   return (
     <>
-      <h2 className="sec">5. 시나리오별 결론 (변수 하나씩 바꿔보기)</h2>
+      <h2 className="sec">시나리오별 결론 (변수 하나씩 바꿔보기)</h2>
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardContent className="pt-5">

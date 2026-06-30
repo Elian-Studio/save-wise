@@ -13,7 +13,7 @@ export function ProductCompare() {
   ];
   return (
     <>
-      <h2 className="sec">8. 상품 기본 비교</h2>
+      <h2 className="sec">상품 기본 비교</h2>
       <Card>
         <CardContent className="pt-5">
           <Table>

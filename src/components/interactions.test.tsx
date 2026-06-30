@@ -5,35 +5,30 @@ import App from '../App';
 
 afterEach(cleanup);
 
-describe('폼 라벨 연결 (P1 접근성)', () => {
-  it('주요 number/date 입력이 라벨로 접근 가능', () => {
-    const { getByLabelText, getByRole } = render(<App />);
-    expect(getByLabelText(/연 총급여/)).toBeTruthy();
-    expect(getByLabelText(/생년월일/)).toBeTruthy();
-    expect(getByLabelText(/월 납입액/)).toBeTruthy();
-    // 도약 입력(현재 적용 금리)은 갈아타기 모드에서만 노출
-    fireEvent.click(getByRole('button', { name: /갈아타기/ }));
-    expect(getByLabelText(/현재 적용 금리/)).toBeTruthy();
-  });
-  it('Select 트리거(combobox)에 id가 부여돼 라벨과 연결 가능', () => {
-    const { container } = render(<App />);
-    const comboboxes = [...container.querySelectorAll('[role="combobox"]')];
-    expect(comboboxes.length).toBeGreaterThan(0);
-    // Field로 감싼 Select는 id를 가져 Label htmlFor와 연결됨
-    expect(comboboxes.some((c) => c.id)).toBe(true);
-  });
-});
-
-describe('InputsPanel 입력 반영', () => {
-  it('연 총급여 변경 → 소득구간 문구 갱신', () => {
+describe('위저드 입력 접근성·반영', () => {
+  it('출생 연도 슬라이더가 라벨로 접근 가능하고 만 나이에 반영', () => {
     const { getByLabelText, container } = render(<App />);
-    const salary = getByLabelText(/연 총급여/);
-    fireEvent.change(salary, { target: { value: '6500' } });
-    expect(container.textContent).toContain('6,000~7,500만원');
+    const slider = getByLabelText(/출생 연도/);
+    expect(slider).toBeTruthy();
+    fireEvent.change(slider, { target: { value: '2005' } });
+    expect(container.textContent).toMatch(/만 \d+세/);
+  });
+
+  it('주거래·급여이체 은행 select가 라벨로 접근 가능', () => {
+    const { getAllByLabelText } = render(<App />);
+    expect(getAllByLabelText(/주거래 은행/).length).toBeGreaterThan(0);
+    expect(getAllByLabelText(/급여이체 은행/).length).toBeGreaterThan(0);
+  });
+
+  it('소득 구간 세그먼트 클릭이 던지지 않고 최적 은행 패널 유지', () => {
+    const { getByRole, container } = render(<App />);
+    fireEvent.click(getByRole('button', { name: /보유 중/ })); // 진입 → 기본정보 스텝(세그먼트 노출)
+    fireEvent.click(getByRole('button', { name: /6,000만원 초과/ }));
+    expect(container.textContent).toContain('최적 은행');
   });
 });
 
-describe('BankRanking 전체보기 토글', () => {
+describe('상세 BankRanking 전체보기 토글 (위저드 아래 SEO 섹션)', () => {
   const bankTable = (root: HTMLElement) =>
     [...root.querySelectorAll('table')].find((t) => /순위/.test(t.querySelector('thead')?.textContent || ''))!;
   it('기본 상위 5행 → 토글 시 14행', () => {
@@ -44,7 +39,7 @@ describe('BankRanking 전체보기 토글', () => {
   });
 });
 
-describe('a11y 구조', () => {
+describe('a11y 구조 (SEO 상세 섹션)', () => {
   it('모든 테이블 헤더 셀에 scope="col"', () => {
     const { container } = render(<App />);
     const ths = [...container.querySelectorAll('thead th')];
