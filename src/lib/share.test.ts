@@ -23,7 +23,7 @@ const inputs: Inputs = {
   manualBank: '',
   investReturn: 0.07,
 };
-const state: ShareState = { inputs, birth: '1997-05-10', leapStart: '2024-12' };
+const state: ShareState = { inputs, leapStart: '2024-12' };
 
 describe('공유 상태 직렬화/복원', () => {
   it('encode→decode 라운드트립이 원본과 동일', () => {

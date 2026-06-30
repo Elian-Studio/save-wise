@@ -38,7 +38,7 @@ function salaryBand(man: number): string {
 
 export default function App() {
   const api = useCalculator();
-  const { inputs, result, rec, setInput, birth, leapStart } = api;
+  const { inputs, result, rec, setInput, leapStart } = api;
   const isNew = inputs.scenario === 'new';
 
   // 공유 텍스트 — 결과 요약(받는 사람이 클릭하도록)
@@ -130,14 +130,14 @@ export default function App() {
         {isNew ? (
           <>
             <MiraeSummary I={inputs} C={result} />
-            <ShareButton state={{ inputs, birth, leapStart }} summary={shareSummary} />
+            <ShareButton state={{ inputs, leapStart }} summary={shareSummary} />
             <StepsGuide scenario={inputs.scenario} />
           </>
         ) : (
           <>
-            <VerdictCard C={result} rec={rec} />
+            <VerdictCard C={result} rec={rec} dday={d} />
             <DecisionTable rec={rec} />
-            <ShareButton state={{ inputs, birth, leapStart }} summary={shareSummary} />
+            <ShareButton state={{ inputs, leapStart }} summary={shareSummary} />
           </>
         )}
         <BankPick I={inputs} C={result} />

@@ -1,4 +1,5 @@
-// 결과 공유: 계산 상태(inputs+birth+leapStart)를 URL ?s= 파라미터로 직렬화/복원.
+// 결과 공유: 계산 상태(inputs+leapStart)를 URL ?s= 파라미터로 직렬화/복원.
+// birth(생년월일)는 PII라 공유에 싣지 않는다 — age는 표시용일 뿐, 계산은 inputs.elapsed/paidCount로 복원됨.
 // 크롤러용 동적 OG는 별개(서버리스 필요) — 여기선 링크 복원만 담당한다.
 // btoa/atob는 브라우저 전역. 모듈 로드 시점이 아니라 함수 내부에서만 호출 → SSR/프리렌더 안전.
 import type { Inputs } from './calc';
@@ -6,15 +7,14 @@ import { LEAP } from '../data/products';
 
 export interface ShareState {
   inputs: Inputs;
-  birth: string;
   leapStart: string;
 }
 
 // 복원 결과: 구버전 링크는 일부 필드가 빠질 수 있어 전부 optional·inputs는 Partial.
 // useCalculator가 DEFAULTS 위에 머지하므로 빠진 필드는 안전하게 메워진다.
+// (구버전 링크의 birth 필드는 타입에 없어 복원 시 자연 무시됨)
 export interface DecodedShare {
   inputs?: Partial<Inputs>;
-  birth?: string;
   leapStart?: string;
 }
 
