@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup, fireEvent } from '@testing-library/react';
-import { YouthSavings as App } from './services/youthSavings/YouthSavings';
+import App from './App';
 
 afterEach(cleanup);
 

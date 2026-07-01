@@ -14,8 +14,7 @@
 
 ## 링크
 
-- [choicewise — 금융 결정 계산기 모음](https://choicewise.kr/)
-- [청년도약계좌 ↔ 청년미래적금 갈아타기 계산기](https://choicewise.kr/youth-savings)
+- [계산기 (메인)](https://choicewise.kr/)
 - [개인정보처리방침](https://choicewise.kr/privacy.html)
 
 ## 출처
