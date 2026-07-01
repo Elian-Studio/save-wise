@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { track } from '@vercel/analytics';
-import { Analytics } from '@vercel/analytics/react';
-import { useCalculator } from './hooks/useCalculator';
-import { DATA_AS_OF } from './data/products';
-import { Wizard } from './components/wizard/Wizard';
-import { BankRanking } from './components/BankRanking';
-import { ScenarioTables } from './components/ScenarioTables';
-import { InvestmentCompare } from './components/InvestmentCompare';
-import { ProductCompare } from './components/ProductCompare';
-import { Faq } from './components/Faq';
-import { Sources } from './components/Sources';
-import { Disclaimer } from './components/Disclaimer';
-import { Ad } from './components/AdSlot';
+import { useCalculator } from '../../hooks/useCalculator';
+import { DATA_AS_OF } from '../../data/products';
+import { Wizard } from '../../components/wizard/Wizard';
+import { BankRanking } from '../../components/BankRanking';
+import { ScenarioTables } from '../../components/ScenarioTables';
+import { InvestmentCompare } from '../../components/InvestmentCompare';
+import { ProductCompare } from '../../components/ProductCompare';
+import { Faq } from '../../components/Faq';
+import { Sources } from '../../components/Sources';
+import { Disclaimer } from '../../components/Disclaimer';
+import { Ad } from '../../components/AdSlot';
 
 function ddayTo(date: string): number {
   const dead = new Date(`${date}T23:59:59+09:00`).getTime();
@@ -28,7 +27,7 @@ function salaryBand(man: number): string {
   return '7500+';
 }
 
-export default function App() {
+export function YouthSavings() {
   const api = useCalculator();
   const { inputs, result, rec } = api;
   const isNew = inputs.scenario === 'new';
@@ -129,7 +128,6 @@ export default function App() {
         <Ad slot="foot" />
         <Disclaimer scenario={inputs.scenario} />
       </main>
-      <Analytics />
     </>
   );
 }
