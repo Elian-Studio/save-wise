@@ -182,11 +182,14 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         </nav>
       )}
 
-      {/* 스텝 전환 시 높이 출렁임 방지: 입력 스텝(~646~649px, 사용자 측정)만큼 min-h 고정.
-          entry(짧음)는 여백, result(큼)는 초과해 늘어남 → 입력 단계 간 이동에서 화면이 안 튄다. */}
-      <div className="min-h-[660px] pt-6 pb-4">
-        {/* STEP 0 — 진입: 도약계좌 보유 여부 */}
-        <section hidden={cur !== 'entry'}>
+      {/* 스텝 전환 시 '다음 단계' 버튼이 안 움직이도록: 데스크톱(2단 레이아웃)에서 입력 스텝 높이를
+          가장 큰 스텝(basics ≈ 콘텐츠 732 + 패딩 40 = 772px)에 맞춰 통일. lg:min-h-[780px]로 basics·
+          account·conditions 컨테이너 높이를 동일하게 → 버튼 Y 고정. result(큼)는 초과해 늘어남(최종 단계).
+          모바일은 스텝 높이 편차가 크고 min-h를 강제하면 entry가 비어 보여 데스크톱에만 적용.
+          flex-col + entry flex-1 중앙정렬 → entry 카드 상단쏠림 제거. */}
+      <div className="flex flex-col pt-6 pb-4 lg:min-h-[780px]">
+        {/* STEP 0 — 진입: 도약계좌 보유 여부 (세로 중앙정렬 위해 hidden 속성 대신 조건부 class) */}
+        <section className={cur === 'entry' ? 'flex flex-1 items-center justify-center' : 'hidden'}>
           <div className="mx-auto max-w-[640px] py-8 text-center">
             <h2 className="text-2xl font-extrabold tracking-tight text-navy">
               청년도약계좌, 미래적금으로 갈아타는 게 유리할까요?
