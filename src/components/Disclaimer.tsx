@@ -23,12 +23,15 @@ export function Disclaimer({ scenario }: { scenario: Scenario }) {
           <b>가정치이며 보장되지 않습니다</b>. 최종 결정 전 반드시 해당 은행과 서민금융진흥원에 확인하세요. 본 서비스는
           투자·금융 자문이 아닙니다.
         </p>
-        <p className="mt-3">
-          <a className="underline hover:text-foreground" href="/privacy.html">
+        <p className="mt-3 flex items-center gap-3">
+          <a className="inline-block py-1.5 underline hover:text-foreground" href="/privacy.html">
             개인정보처리방침
           </a>
-          <span className="mx-2">·</span>
-          <a className="underline hover:text-foreground" href={`mailto:${CONTACT_EMAIL}`}>
+          <span aria-hidden="true">·</span>
+          <a
+            className="inline-block py-1.5 underline hover:text-foreground"
+            href={`mailto:${CONTACT_EMAIL}`}
+          >
             문의
           </a>
         </p>
