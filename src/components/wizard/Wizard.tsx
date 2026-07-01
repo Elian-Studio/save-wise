@@ -6,7 +6,7 @@ import { MAN, MIRAE, INCOME } from '../../data/products';
 import { fmtMoney, pct, won2man } from '../../lib/format';
 import { ShareButton } from '../ShareButton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { StepBadge, Slider, Segments, ToggleCard, type SegOption } from './controls';
+import { Slider, Segments, ToggleCard, type SegOption } from './controls';
 
 // Switch Advisor(Claude Design)의 스텝 위저드 UX를 실엔진(calc.ts) 위로 포팅.
 // 핵심: 스텝을 조건부 언마운트하지 않고 전부 마운트한 채 hidden으로 활성만 표시 →
@@ -233,7 +233,6 @@ export function Wizard({ api }: { api: CalculatorApi }) {
 
         {/* STEP — 기본정보 */}
         <section hidden={cur !== 'basics'}>
-          <StepBadge>STEP 01 · 기본 정보</StepBadge>
           <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">기본 정보를 알려주세요</h2>
           <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-start">
             <div className="flex flex-col gap-6 rounded-2xl border border-line bg-card p-6">
@@ -290,7 +289,6 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         {/* STEP — 현재 계좌 (switch 전용, 프리렌더 기본모드라 크롤 포함) */}
         {!isNew && (
           <section hidden={cur !== 'account'}>
-            <StepBadge>STEP 02 · 현재 도약계좌</StepBadge>
             <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">
               지금 도약계좌, 어떻게 넣고 계세요?
             </h2>
@@ -364,7 +362,6 @@ export function Wizard({ api }: { api: CalculatorApi }) {
 
         {/* STEP — 우대조건 / 가입조건 */}
         <section hidden={cur !== 'conditions'}>
-          <StepBadge>{isNew ? 'STEP 02 · 가입 조건' : 'STEP 03 · 우대 조건'}</StepBadge>
           <h2 className="mb-2 text-2xl font-extrabold tracking-tight text-navy">실제로 채울 수 있는 조건만 켜주세요</h2>
           <p className="mb-6 text-[14px] text-muted-foreground">
             최고금리는 모든 조건을 다 채워야 받는 숫자예요. <b className="text-ink">정말 달성 가능한 것</b>만 선택하면
@@ -426,7 +423,6 @@ export function Wizard({ api }: { api: CalculatorApi }) {
 
         {/* STEP — 결과 */}
         <section hidden={cur !== 'result'}>
-          <StepBadge>{isNew ? 'STEP 03 · 결과' : 'STEP 04 · 진단 결과'}</StepBadge>
           {isNew ? (
             <div className={`rounded-2xl bg-gradient-to-br from-fin-green to-[#0f6b32] p-7 text-white`}>
               <p className="text-[13px] opacity-85">
@@ -593,10 +589,10 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         </section>
       </div>
 
-      {/* 푸터 네비 — 모바일은 입력 스텝이 길어 버튼이 화면 밖으로 사라지므로 하단 sticky 바로 항상 노출.
-          데스크톱(lg)은 높이통일로 버튼 위치가 이미 고정이라 일반 흐름(static). */}
+      {/* 푸터 네비 — 모바일·데스크톱 모두 하단 sticky로 버튼 위치 고정. 배경 투명(버튼만 노출).
+          모바일은 이전/다음 양끝, 데스크톱은 둘 다 오른쪽 정렬. */}
       {step > 0 && (
-        <div className="sticky bottom-0 z-20 -mx-[18px] flex items-center justify-between gap-4 border-t border-line bg-card/95 px-[18px] py-3 backdrop-blur lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-2 lg:backdrop-blur-none">
+        <div className="sticky bottom-0 z-20 flex items-center justify-between gap-4 py-3 lg:justify-end">
           <button
             type="button"
             onClick={prev}
