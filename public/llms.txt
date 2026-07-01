@@ -15,6 +15,7 @@
 ## 링크
 
 - [choicewise — 금융 결정 계산기 모음](https://choicewise.kr/)
+- [K-패스 모두의카드 교통카드 추천](https://choicewise.kr/transit) — 나이·거주지·교통비로 가장 유리한 카드사 카드 추천. 2026 K-패스는 모두의카드(정액제·초과분 전액환급)로 개편돼 대부분 기후동행보다 유리.
 - [청년도약계좌 ↔ 청년미래적금 갈아타기 계산기](https://choicewise.kr/youth-savings)
 - [개인정보처리방침](https://choicewise.kr/privacy.html)
 
