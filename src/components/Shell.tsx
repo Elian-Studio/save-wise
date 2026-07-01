@@ -21,9 +21,6 @@ export function Shell() {
           <Link to="/" className="font-extrabold tracking-tight text-navy">
             choicewise
           </Link>
-          <Link to="/transit" className="text-sm text-muted-foreground hover:text-foreground">
-            K-패스 카드
-          </Link>
           <Link
             to="/youth-savings"
             className="text-sm text-muted-foreground hover:text-foreground"

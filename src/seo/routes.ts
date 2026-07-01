@@ -1,6 +1,5 @@
 import type { RouteSeo } from './head';
 import { youthSavingsSeo } from '../services/youthSavings/seo';
-import { transitSeo } from '../services/transit/seo';
 
 export const hubSeo: RouteSeo = {
   path: '/',
@@ -13,4 +12,4 @@ export const hubSeo: RouteSeo = {
 };
 
 // 프리렌더 대상 라우트 목록(순서 무관). '/'는 dist/index.html, 나머지는 dist/<path>/index.html.
-export const ROUTE_SEO: RouteSeo[] = [hubSeo, youthSavingsSeo, transitSeo];
+export const ROUTE_SEO: RouteSeo[] = [hubSeo, youthSavingsSeo];
