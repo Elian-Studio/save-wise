@@ -182,7 +182,9 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         </nav>
       )}
 
-      <div className="pt-6 pb-4">
+      {/* 스텝 전환 시 높이 출렁임 방지: 입력 스텝(~646~649px, 사용자 측정)만큼 min-h 고정.
+          entry(짧음)는 여백, result(큼)는 초과해 늘어남 → 입력 단계 간 이동에서 화면이 안 튄다. */}
+      <div className="min-h-[660px] pt-6 pb-4">
         {/* STEP 0 — 진입: 도약계좌 보유 여부 */}
         <section hidden={cur !== 'entry'}>
           <div className="mx-auto max-w-[640px] py-8 text-center">
