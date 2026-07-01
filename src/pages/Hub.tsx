@@ -4,12 +4,6 @@ type ServiceCard = { to: string; emoji: string; title: string; desc: string };
 
 const LIVE: ServiceCard[] = [
   {
-    to: '/transit',
-    emoji: '🚌',
-    title: 'K-패스 모두의카드 교통카드 추천',
-    desc: '나이·거주지·교통비로 가장 유리한 카드사 카드를 추천.',
-  },
-  {
     to: '/youth-savings',
     emoji: '🏦',
     title: '청년도약계좌 ↔ 청년미래적금 갈아타기',
@@ -18,6 +12,12 @@ const LIVE: ServiceCard[] = [
 ];
 
 const SOON: ServiceCard[] = [
+  {
+    to: '',
+    emoji: '🚌',
+    title: 'K-패스 교통카드 추천',
+    desc: '나이·거주지로 가장 유리한 교통카드를 추천.',
+  },
   {
     to: '',
     emoji: '💰',
