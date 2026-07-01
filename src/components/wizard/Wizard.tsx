@@ -588,9 +588,10 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         </section>
       </div>
 
-      {/* 푸터 네비 */}
+      {/* 푸터 네비 — 모바일은 입력 스텝이 길어 버튼이 화면 밖으로 사라지므로 하단 sticky 바로 항상 노출.
+          데스크톱(lg)은 높이통일로 버튼 위치가 이미 고정이라 일반 흐름(static). */}
       {step > 0 && (
-        <div className="flex items-center justify-between gap-4 pb-2">
+        <div className="sticky bottom-0 z-20 -mx-[18px] flex items-center justify-between gap-4 border-t border-line bg-card/95 px-[18px] py-3 backdrop-blur lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-2 lg:backdrop-blur-none">
           <button
             type="button"
             onClick={prev}
