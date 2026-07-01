@@ -187,7 +187,12 @@ export function Wizard({ api }: { api: CalculatorApi }) {
           account·conditions 컨테이너 높이를 동일하게 → 버튼 Y 고정. result(큼)는 초과해 늘어남(최종 단계).
           모바일은 스텝 높이 편차가 크고 min-h를 강제하면 entry가 비어 보여 데스크톱에만 적용.
           flex-col + entry flex-1 중앙정렬 → entry 카드 상단쏠림 제거. */}
-      <div className="flex flex-col pt-6 pb-4 lg:min-h-[780px]">
+      {/* key={step}로 스텝 전환마다 재마운트 → 진입 애니메이션 재생(부드러운 fade+slide-up).
+          motion-reduce는 애니메이션 비활성(접근성). */}
+      <div
+        key={step}
+        className="flex flex-col pt-6 pb-4 duration-300 ease-out animate-in fade-in slide-in-from-bottom-3 motion-reduce:animate-none lg:min-h-[780px]"
+      >
         {/* STEP 0 — 진입: 도약계좌 보유 여부 (세로 중앙정렬 위해 hidden 속성 대신 조건부 class) */}
         <section className={cur === 'entry' ? 'flex flex-1 items-center justify-center' : 'hidden'}>
           <div className="mx-auto max-w-[640px] py-8 text-center">
