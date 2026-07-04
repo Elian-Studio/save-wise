@@ -26,6 +26,7 @@ export interface TransitCard {
   grade: Grade;
   discontinued?: boolean;
   note?: string;
+  applyUrl?: string; // 카드사 공식 상품 페이지(신청). 미확인 카드는 생략 → UI 버튼 미노출
 }
 
 // ── 정부 제도: K-패스 모두의카드 ──
@@ -60,6 +61,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 0,
     source: 'tossbank.com/card/k-pass',
     grade: 'verified',
+    applyUrl: 'https://www.tossbank.com/card/k-pass',
     note: '추가캐시백 한시 2026.04~09',
   },
   {
@@ -97,6 +99,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 0,
     source: 'card.kbcard.com',
     grade: 'verified',
+    applyUrl: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09322',
   },
   {
     id: 'samsung-check',
@@ -108,6 +111,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 0,
     source: 'samsungcard.com(ABP1800)',
     grade: 'press',
+    applyUrl: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=ABP1800',
     note: '공식: 대중교통 캐시백·연회비 없음. 월 한도·전월실적 수치 미공시[R]',
   },
   {
@@ -133,6 +137,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 0,
     source: 'hanacard.co.kr',
     grade: 'verified',
+    applyUrl: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17033&_frame=no',
   },
   {
     id: 'im-check',
@@ -156,6 +161,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 0,
     source: 'card.nonghyup.com',
     grade: 'verified',
+    applyUrl: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010470',
     note: '80만↑ 월 5천 한도, 교통비 실적포함',
   },
   {
@@ -169,6 +175,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 0,
     source: 'cardapplication.ibk.co.kr',
     grade: 'verified',
+    applyUrl: 'https://m.bccard.com/app/mobileweb/CardDetail.do?exec=cardDetail&cardGdsNo=103109',
     note: '1회 100원·월 최대 1천(월 10회) → flat 근사',
   },
   // 신용
@@ -183,6 +190,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 10000,
     source: 'shinhancard.com',
     grade: 'verified',
+    applyUrl: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1225543_2207.html',
     note: '60만↑ 월 1.5만 한도',
   },
   {
@@ -195,6 +203,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 8000,
     source: 'card.kbcard.com',
     grade: 'verified',
+    applyUrl: 'https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?cooperationcode=09321&mainCC=a',
   },
   {
     id: 'timoney-shinhan',
@@ -207,6 +216,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 15000,
     source: 'shinhancard.com',
     grade: 'verified',
+    applyUrl: 'https://www.shinhancard.com/pconts/html/card/apply/credit/1216792_2207.html',
     note: '모바일티머니 앱 등록 필요(아이폰 제외) · 50만↑ 1.2만/100만↑ 1.8만',
   },
   {
@@ -219,6 +229,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 10000,
     source: 'samsungcard.com',
     grade: 'verified',
+    applyUrl: 'https://www.samsungcard.com/home/card/cardinfo/PGHPPCCCardCardinfoDetails001?code=AAP1830',
   },
   {
     id: 'woori-credit',
@@ -243,6 +254,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 13000,
     source: 'nhcardblog',
     grade: 'verified',
+    applyUrl: 'https://card.nonghyup.com/servlet/IpCc2021R.act?CD_WRS_SQNO=90010471',
   },
   {
     id: 'hana-credit',
@@ -255,6 +267,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 10000,
     source: 'hanacard.co.kr',
     grade: 'verified',
+    applyUrl: 'https://www.hanacard.co.kr/OPI41000000D.web?schID=pcd&mID=PI41017016P&CD_PD_SEQ=17016',
     note: '100만↑ 월 2만 한도',
   },
   {
@@ -268,6 +281,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 2000,
     source: 'banksalad CARD004320 / card-gorilla 4035',
     grade: 'verified',
+    applyUrl: 'https://m.bccard.com/app/mobileweb/CardDetail.do?exec=cardDetail&cardGdsNo=103105',
     note: '300원/회·1일3회·월 1만 한도 → flat 3천 근사(엔진 단순화)',
   },
   {
@@ -294,6 +308,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 20000,
     source: 'lottecard.co.kr',
     grade: 'verified',
+    applyUrl: 'https://www.lottecard.co.kr/app/LPCDXBA_V100.lc?vtCdKndC=P15644-A15644',
     note: '80만↑ 15% 월 1.5만',
   },
   {
@@ -306,6 +321,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 6000,
     source: 'bccard.com',
     grade: 'verified',
+    applyUrl: 'https://m.bccard.com/app/mobileweb/CardDetail.do?exec=cardDetail&cardGdsNo=103112',
   },
   {
     id: 'kjbank-green',
@@ -318,6 +334,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     annualFee: 10000,
     source: 'kjbank.com / wealthywing',
     grade: 'press',
+    applyUrl: 'https://www.kjbank.com/ib20/mnu/FPMCARD020103?ib20_wc=FPMCARD050102V10:FPMCARD050102V20&INBN_GDS_NO=CDR20230623001',
     note: '대중교통 10%·전월30만↑ 확인, 월 한도만 미공시[R]',
   },
 ];

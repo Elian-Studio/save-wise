@@ -43,7 +43,8 @@
 - 정부 환급(정률/기준금액)은 카드 무관 동일 → 카드 랭킹 변수는 `add − 연회비월환산`뿐.
 
 ## 5. 데이터 (`src/data/transitCards.ts`)
-`TransitCard{ id, issuer, name, type, benefit, minPrevSpend, annualFee, source, grade, discontinued? }` + `TRANSIT_CARDS[]` + `KPASS`(rate·cap·minRides) + `CLIMATE`(정액) + `DATA_AS_OF='2026-07'`. 값·grade는 research 문서 표 그대로. press 항목은 UI에서 grade 노출.
+`TransitCard{ id, issuer, name, type, benefit, minPrevSpend, annualFee, source, grade, discontinued?, applyUrl? }` + `TRANSIT_CARDS[]` + `KPASS`(rate·cap·minRides) + `CLIMATE`(정액) + `DATA_AS_OF='2026-07'`. 값·grade는 research 문서 표 그대로. press 항목은 UI에서 grade 노출.
+- `applyUrl?`: 카드사 공식 상품/신청 페이지(WebFetch 확인분만, research §7). 없으면 UI 신청 버튼 미노출. 집계 사이트 링크 금지.
 
 ## 6. 고지(UI 필수)
 - 기준일 배지: "혜택 기준 2026-07 · 매월 변동 가능".

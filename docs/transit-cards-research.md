@@ -128,3 +128,44 @@
 | kjbank-green | press `[R]` | press `[R]`(10%·30만 확인) | kjbank.com |
 
 **잔여 `[R]`**: 비수도권 기준금액(공식표 미확보), 반값종료 정상값(엔진 미저장), 시차시간 정률, samsung-check 캡·실적, kjbank-green 월 한도, hana-check 60만↑ 한도.
+
+---
+
+## 7. 카드 신청 URL (applyUrl)
+
+> `src/data/transitCards.ts`의 `applyUrl?` 필드. **카드사 공식 도메인만**, WebFetch로 해당 상품 페이지 확인한 것만 등재(확인 2026-07-04). 집계 사이트(카드고릴라·뱅크샐러드) 링크 금지. 미확인은 생략 → UI 버튼 미노출.
+
+### 확보 (16장) — WebFetch로 카드명·혜택 확인
+
+| id | 카드 | URL | 확인(페이지 타이틀/내용) |
+|---|---|---|---|
+| toss-check | 토스뱅크 K-패스 체크 | tossbank.com/card/k-pass | "토스뱅크 K-패스 체크카드"·심의필 제2026-1986호 |
+| kb-check | KB국민 K-패스체크 | card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?…09322 | "KB국민 K-패스체크카드"·대중교통 10% 월2천점 |
+| samsung-check | K-패스 삼성체크 | samsungcard.com/…?code=ABP1800 | "K-패스 삼성체크카드"·연회비 없음 |
+| hana-check | K-패스 하나 체크 | hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17033 | "K-패스 하나 체크카드" |
+| nh-check | NH농협 K-패스(체크) | card.nonghyup.com/…IpCc2021R.act?…90010470 | "K-패스카드(체크)"·버스/지하철 10% |
+| ibk-check | IBK K-패스(체크) | m.bccard.com/…CardDetail.do?…cardGdsNo=103109 | "IBK기업은행 K-패스(체크)"(BC 발급) |
+| shinhan-credit | K-패스 신한카드 | shinhancard.com/…/credit/1225543_2207.html | "K-패스 신한카드"·2024-03-27 출시 |
+| kb-credit | KB국민 K-패스 | card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?…09321 | "KB국민 K-패스카드"·대중교통 10% |
+| timoney-shinhan | 티머니 Pay&GO 신한 | shinhancard.com/…/credit/1216792_2207.html | "티머니 Pay & GO 신한카드"·심의필 제2024-C1a-06864 |
+| samsung-credit | K-패스 삼성카드 | samsungcard.com/…?code=AAP1830 | "K-패스 삼성카드"·연회비 1만 |
+| nh-credit | NH농협 K-패스(신용) | card.nonghyup.com/…IpCc2021R.act?…90010471 | "K-패스카드(신용)"·모빌리티 10% |
+| hana-credit | K-패스 하나 신용 | hanacard.co.kr/OPI41000000D.web?…CD_PD_SEQ=17016 | "K-패스 하나 신용카드"·연회비 1.7만 |
+| ibk-credit | IBK K-패스(신용) | m.bccard.com/…CardDetail.do?…cardGdsNo=103105 | "IBK기업은행 K-패스(신용)"·300원/회(BC 발급) |
+| lotte-enloca | K-패스엔로카 | lottecard.co.kr/app/LPCDXBA_V100.lc?vtCdKndC=P15644-A15644 | "K-패스엔로카" 신청 페이지·연회비 2만 |
+| bc-baro | BC바로 K-패스 | m.bccard.com/…CardDetail.do?…cardGdsNo=103112 | "BC바로 K-패스 카드"·대중교통 15% |
+| kjbank-green | 광주 K-그린카드 V2 | kjbank.com/ib20/mnu/FPMCARD020103?…CDR20230623001 | "K-패스그린카드v2"·에코머니 적립 |
+
+- IBK 2종·BC바로는 발급처가 BC카드라 공식 상세 호스트가 `m.bccard.com`(BC 공식 도메인). 집계 사이트 아님.
+
+### 미확보 (5장) — 버튼 미노출
+
+| id | 카드 | 사유 |
+|---|---|---|
+| kbank-one | 케이뱅크 ONE 체크 | 신청 딥링크(m.kbanknow.com/k/…)가 세션 만료 시 홈으로 302 리다이렉트 → 안정 상품 URL 없음(앱 신청). |
+| kakao-friends | 카카오뱅크 K-패스 프렌즈 | 앱 전용 발급, 웹 신청/상품 페이지 없음(공식은 뉴스 공지뿐). |
+| im-check | iM K-패스 체크 | 상품 URL(mbanking.imbank.co.kr)이 로그인/세션 게이트 → 상품 내용 확인 불가. |
+| woori-credit | 우리 K-패스(신용) | pc.wooricard 상품 URL이 SPA로 홈 화면만 반환 → 내용 확인 불가. |
+| hyundai-zwork | 현대카드 Z work Edition2 | 공식 상품 페이지 URL 미노출(가이드북 PDF·집계 사이트뿐). |
+
+- woori-cookie(우리 COOKIE 체크)는 `discontinued` → 조사 제외.
