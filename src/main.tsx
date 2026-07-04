@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
-import { hydrateRoot } from 'react-dom/client';
-import App from './App';
+import { hydrateRoot, createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRoutes } from './router';
 import './index.css';
 import { Flow } from './lib/flowmvp';
 
@@ -12,10 +13,19 @@ Flow.init({
   env: import.meta.env.PROD ? 'prod' : 'dev',
 });
 
-// 빌드 타임에 프리렌더된 #root 마크업에 하이드레이션 부착(SEO 크롤 가능성 확보).
-hydrateRoot(
-  document.getElementById('root')!,
+const rootEl = document.getElementById('root')!;
+const app = (
   <StrictMode>
-    <App />
-  </StrictMode>,
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  </StrictMode>
 );
+
+// prod(빌드): #root에 경로별 프리렌더 마크업이 있으므로 hydrate(크롤 가능성 유지).
+// dev: #root가 비어 있으므로 createRoot(하이드레이션 미스매치·인터랙션 먹통 방지).
+if (rootEl.hasChildNodes()) {
+  hydrateRoot(rootEl, app);
+} else {
+  createRoot(rootEl).render(app);
+}

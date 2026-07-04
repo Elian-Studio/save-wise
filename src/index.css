@@ -5,26 +5,26 @@
 
 /* 금융 디자인 토큰을 shadcn CSS 변수로 매핑 (라이트) */
 :root {
-  --radius: 0.625rem;
-  --background: #f4f6f9;
-  --foreground: #1c2530;
+  --radius: 0.75rem;
+  --background: #edf1f5;
+  --foreground: #191f28;
   --card: #ffffff;
-  --card-foreground: #1c2530;
+  --card-foreground: #191f28;
   --popover: #ffffff;
-  --popover-foreground: #1c2530;
-  --primary: #2563eb;
+  --popover-foreground: #191f28;
+  --primary: #12b886; /* 토스 그린 accent (브랜드·K-패스) */
   --primary-foreground: #ffffff;
-  --secondary: #eef1f5;
-  --secondary-foreground: #16284a;
-  --muted: #f1f4f9;
-  --muted-foreground: #5f6b7a;
-  --accent: #e8f0fe;
-  --accent-foreground: #16284a;
-  --destructive: #b91c1c;
+  --secondary: #f2f4f6;
+  --secondary-foreground: #333d4b;
+  --muted: #f9fafb;
+  --muted-foreground: #8b95a1;
+  --accent: #e7f7f1; /* 소프트 그린 틴트 */
+  --accent-foreground: #0b6b4f;
+  --destructive: #f04452;
   --destructive-foreground: #ffffff;
-  --border: #e3e8ef;
-  --input: #cfd6e0;
-  --ring: #2563eb;
+  --border: #e5e8eb;
+  --input: #d1d6db;
+  --ring: #12b886;
 }
 
 @theme inline {
@@ -52,15 +52,16 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* 금융 시맨틱 컬러 (verdict·패널 의미 보존) + 한국형 폰트 */
-  --color-navy: #16284a;
-  --color-navy2: #1f3a66;
-  --color-ink: #1c2530;
-  --color-line: #e3e8ef;
-  --color-fin-green: #15803d;
-  --color-fin-green-soft: #e7f6ec;
-  --color-fin-blue: #2563eb;
-  --color-fin-blue-soft: #e8f0fe;
+  /* 금융 시맨틱 컬러 (토스 스타일) + 한국형 폰트.
+     navy=ink(진회색, 헤더·제목·CTA), fin-green=절약/양수, fin-blue=기후동행/보조(accent 그린과 분리). */
+  --color-navy: #191f28;
+  --color-navy2: #333d4b;
+  --color-ink: #191f28;
+  --color-line: #e5e8eb;
+  --color-fin-green: #00a860;
+  --color-fin-green-soft: #e7f7f1;
+  --color-fin-blue: #3182f6;
+  --color-fin-blue-soft: #eaf2fe;
   --color-fin-amber: #b45309;
   --color-fin-amber-soft: #fdf2e2;
   --font-sans:
