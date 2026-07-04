@@ -11,12 +11,12 @@
         --background: #edf1f5;
         --foreground: #191f28;
         --card: #ffffff;
-        --primary: #12b886;
+        --primary: #068068;
         --primary-foreground: #ffffff;
         --secondary: #f2f4f6;
         --secondary-foreground: #333d4b;
         --muted: #f9fafb;
-        --muted-foreground: #8b95a1;
+        --muted-foreground: #5f6b78;
         --accent: #e7f7f1;
         --accent-foreground: #0b6b4f;
         --destructive: #f04452;
@@ -25,9 +25,9 @@
         --navy: #191f28;
         --navy2: #333d4b;
         --line: #e5e8eb;
-        --fin-green: #00a860;
+        --fin-green: #157a3f;
         --fin-green-soft: #e7f7f1;
-        --fin-blue: #3182f6;
+        --fin-blue: #1b5fd0;
         --fin-blue-soft: #eaf2fe;
         --fin-amber: #b45309;
         --fin-amber-soft: #fdf2e2;
@@ -333,7 +333,7 @@
         <h1>ChoiceWise 디자인 시스템</h1>
         <p>choicewise.kr — React 19 + Vite + Tailwind v4 (CSS-first). 실제 코드(<code>src/index.css</code>)의 토큰만 인용.</p>
         <span class="pill">source of truth · src/index.css</span>
-        <div class="metaline">Last updated 2026-07-02 · Owner daniel · SSOT src/index.css</div>
+        <div class="metaline">Last updated 2026-07-04 · Owner daniel · SSOT src/index.css</div>
       </div>
     </header>
 
@@ -363,10 +363,10 @@
         <div class="sw"><div class="chip" style="background: #edf1f5"></div><div class="meta"><b>--background</b><span>#edf1f5</span></div></div>
         <div class="sw"><div class="chip" style="background: #191f28"></div><div class="meta"><b>--foreground</b><span>#191f28</span></div></div>
         <div class="sw"><div class="chip" style="background: #ffffff; border-bottom: 1px solid var(--border)"></div><div class="meta"><b>--card / --popover</b><span>#ffffff</span></div></div>
-        <div class="sw"><div class="chip" style="background: #12b886"></div><div class="meta"><b>--primary / --ring</b><span>#12b886</span></div></div>
+        <div class="sw"><div class="chip" style="background: #068068"></div><div class="meta"><b>--primary / --ring</b><span>#068068 · AA 4.89</span></div></div>
         <div class="sw"><div class="chip" style="background: #f2f4f6"></div><div class="meta"><b>--secondary</b><span>#f2f4f6</span></div></div>
         <div class="sw"><div class="chip" style="background: #f9fafb"></div><div class="meta"><b>--muted</b><span>#f9fafb</span></div></div>
-        <div class="sw"><div class="chip" style="background: #8b95a1"></div><div class="meta"><b>--muted-foreground</b><span>#8b95a1</span></div></div>
+        <div class="sw"><div class="chip" style="background: #5f6b78"></div><div class="meta"><b>--muted-foreground</b><span>#5f6b78 · AA 4.79</span></div></div>
         <div class="sw"><div class="chip" style="background: #e7f7f1"></div><div class="meta"><b>--accent</b><span>#e7f7f1</span></div></div>
         <div class="sw"><div class="chip" style="background: #0b6b4f"></div><div class="meta"><b>--accent-foreground</b><span>#0b6b4f</span></div></div>
         <div class="sw"><div class="chip" style="background: #f04452"></div><div class="meta"><b>--destructive</b><span>#f04452</span></div></div>
@@ -386,19 +386,42 @@
       <h3>폰트 & 전역 base</h3>
       <div class="card">
         <p style="margin: 0"><code>--font-sans</code> = <code>'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif</code></p>
+        <p class="mini"><b>Pretendard 로드</b>: <code>pretendard</code> npm(가변·동적 서브셋) self-host. <code>index.css</code> 최상단 <code>@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css'</code> → Vite가 woff2 서브셋 번들·해싱. CDN 미사용.</p>
         <p class="mini">전역: <code>-webkit-font-smoothing: antialiased</code> · 한글 줄바꿈 <code>word-break: keep-all</code> + <code>overflow-wrap: anywhere</code> (‘NH농협’, ‘도약 월 3만원’ 중간 깨짐 방지) · <code>* { border-color: var(--border) }</code></p>
       </div>
 
       <h2>4. Semantic tokens — 금융 시맨틱 색</h2>
-      <p class="mini"><code>@theme inline</code> 57–66줄. shadcn 변수와 별개로 도메인(금융) 의미 색. <b>primary(#12b886)는 브랜드·컨트롤 강조, fin-green(#00a860)은 “절약/이득” 의미색 — 혼용하지 않는다.</b></p>
+      <p class="mini"><code>@theme inline</code>은 각 색을 <code>var(--토큰)</code>으로 참조(다크 스왑 가능). shadcn 변수와 별개로 도메인(금융) 의미 색. <b>primary(#068068·teal)는 브랜드·컨트롤 강조, fin-green(#157a3f·grass)은 “절약/이득” 의미색 — hue가 달라 혼용하지 않는다.</b> 텍스트는 <code>text-navy</code>(배너/틴트 위, 비반전)와 <code>text-ink</code>(카드 위, 다크 반전)로 구분.
       <div class="swatches">
         <div class="sw"><div class="chip" style="background: #191f28"></div><div class="meta"><b>--navy / --ink</b><span>#191f28</span></div></div>
         <div class="sw"><div class="chip" style="background: #333d4b"></div><div class="meta"><b>--navy2</b><span>#333d4b</span></div></div>
-        <div class="sw"><div class="chip" style="background: #00a860"></div><div class="meta"><b>--fin-green</b><span>#00a860 · 절약/양수</span></div></div>
-        <div class="sw"><div class="chip" style="background: #3182f6"></div><div class="meta"><b>--fin-blue</b><span>#3182f6 · 정보/보조</span></div></div>
+        <div class="sw"><div class="chip" style="background: #157a3f"></div><div class="meta"><b>--fin-green</b><span>#157a3f · 절약/양수</span></div></div>
+        <div class="sw"><div class="chip" style="background: #1b5fd0"></div><div class="meta"><b>--fin-blue</b><span>#1b5fd0 · 정보/보조</span></div></div>
         <div class="sw"><div class="chip" style="background: #b45309"></div><div class="meta"><b>--fin-amber</b><span>#b45309 · 주의</span></div></div>
         <div class="sw"><div class="chip" style="background: #e5e8eb"></div><div class="meta"><b>--line</b><span>#e5e8eb</span></div></div>
       </div>
+
+      <h2>4a. 다크 팔레트 (<code>.dark</code>)</h2>
+      <p class="mini">클래스 전략(<code>@custom-variant dark (&amp;:is(.dark *))</code>). <code>index.html</code>의 FOUC 방지 인라인 스크립트가 하이드레이션 전 <code>&lt;html&gt;</code>에 <code>.dark</code> 적용(localStorage <code>theme</code> → 없으면 <code>prefers-color-scheme</code>). <code>Shell.tsx</code> 우상단 토글로 전환, 저장값 없을 때만 시스템 변경 추종. 아이콘 전환은 CSS(<code>dark:</code>)로 처리해 하이드레이션 불일치 없음.</p>
+      <div class="card" style="border-left: 4px solid var(--primary)">
+        <b>설계 원칙</b> — 중립 표면·잉크만 반전한다. <code>primary</code>·<code>fin-*</code>(솔리드)·<code>fin-*-soft</code>(칩)·<code>navy</code>(배너)는 <b>반전하지 않아</b> 솔리드 위 흰 글자·라이트 칩 위 진한 텍스트가 두 테마에서 동일하게 AA를 만족한다.
+      </div>
+      <table>
+        <tr><th>토큰</th><th>라이트</th><th>다크</th><th>비고</th></tr>
+        <tr><td><code>--background</code></td><td>#edf1f5</td><td>#16181d</td><td>페이지</td></tr>
+        <tr><td><code>--foreground</code></td><td>#191f28</td><td>#e6e9ee</td><td>본문</td></tr>
+        <tr><td><code>--card / --popover</code></td><td>#ffffff</td><td>#1e222b</td><td>표면</td></tr>
+        <tr><td><code>--secondary</code> / fg</td><td>#f2f4f6 / #333d4b</td><td>#2a2f3a / #d3d8e0</td><td>보조</td></tr>
+        <tr><td><code>--muted</code> / fg</td><td>#f9fafb / #5f6b78</td><td>#262b34 / #98a1ad</td><td>흐린 배경/보조문구</td></tr>
+        <tr><td><code>--accent</code> / fg</td><td>#e7f7f1 / #0b6b4f</td><td>#16362a / #74dcae</td><td>저채도 그린 틴트</td></tr>
+        <tr><td><code>--border / --input</code></td><td>#e5e8eb / #d1d6db</td><td>#2c313b / #3a414d</td><td>경계·입력</td></tr>
+        <tr><td><code>--ink</code></td><td>#191f28</td><td>#f0f2f5</td><td>제목·라벨 텍스트</td></tr>
+        <tr><td><code>--line</code></td><td>#e5e8eb</td><td>#2c313b</td><td>구분선·슬라이더 트랙</td></tr>
+        <tr><td><code>--primary / --ring</code></td><td>#068068</td><td>#068068 (동일)</td><td>반전 안 함 (흰 글자 AA)</td></tr>
+        <tr><td><code>--navy / --navy2</code></td><td>#191f28 / #333d4b</td><td>동일</td><td>반전 안 함 (배너 표면)</td></tr>
+        <tr><td><code>--fin-* / --fin-*-soft</code></td><td>라이트값</td><td>동일</td><td>반전 안 함 (솔리드/칩 대비)</td></tr>
+      </table>
+      <p class="note">다크에서 <code>fin-*-soft</code> 칩(뱃지·경고 박스)은 밝은 칩으로 유지 — 흔한 다크 UI 패턴이며 진한 시맨틱 텍스트 AA를 두 테마에서 보존. <code>bg-fin-blue-soft</code> 강조 행(<code>ScenarioTables</code>)은 밝은 띠 위에 <code>text-navy</code>(비반전 다크)를 얹음.</p>
 
       <h2>5. Components — 재사용 프리미티브</h2>
       <p class="mini"><code>src/components/ui/*</code> — 수동 작성 최소 shadcn 프리미티브. React 19 시그니처(<code>React.ComponentProps</code>), 아이콘 인라인 SVG(lucide 미사용). 모든 프리미티브가 <code>className={cn('...base...', className)}</code>로 오버라이드 허용. <b>cva variant는 Button·Badge 2곳뿐.</b></p>
@@ -471,17 +494,19 @@
 
       <h3>색 대비 (WCAG 2.2 AA) — 실측</h3>
       <p class="mini">sRGB relative luminance 기준 실측. 본문 텍스트 AA=4.5:1, 큰 글자(≥18.66px bold/≥24px)=3:1. <b>text-xs(12px) bold는 “큰 글자” 아님 → 4.5 필요.</b></p>
+      <p class="mini"><b>AA 조정(2026-07-04)</b> — 미달 4종을 토큰값 조정으로 해소. <code>--primary</code>는 <b>흰 글자 유지 원칙</b>에 따라 primary를 어둡게(#12b886→#068068) 결정 — <code>bg-primary text-white</code> 사용처(버튼·세그먼트·스텝)가 한 토큰으로 모두 통과하고 흰-글자-온-그린 관례를 유지하기 때문.</p>
       <table>
-        <tr><th>전경 / 배경</th><th>대비</th><th>판정</th></tr>
-        <tr><td>foreground <code>#191f28</code> / background <code>#edf1f5</code></td><td>14.59</td><td><span class="ok">AA ✔</span></td></tr>
-        <tr><td>accent-fg <code>#0b6b4f</code> / accent <code>#e7f7f1</code></td><td>5.87</td><td><span class="ok">AA ✔</span></td></tr>
-        <tr><td>fin-amber <code>#b45309</code> / amber-soft <code>#fdf2e2</code> (Badge amber)</td><td>4.54</td><td><span class="ok">AA ✔</span></td></tr>
-        <tr><td>fin-blue <code>#3182f6</code> / blue-soft <code>#eaf2fe</code> (Badge blue)</td><td>3.29</td><td><span class="ng">큰 글자만, 본문 ✘</span></td></tr>
-        <tr><td>muted-foreground <code>#8b95a1</code> / background <code>#edf1f5</code></td><td>2.68</td><td><span class="ng">AA ✘</span></td></tr>
-        <tr><td>fin-green <code>#00a860</code> / green-soft <code>#e7f7f1</code> (Badge green)</td><td>2.80</td><td><span class="ng">AA ✘</span></td></tr>
-        <tr><td>primary-fg <code>#ffffff</code> / primary <code>#12b886</code> (default 버튼)</td><td>2.55</td><td><span class="ng">AA ✘</span></td></tr>
+        <tr><th>전경 / 배경</th><th>before</th><th>after</th><th>판정</th></tr>
+        <tr><td>primary-fg #ffffff / primary (default 버튼)</td><td><span class="ng">2.55</span> <code>#12b886</code></td><td><b>4.89</b> <code>#068068</code></td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>fin-green / green-soft (Badge green)</td><td><span class="ng">2.80</span> <code>#00a860</code></td><td><b>4.88</b> <code>#157a3f</code></td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>fin-blue / blue-soft (Badge blue)</td><td><span class="ng">3.29</span> <code>#3182f6</code></td><td><b>5.18</b> <code>#1b5fd0</code></td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>muted-foreground / background #edf1f5</td><td><span class="ng">2.68</span> <code>#8b95a1</code></td><td><b>4.79</b> <code>#5f6b78</code></td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>white / fin-green 솔리드(결과 카드)</td><td><span class="ng">3.10</span></td><td><b>5.40</b></td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>fin-amber #b45309 / amber-soft #fdf2e2</td><td>4.54</td><td>4.54 (유지)</td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>accent-fg #0b6b4f / accent #e7f7f1</td><td>5.87</td><td>5.87 (유지)</td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>foreground #191f28 / background #edf1f5</td><td>14.59</td><td>14.59 (유지)</td><td><span class="ok">AA ✔</span></td></tr>
       </table>
-      <p class="note">브랜드 색 유지가 전제라 코드는 미변경. 보완책: 미달 색은 <b>큰 글자·아이콘·테두리 병행</b>으로 정보를 색에만 싣지 않기, primary 버튼은 대비 확보를 원하면 잉크(navy) 텍스트 또는 더 진한 그린 검토. 결정 전까지 <b>알려진 제약</b>으로 관리.</p>
+      <p class="note"><b>다크 실측(핵심, 전부 AA ✔)</b>: fg/bg 14.59 · ink/card 14.20 · muted-fg/card 6.09 · muted-fg/bg 6.80 · muted-fg/secondary 5.13 · ink/accent 11.74 · accent-fg/accent 7.89 · secondary-fg/secondary 9.37 · white/primary 4.89 · white/fin-green 5.40 · fin-green/green-soft(칩) 4.88 · fin-blue/blue-soft(칩) 5.18 · fin-amber/amber-soft(칩) 4.54 · navy/blue-soft(강조행) 14.69 · white/navy(배너) 16.56.</p>
 
       <h2>8. Content — 보이스 & 톤</h2>
       <p class="mini">금융 계산 서비스 카피 규칙. <code>Disclaimer.tsx</code>·as-of pill 관행에서 도출.</p>
@@ -501,11 +526,12 @@
       </div>
 
       <h2>10. Known gaps</h2>
-      <p class="mini">문서화 중 발견한 코드-문서 불일치. <b>기록만 — 코드 미수정.</b></p>
-      <div class="gap"><b>Pretendard 미로드</b> — <code>--font-sans</code> 1순위인데 <code>index.html</code>에 <code>&lt;link&gt;</code>·<code>@font-face</code>·웹폰트 파일 전무. 대부분 환경에서 시스템 폰트 폴백. 의도면 스택에서 제거, 아니면 CDN/self-host 추가.</div>
-      <div class="gap"><b>다크모드 미구현</b> — <code>@custom-variant dark (&amp;:is(.dark *))</code> 선언만 있고 <code>.dark</code> 팔레트 오버라이드 블록 없음 → <code>dark:</code> 유틸 사실상 무효.</div>
-      <div class="gap"><b>미사용 레거시 컴포넌트</b> — <code>VerdictCard</code>(테스트만)/<code>DecisionTable</code>/<code>ComparePanels</code>/<code>BankPick</code>/<code>MiraeSummary</code>/<code>StepsGuide</code>. 라우팅 도달 불가. 신규 작업 참고 대상 제외.</div>
-      <div class="gap"><b>접근성: 주요 색 대비 AA 미달</b> — Badge <code>green</code>(2.8)·<code>blue</code>(3.29), <code>muted-foreground</code> on bg(2.68), default 버튼 흰 글자 on primary(2.55)가 WCAG AA(4.5:1) 미달(§7 실측표). 브랜드 색 유지 시 색 외 단서(굵기·아이콘·테두리) 병행 권장.</div>
+      <p class="mini">문서화 중 발견한 코드-문서 불일치.</p>
+      <div class="gap"><b>미사용 레거시 컴포넌트</b> — <code>VerdictCard</code>(테스트만)/<code>DecisionTable</code>/<code>ComparePanels</code>/<code>MiraeSummary</code>/<code>StepsGuide</code>(및 정리 대상 <code>BankPick</code>). 라우팅 도달 불가. 신규 작업 참고 대상 제외.</div>
+      <h3>해소됨 (2026-07-04)</h3>
+      <div class="use-do" style="border-radius: 10px; padding: 10px 12px"><b>Pretendard 미로드</b> → <code>pretendard</code> npm self-host + <code>index.css</code> 상단 <code>@import</code>. Vite가 woff2 서브셋 번들·해싱(§3).</div>
+      <div class="use-do" style="border-radius: 10px; padding: 10px 12px; margin-top: 8px"><b>다크모드 미구현</b> → <code>.dark</code> 팔레트 + FOUC 스크립트 + <code>Shell</code> 토글(§4a).</div>
+      <div class="use-do" style="border-radius: 10px; padding: 10px 12px; margin-top: 8px"><b>주요 색 대비 AA 미달</b> → <code>primary</code>·<code>fin-green</code>·<code>fin-blue</code>·<code>muted-foreground</code> 토큰 조정으로 라이트·다크 모두 4.5:1↑(§7).</div>
     </div>
   </body>
 </html>

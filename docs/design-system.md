@@ -4,7 +4,7 @@
 > 값은 전부 소스에서 인용했다(파일:라인). 새 토큰/컴포넌트를 발명하지 않았고,
 > 현재 코드와 불일치하는 항목은 마지막 [Known gaps](#10-known-gaps) 섹션에 따로 모았다.
 >
-> `Last updated 2026-07-02 · Owner daniel · SSOT src/index.css`
+> `Last updated 2026-07-04 · Owner daniel · SSOT src/index.css`
 
 ## 1. 디자인 원칙
 
@@ -24,7 +24,7 @@
 
 ## 3. Foundations (기초 토큰)
 
-`:root` (index.css 7–28줄) — shadcn 변수 매핑 (라이트만 정의):
+`:root` — shadcn 변수 매핑 (라이트). 다크 오버라이드는 [§3a](#3a-다크-팔레트-dark) 참조:
 
 | 토큰 | 값 | 용도 |
 |------|-----|------|
@@ -32,14 +32,16 @@
 | `--background` | `#edf1f5` | 페이지 배경 (연회색) |
 | `--foreground` | `#191f28` | 본문 텍스트 |
 | `--card` / `--popover` | `#ffffff` | 카드·팝오버 배경 |
-| `--primary` / `--ring` | `#12b886` | 토스 그린, 브랜드·CTA·포커스 링 |
+| `--primary` / `--ring` | `#068068` | 토스 그린 계열, 브랜드·CTA·포커스 링 (흰 글자 AA=4.89) |
 | `--primary-foreground` | `#ffffff` | primary 위 텍스트 |
 | `--secondary` | `#f2f4f6` / fg `#333d4b` | 보조 배경 |
-| `--muted` | `#f9fafb` / fg `#8b95a1` | 흐린 배경·보조문구 |
+| `--muted` | `#f9fafb` / fg `#5f6b78` | 흐린 배경·보조문구 (fg는 배경/카드 위 AA≥4.5) |
 | `--accent` | `#e7f7f1` / fg `#0b6b4f` | 소프트 그린 틴트 (hover 등) |
 | `--destructive` | `#f04452` / fg `#ffffff` | 위험·삭제 |
 | `--border` | `#e5e8eb` | 경계선 |
 | `--input` | `#d1d6db` | 입력 테두리 |
+
+> **AA 조정(2026-07-04)**: `--primary`(구 `#12b886`)·`--muted-foreground`(구 `#8b95a1`)를 WCAG AA 4.5:1을 만족하도록 어둡게 조정. 근거·실측은 [§7 색 대비](#색-대비-wcag-22-aa--실측).
 
 **반경 스케일** (`@theme inline` 50–53줄, `--radius 0.75rem` 기준 파생):
 
@@ -56,7 +58,9 @@
 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif
 ```
 
-> ⚠️ Pretendard는 스택 1순위지만 실제로 로드되지 않는다 → [Known gaps](#7-known-gaps) 참조.
+> **Pretendard 로드 방식**: `pretendard` npm 패키지(가변 폰트, 동적 서브셋)를 self-host. `index.css` 최상단에서
+> `@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';`로 로드하며, Vite가 woff2 서브셋을
+> 번들·해싱한다(빌드 산출물 `dist/assets/PretendardVariable.subset.*.woff2`). CDN 미사용.
 
 **전역 base** (`@layer base`, 71–84줄):
 
@@ -70,16 +74,42 @@
 
 | 토큰 | 값 | soft (배경) | 의미 |
 |------|-----|-------------|------|
-| `--color-navy` / `--color-ink` | `#191f28` | — | 잉크(진회색). 헤더·제목·CTA |
-| `--color-navy2` | `#333d4b` | — | 헤더 그라데이션 하단, 보조 잉크 |
-| `--color-line` | `#e5e8eb` | — | 구분선 |
-| `--color-fin-green` | `#00a860` | `--color-fin-green-soft #e7f7f1` | 절약·양수(이득) |
-| `--color-fin-blue` | `#3182f6` | `--color-fin-blue-soft #eaf2fe` | 정보·보조 (accent 그린과 분리) |
-| `--color-fin-amber` | `#b45309` | `--color-fin-amber-soft #fdf2e2` | 주의·경고 |
+| `--color-navy` | `--navy #191f28` | — | 잉크(진회색). **배너 표면**(`from-navy` 헤더 그라데이션). 두 테마 공통 다크 유지 |
+| `--color-ink` | `--ink #191f28` | — | 제목·라벨·강조 **텍스트**. 다크에서 밝게 반전(`#f0f2f5`) |
+| `--color-navy2` | `--navy2 #333d4b` | — | 헤더 그라데이션 하단, 보조 잉크 표면 |
+| `--color-line` | `--line #e5e8eb` | — | 구분선 (다크 `#2c313b`) |
+| `--color-fin-green` | `--fin-green #157a3f` | `--fin-green-soft #e7f7f1` | 절약·양수(이득). 흰 글자 5.4, soft 위 4.88 |
+| `--color-fin-blue` | `--fin-blue #1b5fd0` | `--fin-blue-soft #eaf2fe` | 정보·보조. soft 위 5.18 |
+| `--color-fin-amber` | `--fin-amber #b45309` | `--fin-amber-soft #fdf2e2` | 주의·경고. soft 위 4.54 |
 
-Tailwind 유틸로 `bg-fin-green-soft text-fin-green`, `text-navy`, `border-line` 형태로 쓴다.
+각 `--color-*`는 `:root`/`.dark`의 `var(--토큰)`을 참조한다(예: `--color-fin-green: var(--fin-green)`) — 다크 스왑을 위해 hex 직박기에서 전환됨. Tailwind 유틸로 `bg-fin-green-soft text-fin-green`, `text-ink`, `border-line` 형태로 쓴다.
 
-> **primary(`#12b886`) vs fin-green(`#00a860`)** — 둘 다 그린이지만 역할이 다르다. primary는 브랜드/컨트롤 강조(버튼·링·슬라이더), fin-green은 계산 결과의 "절약/이득" 의미색이다. 혼용하지 않는다.
+> **`text-navy` vs `text-ink`** — 배너/라이트-고정 틴트 위의 진한 텍스트는 `text-navy`(다크에서도 어두움 유지), 카드·배경 위의 제목/라벨은 `text-ink`(다크에서 밝게 반전). 라이트에서는 둘 다 `#191f28`로 동일.
+
+> **primary(`#068068`) vs fin-green(`#157a3f`)** — 둘 다 어두운 그린이지만 hue가 다르다(primary=teal 계열, fin-green=grass 계열). primary는 브랜드/컨트롤 강조(버튼·링·슬라이더), fin-green은 계산 결과의 "절약/이득" 의미색. 혼용하지 않는다.
+
+## 3a. 다크 팔레트 (`.dark`)
+
+클래스 전략(`@custom-variant dark (&:is(.dark *))`, index.css). `index.html`의 FOUC 방지 인라인 스크립트가 하이드레이션 전에 `<html>`에 `.dark`를 적용(localStorage `theme` → 없으면 `prefers-color-scheme`). `Shell.tsx` 우상단 토글로 전환(localStorage 저장), 저장값 없을 때만 시스템 변경을 추종.
+
+**설계 원칙**: 중립 표면·잉크만 반전한다. `primary`·`fin-*`(솔리드)·`fin-*-soft`(칩)·`navy`(배너)는 반전하지 않아, 솔리드 위 흰 글자와 라이트 칩 위 진한 시맨틱 텍스트가 두 테마에서 동일하게 AA를 만족한다(별도 다크 대비 계산 불필요).
+
+| 토큰 | 라이트 | 다크 | 비고 |
+|------|--------|------|------|
+| `--background` | `#edf1f5` | `#16181d` | 페이지 |
+| `--foreground` | `#191f28` | `#e6e9ee` | 본문 |
+| `--card` / `--popover` | `#ffffff` | `#1e222b` | 표면 |
+| `--secondary` | `#f2f4f6` / `#333d4b` | `#2a2f3a` / `#d3d8e0` | 보조 배경/텍스트 |
+| `--muted` | `#f9fafb` / `#5f6b78` | `#262b34` / `#98a1ad` | 흐린 배경/보조문구 |
+| `--accent` | `#e7f7f1` / `#0b6b4f` | `#16362a` / `#74dcae` | 저채도 그린 틴트 |
+| `--border` / `--input` | `#e5e8eb` / `#d1d6db` | `#2c313b` / `#3a414d` | 경계·입력 |
+| `--ink` | `#191f28` | `#f0f2f5` | 제목·라벨 텍스트 |
+| `--line` | `#e5e8eb` | `#2c313b` | 구분선·슬라이더 트랙 |
+| `--primary` / `--ring` | `#068068` | `#068068` (동일) | 반전 안 함(흰 글자 AA 유지) |
+| `--navy` / `--navy2` | `#191f28` / `#333d4b` | 동일 | 반전 안 함(배너 표면) |
+| `--fin-*` / `--fin-*-soft` | 라이트값 | 동일 | 반전 안 함(솔리드/칩 대비 유지) |
+
+> 다크에서 `fin-*-soft` 칩(뱃지·경고 박스)은 밝은 칩으로 유지된다 — 흔한 다크 UI 패턴이며 진한 시맨틱 텍스트의 AA를 두 테마에서 그대로 보존한다. `bg-fin-blue-soft` 강조 행(`ScenarioTables`)은 밝은 띠 위에 `text-navy`(비반전 다크)를 얹어 가독성을 지킨다.
 
 ## 5. Components (재사용 프리미티브)
 
@@ -164,19 +194,23 @@ Tailwind 유틸로 `bg-fin-green-soft text-fin-green`, `text-navy`, `border-line
 
 ### 색 대비 (WCAG 2.2 AA) — 실측
 
-sRGB relative luminance 기준 실측. 본문 AA=4.5:1, 큰 글자(≥18.66px bold/≥24px)=3:1. **`text-xs`(12px) bold는 "큰 글자"가 아니라 4.5 필요.**
+sRGB relative luminance 기준 실측(`scripts/`가 아닌 검증 스크립트로 산출). 본문 AA=4.5:1, 큰 글자(≥18.66px bold/≥24px)=3:1. **`text-xs`(12px) bold는 "큰 글자"가 아니라 4.5 필요.**
 
-| 전경 / 배경 | 대비 | 판정 |
-|------|-----|------|
-| foreground `#191f28` / background `#edf1f5` | 14.59 | AA ✔ |
-| accent-fg `#0b6b4f` / accent `#e7f7f1` | 5.87 | AA ✔ |
-| fin-amber `#b45309` / amber-soft `#fdf2e2` (Badge amber) | 4.54 | AA ✔ |
-| fin-blue `#3182f6` / blue-soft `#eaf2fe` (Badge blue) | 3.29 | 큰 글자만, 본문 ✘ |
-| muted-foreground `#8b95a1` / background `#edf1f5` | 2.68 | AA ✘ |
-| fin-green `#00a860` / green-soft `#e7f7f1` (Badge green) | 2.80 | AA ✘ |
-| primary-fg `#ffffff` / primary `#12b886` (default 버튼) | 2.55 | AA ✘ |
+**AA 조정 결과 (2026-07-04)** — 미달 4종을 토큰값 조정으로 해소. `--primary`는 흰 글자 유지 원칙에 따라 **primary를 어둡게**(#12b886→#068068) 결정(전경 잉크 전환 대신) — 버튼·세그먼트·스텝 등 `bg-primary text-white` 사용처가 한 토큰으로 모두 통과하고 흰-글자-온-그린 관례를 유지하기 때문:
 
-> 브랜드 색 유지가 전제라 코드는 미변경. 보완책: 미달 색은 **큰 글자·아이콘·테두리 병행**으로 정보를 색에만 싣지 않기, primary 버튼은 대비가 필요하면 navy 텍스트 또는 더 진한 그린 검토. 결정 전까지 **알려진 제약**으로 관리.
+| 전경 / 배경 | before | after | 판정 |
+|------|-----|-----|------|
+| primary-fg `#ffffff` / primary (default 버튼) | 2.55 (`#12b886`) | **4.89** (`#068068`) | AA ✔ |
+| fin-green / green-soft (Badge green) | 2.80 (`#00a860`) | **4.88** (`#157a3f`) | AA ✔ |
+| fin-blue / blue-soft (Badge blue) | 3.29 (`#3182f6`) | **5.18** (`#1b5fd0`) | AA ✔ |
+| muted-foreground / background `#edf1f5` | 2.68 (`#8b95a1`) | **4.79** (`#5f6b78`) | AA ✔ |
+| muted-foreground `#5f6b78` / card `#ffffff` | — | 5.44 | AA ✔ |
+| fin-amber `#b45309` / amber-soft `#fdf2e2` | 4.54 | 4.54 (유지) | AA ✔ |
+| accent-fg `#0b6b4f` / accent `#e7f7f1` | 5.87 | 5.87 (유지) | AA ✔ |
+| foreground `#191f28` / background `#edf1f5` | 14.59 | 14.59 (유지) | AA ✔ |
+| white / fin-green 솔리드 채움(결과 카드) | 3.10 | **5.40** | AA ✔ |
+
+**다크 실측(핵심)** — 전부 AA ✔: fg/bg 14.59 · ink/card 14.20 · muted-fg/card 6.09 · muted-fg/bg 6.80 · muted-fg/secondary 5.13 · ink/accent 11.74 · accent-fg/accent 7.89 · secondary-fg/secondary 9.37 · white/primary 4.89 · white/fin-green 5.40 · fin-green/green-soft(칩) 4.88 · fin-blue/blue-soft(칩) 5.18 · fin-amber/amber-soft(칩) 4.54 · navy/blue-soft(강조행) 14.69 · white/navy(배너) 16.56.
 
 ## 8. Content — 보이스 & 톤
 
@@ -194,10 +228,13 @@ sRGB relative luminance 기준 실측. 본문 AA=4.5:1, 큰 글자(≥18.66px bo
 
 ## 10. Known gaps
 
-> 문서화 중 발견한 코드-문서 불일치. **여기서는 기록만 하고 코드는 수정하지 않았다.** 후속 판단용.
+> 문서화 중 발견한 코드-문서 불일치. 후속 판단용.
 
-1. **Pretendard 미로드** — `--font-sans` 1순위가 `Pretendard`인데 `index.html`에 `<link>`도, `@font-face`도, `public/`·`src/`에 웹폰트 파일(woff/otf/ttf)도 없다(검증: `grep -rn "Pretendard\|@font-face"` + 폰트 파일 find 결과 0건). → 대부분 환경에서 `-apple-system`/맑은 고딕 등 **시스템 폰트로 폴백**된다. 의도라면 스택에서 Pretendard를 빼거나, 아니라면 CDN link/self-host 추가 필요.
-2. **다크모드 미구현** — `@custom-variant dark (&:is(.dark *));`(index.css 4줄) 선언만 있고 `.dark` 팔레트 오버라이드 블록이 없다. `:root`(라이트)만 정의됨 → `dark:` 유틸이 사실상 무효.
-3. **미사용 레거시 컴포넌트** — 다음은 현재 라우팅에서 도달 불가(비-테스트 import 0건 확인):
-   `VerdictCard`(테스트에서만 참조), `DecisionTable`, `ComparePanels`, `BankPick`, `MiraeSummary`, `StepsGuide`. 위저드가 구 `VerdictCard`류를 대체한 흔적. **현행 아님** — 신규 작업 시 참고 대상에서 제외.
-4. **접근성: 주요 색 대비 AA 미달** — Badge `green`(2.8)·`blue`(3.29), `muted-foreground` on bg(2.68), default 버튼 흰 글자 on primary(2.55)가 WCAG AA(4.5:1) 미달([§7 실측표](#색-대비-wcag-22-aa--실측)). 브랜드 색 유지 시 색 외 단서(굵기·아이콘·테두리) 병행 권장.
+1. **미사용 레거시 컴포넌트** — 다음은 현재 라우팅에서 도달 불가(비-테스트 import 0건 확인):
+   `VerdictCard`(테스트에서만 참조), `DecisionTable`, `ComparePanels`, `MiraeSummary`, `StepsGuide`(단, `BankPick`은 정리 대상). 위저드가 구 `VerdictCard`류를 대체한 흔적. **현행 아님** — 신규 작업 시 참고 대상에서 제외.
+
+### 해소됨 (2026-07-04)
+
+- ~~**Pretendard 미로드**~~ → `pretendard` npm self-host + `index.css` 상단 `@import`로 로드([§3 폰트](#3-foundations-기초-토큰)). Vite가 woff2 서브셋 번들·해싱.
+- ~~**다크모드 미구현**~~ → `.dark` 팔레트 + FOUC 스크립트 + `Shell` 토글 구현([§3a](#3a-다크-팔레트-dark)).
+- ~~**주요 색 대비 AA 미달**~~ → `primary`·`fin-green`·`fin-blue`·`muted-foreground` 토큰값 조정으로 라이트·다크 모두 4.5:1↑ 충족([§7 실측표](#색-대비-wcag-22-aa--실측)).

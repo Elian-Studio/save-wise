@@ -14,11 +14,23 @@ export function Shell() {
     if (seo) document.title = seo.title;
   }, [pathname]);
 
+  // 저장된 테마 선호가 없을 때만 시스템(prefers-color-scheme) 변경을 따라간다.
+  // 초기 적용은 index.html의 FOUC 방지 스크립트가 담당(하이드레이션 전).
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const sync = (e: MediaQueryListEvent) => {
+      if (!localStorage.getItem('theme'))
+        document.documentElement.classList.toggle('dark', e.matches);
+    };
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
   return (
     <div className="min-h-screen">
-      <nav className="border-b bg-white">
+      <nav className="border-b bg-card">
         <div className="mx-auto flex max-w-[1080px] items-center gap-1 px-[18px] py-2.5">
-          <Link to="/" className="mr-2 font-extrabold tracking-tight text-navy">
+          <Link to="/" className="mr-2 font-extrabold tracking-tight text-ink">
             choicewise
           </Link>
           <NavItem to="/" active={pathname === '/'}>
@@ -27,12 +39,13 @@ export function Shell() {
           <NavItem to="/transit" active={pathname === '/transit'}>
             K-패스 교통카드
           </NavItem>
+          <ThemeToggle />
         </div>
       </nav>
 
       <Outlet />
 
-      <footer className="mt-9 border-t bg-white">
+      <footer className="mt-9 border-t bg-card">
         <div className="mx-auto max-w-[1080px] px-[18px] py-6 text-xs text-muted-foreground">
           <p>
             본 계산기들은 공개 자료 기반 <b>참고용 추정</b>입니다. 최종 결정 전 반드시 해당 기관에 확인하세요. 본
@@ -58,6 +71,29 @@ export function Shell() {
   );
 }
 
+// 라이트/다크 테마 토글. 아이콘 전환을 CSS(.dark)로 처리해 SSR 마크업과 하이드레이션이 어긋나지 않게 한다.
+function ThemeToggle() {
+  const toggle = () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  };
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label="라이트/다크 테마 전환"
+      className="ml-auto flex size-9 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+    >
+      <span className="text-base dark:hidden" aria-hidden="true">
+        🌙
+      </span>
+      <span className="hidden text-base dark:inline" aria-hidden="true">
+        ☀️
+      </span>
+    </button>
+  );
+}
+
 // 상단 메뉴 항목 — 현재 경로면 강조(active).
 function NavItem({ to, active, children }: { to: string; active: boolean; children: ReactNode }) {
   return (
@@ -65,7 +101,7 @@ function NavItem({ to, active, children }: { to: string; active: boolean; childr
       to={to}
       aria-current={active ? 'page' : undefined}
       className={`rounded-lg px-2.5 py-1.5 text-sm font-semibold transition ${
-        active ? 'bg-accent text-navy' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+        active ? 'bg-accent text-ink' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
       }`}
     >
       {children}

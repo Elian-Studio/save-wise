@@ -161,7 +161,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                 onClick={() => n < step && setStep(n)}
                 disabled={n > step}
                 className={`flex items-center gap-2 rounded-full px-3 py-1.5 transition ${
-                  active ? 'bg-accent text-navy' : 'text-muted-foreground'
+                  active ? 'bg-accent text-ink' : 'text-muted-foreground'
                 } ${n > step ? 'cursor-default opacity-60' : ''}`}
               >
                 <span
@@ -196,14 +196,14 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         {/* STEP 0 — 진입: 도약계좌 보유 여부 (세로 중앙정렬 위해 hidden 속성 대신 조건부 class) */}
         <section className={cur === 'entry' ? 'flex flex-1 items-center justify-center' : 'hidden'}>
           <div className="mx-auto max-w-[640px] py-8 text-center">
-            <h2 className="text-2xl font-extrabold tracking-tight text-navy">
+            <h2 className="text-2xl font-extrabold tracking-tight text-ink">
               청년도약계좌, 미래적금으로 갈아타는 게 유리할까요?
             </h2>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
               은행별 최고금리가 아니라 <b className="text-ink">내가 실제로 받을 금리</b> 기준으로 3분 안에 판단해
               드립니다.
             </p>
-            <p className="mt-7 mb-4 text-[19px] font-extrabold text-navy">시작하기 · 도약계좌를 보유 중인가요?</p>
+            <p className="mt-7 mb-4 text-[19px] font-extrabold text-ink">시작하기 · 도약계좌를 보유 중인가요?</p>
             <div className="grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
@@ -211,7 +211,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                 className="rounded-2xl border border-line bg-card p-6 text-left transition hover:border-primary hover:bg-accent"
               >
                 <div className="text-2xl">🏦</div>
-                <div className="mt-2 text-[16px] font-bold text-navy">보유 중 — 갈아탈지 비교</div>
+                <div className="mt-2 text-[16px] font-bold text-ink">보유 중 — 갈아탈지 비교</div>
                 <div className="mt-1 text-[13px] text-muted-foreground">
                   유지 vs 전환 결론 + 최적 은행을 찾아드려요.
                 </div>
@@ -222,7 +222,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                 className="rounded-2xl border border-line bg-card p-6 text-left transition hover:border-primary hover:bg-accent"
               >
                 <div className="text-2xl">✨</div>
-                <div className="mt-2 text-[16px] font-bold text-navy">미보유 — 신규 가입</div>
+                <div className="mt-2 text-[16px] font-bold text-ink">미보유 — 신규 가입</div>
                 <div className="mt-1 text-[13px] text-muted-foreground">
                   미래적금 예상 수령액 + 최적 은행을 찾아드려요.
                 </div>
@@ -233,7 +233,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
 
         {/* STEP — 기본정보 */}
         <section hidden={cur !== 'basics'}>
-          <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">기본 정보를 알려주세요</h2>
+          <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-ink">기본 정보를 알려주세요</h2>
           <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-start">
             <div className="flex flex-col gap-6 rounded-2xl border border-line bg-card p-6">
               <div>
@@ -289,7 +289,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
         {/* STEP — 현재 계좌 (switch 전용, 프리렌더 기본모드라 크롤 포함) */}
         {!isNew && (
           <section hidden={cur !== 'account'}>
-            <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">
+            <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-ink">
               지금 도약계좌, 어떻게 넣고 계세요?
             </h2>
             <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-start">
@@ -362,7 +362,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
 
         {/* STEP — 우대조건 / 가입조건 */}
         <section hidden={cur !== 'conditions'}>
-          <h2 className="mb-2 text-2xl font-extrabold tracking-tight text-navy">실제로 채울 수 있는 조건만 켜주세요</h2>
+          <h2 className="mb-2 text-2xl font-extrabold tracking-tight text-ink">실제로 채울 수 있는 조건만 켜주세요</h2>
           <p className="mb-6 text-[14px] text-muted-foreground">
             최고금리는 모든 조건을 다 채워야 받는 숫자예요. <b className="text-ink">정말 달성 가능한 것</b>만 선택하면
             현실 금리로 은행을 추천합니다.
@@ -412,7 +412,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
               <div className="mb-2 text-[11.5px] font-bold tracking-wide text-muted-foreground">
                 내 조건 기준 최적 은행 · LIVE
               </div>
-              <div className="text-[18px] font-extrabold text-navy">{C.bb.bank.name}</div>
+              <div className="text-[18px] font-extrabold text-ink">{C.bb.bank.name}</div>
               <div className="mt-1 text-[26px] font-extrabold tabular-nums text-fin-green">{pct(C.bb.r)}</div>
               <div className="mini">
                 {C.bb.tier} (우대 +{(C.bb.pref * 100).toFixed(1)}%p)
@@ -646,7 +646,7 @@ function CompareCol({
     : 'border-line bg-secondary';
   return (
     <div className={`rounded-xl border p-5 ${border}`}>
-      <div className={`text-[13px] font-bold ${tone === 'green' ? 'text-fin-green' : 'text-navy'}`}>{title}</div>
+      <div className={`text-[13px] font-bold ${tone === 'green' ? 'text-fin-green' : 'text-ink'}`}>{title}</div>
       <div className="mt-2 text-[24px] font-extrabold tabular-nums">{fmtMoney(total)}</div>
       <div className="mt-3 flex flex-col gap-1.5 text-[12.5px] text-muted-foreground">
         <div className="flex justify-between">

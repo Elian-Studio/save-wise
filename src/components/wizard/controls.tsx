@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 
 export function StepBadge({ children }: { children: ReactNode }) {
   return (
-    <div className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-xs font-bold text-navy">
+    <div className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-xs font-bold text-ink">
       {children}
     </div>
   );
@@ -72,7 +72,7 @@ export function Segments<T extends string | number>({
             onClick={() => onChange(o.value)}
             className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-4 py-2.5 text-[13.5px] font-semibold transition ${
               cols === 1 ? 'w-full' : ''
-            } ${active ? 'border-primary bg-accent text-navy' : 'border-line bg-card text-ink hover:bg-secondary'}`}
+            } ${active ? 'border-primary bg-accent text-ink' : 'border-line bg-card text-ink hover:bg-secondary'}`}
           >
             <span>{o.label}</span>
             {o.tag && (
@@ -119,7 +119,7 @@ export function ToggleCard({
       <div className="mb-2.5 flex items-center justify-between">
         <div
           className={`flex h-10 w-10 items-center justify-center rounded-xl text-xl ${
-            on ? 'bg-white' : 'bg-secondary'
+            on ? 'bg-card' : 'bg-secondary'
           }`}
         >
           {icon}

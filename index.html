@@ -2,6 +2,17 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <!-- 다크모드 초기 적용 (FOUC 방지): 저장된 선호 → 없으면 시스템 설정. 하이드레이션 전에 실행. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <!-- 구글 서치콘솔 소유 확인 -->
     <meta name="google-site-verification" content="l_whixRLi4AVay_uSzURnhAxWnBUA_b4COQnngayD98" />
     <!-- 네이버 웹마스터 도구 소유 확인 -->

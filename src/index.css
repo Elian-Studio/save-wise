@@ -1,9 +1,12 @@
+/* Pretendard 가변 폰트 (동적 서브셋) — --font-sans 1순위. tailwind import보다 앞. */
+@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
-/* 금융 디자인 토큰을 shadcn CSS 변수로 매핑 (라이트) */
+/* 금융 디자인 토큰을 shadcn CSS 변수로 매핑 (라이트).
+   primary·fin-green·fin-blue·muted-foreground는 WCAG AA(4.5:1)를 만족하도록 조정됨. */
 :root {
   --radius: 0.75rem;
   --background: #edf1f5;
@@ -12,19 +15,55 @@
   --card-foreground: #191f28;
   --popover: #ffffff;
   --popover-foreground: #191f28;
-  --primary: #12b886; /* 토스 그린 accent (브랜드·K-패스) */
+  --primary: #068068; /* 토스 그린 계열 accent (브랜드·K-패스). 흰 글자 대비 4.89:1 */
   --primary-foreground: #ffffff;
   --secondary: #f2f4f6;
   --secondary-foreground: #333d4b;
   --muted: #f9fafb;
-  --muted-foreground: #8b95a1;
+  --muted-foreground: #5f6b78; /* 배경/카드 위 4.5:1↑ */
   --accent: #e7f7f1; /* 소프트 그린 틴트 */
   --accent-foreground: #0b6b4f;
   --destructive: #f04452;
   --destructive-foreground: #ffffff;
   --border: #e5e8eb;
   --input: #d1d6db;
-  --ring: #12b886;
+  --ring: #068068;
+
+  /* 금융 시맨틱 색 (라이트) — @theme inline이 var()로 참조해 다크에서 스왑 가능하게 함.
+     navy=잉크(배너 표면), ink=반전 텍스트, fin-*=솔리드/텍스트, fin-*-soft=칩 배경. */
+  --navy: #191f28;
+  --navy2: #333d4b;
+  --ink: #191f28;
+  --line: #e5e8eb;
+  --fin-green: #157a3f; /* 절약·양수. 흰 글자 5.4:1, green-soft 위 4.88:1 */
+  --fin-green-soft: #e7f7f1;
+  --fin-blue: #1b5fd0; /* 정보·보조. blue-soft 위 5.18:1 */
+  --fin-blue-soft: #eaf2fe;
+  --fin-amber: #b45309; /* 주의. amber-soft 위 4.54:1 */
+  --fin-amber-soft: #fdf2e2;
+}
+
+/* 다크 팔레트 (클래스 전략 .dark, index.html FOUC 스크립트가 초기 적용).
+   토스 스타일 다크: 중립 표면(배경/카드/보더/텍스트)·잉크만 반전한다.
+   primary·fin-*(솔리드)·fin-*-soft(칩)·navy(배너)는 반전하지 않아 대비를 그대로 유지 —
+   솔리드 위 흰 글자, 라이트 칩 위 진한 시맨틱 텍스트가 두 테마에서 동일하게 AA를 만족. */
+.dark {
+  --background: #16181d;
+  --foreground: #e6e9ee;
+  --card: #1e222b;
+  --card-foreground: #e6e9ee;
+  --popover: #1e222b;
+  --popover-foreground: #e6e9ee;
+  --secondary: #2a2f3a;
+  --secondary-foreground: #d3d8e0;
+  --muted: #262b34;
+  --muted-foreground: #98a1ad; /* 카드/배경/secondary 위 5:1↑ */
+  --accent: #16362a; /* 저채도 그린 틴트 */
+  --accent-foreground: #74dcae;
+  --border: #2c313b;
+  --input: #3a414d;
+  --ink: #f0f2f5;
+  --line: #2c313b;
 }
 
 @theme inline {
@@ -54,16 +93,16 @@
 
   /* 금융 시맨틱 컬러 (토스 스타일) + 한국형 폰트.
      navy=ink(진회색, 헤더·제목·CTA), fin-green=절약/양수, fin-blue=기후동행/보조(accent 그린과 분리). */
-  --color-navy: #191f28;
-  --color-navy2: #333d4b;
-  --color-ink: #191f28;
-  --color-line: #e5e8eb;
-  --color-fin-green: #00a860;
-  --color-fin-green-soft: #e7f7f1;
-  --color-fin-blue: #3182f6;
-  --color-fin-blue-soft: #eaf2fe;
-  --color-fin-amber: #b45309;
-  --color-fin-amber-soft: #fdf2e2;
+  --color-navy: var(--navy);
+  --color-navy2: var(--navy2);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
+  --color-fin-green: var(--fin-green);
+  --color-fin-green-soft: var(--fin-green-soft);
+  --color-fin-blue: var(--fin-blue);
+  --color-fin-blue-soft: var(--fin-blue-soft);
+  --color-fin-amber: var(--fin-amber);
+  --color-fin-amber-soft: var(--fin-amber-soft);
   --font-sans:
     'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
 }
@@ -121,7 +160,7 @@ input.range::-webkit-slider-thumb {
   height: 24px;
   border-radius: 50%;
   background: var(--primary);
-  border: 3px solid #fff;
+  border: 3px solid var(--card);
   box-shadow: 0 1px 6px rgba(15, 27, 45, 0.25);
   cursor: pointer;
 }
@@ -130,7 +169,7 @@ input.range::-moz-range-thumb {
   height: 24px;
   border-radius: 50%;
   background: var(--primary);
-  border: 3px solid #fff;
+  border: 3px solid var(--card);
   box-shadow: 0 1px 6px rgba(15, 27, 45, 0.25);
   cursor: pointer;
 }

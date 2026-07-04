@@ -25,7 +25,7 @@ export function ScenarioTables({ I }: { I: Inputs }) {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardContent className="pt-5">
-            <p className="mb-2 font-bold text-navy">소득구간별</p>
+            <p className="mb-2 font-bold text-ink">소득구간별</p>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -59,7 +59,7 @@ export function ScenarioTables({ I }: { I: Inputs }) {
         </Card>
         <Card>
           <CardContent className="pt-5">
-            <p className="mb-2 font-bold text-navy">도약계좌 경과기간별</p>
+            <p className="mb-2 font-bold text-ink">도약계좌 경과기간별</p>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -75,7 +75,7 @@ export function ScenarioTables({ I }: { I: Inputs }) {
                   const C = compute(J);
                   const R = recommend(J, C);
                   return (
-                    <TableRow key={e} className={cn(e === I.elapsed && 'bg-fin-blue-soft')}>
+                    <TableRow key={e} className={cn(e === I.elapsed && 'bg-fin-blue-soft text-navy')}>
                       <TableCell>{e}</TableCell>
                       <TableCell className="text-right">{60 - e}</TableCell>
                       <TableCell className="text-right">{fmtMoney(C.refund.total)}</TableCell>
@@ -91,7 +91,7 @@ export function ScenarioTables({ I }: { I: Inputs }) {
       </div>
       <Card className="mt-4">
         <CardContent className="pt-5">
-          <p className="mb-2 font-bold text-navy">유형별 (일반형 6% vs 우대형 12%)</p>
+          <p className="mb-2 font-bold text-ink">유형별 (일반형 6% vs 우대형 12%)</p>
           <Table>
             <TableHeader>
               <TableRow>
@@ -108,7 +108,7 @@ export function ScenarioTables({ I }: { I: Inputs }) {
                 const C = compute(J);
                 const R = recommend(J, C);
                 return (
-                  <TableRow key={t} className={cn(t === I.type && 'bg-fin-blue-soft')}>
+                  <TableRow key={t} className={cn(t === I.type && 'bg-fin-blue-soft text-navy')}>
                     <TableCell>{label}</TableCell>
                     <TableCell className="text-right">{pct(C.rMirae)}</TableCell>
                     <TableCell className="text-right">{pct(C.mirae.eff)}</TableCell>
