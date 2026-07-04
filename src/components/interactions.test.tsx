@@ -39,6 +39,13 @@ describe('상세 BankRanking 전체보기 토글 (위저드 아래 SEO 섹션)',
   });
 });
 
+describe('마감 배너 (결정적 사실 · 무조건 렌더)', () => {
+  it('1차 접수 마감 문구가 존재', () => {
+    const { container } = render(<App />);
+    expect(container.textContent).toContain('청년미래적금 1차 신규 접수가 2026-07-03 마감됐어요.');
+  });
+});
+
 describe('a11y 구조 (SEO 상세 섹션)', () => {
   it('모든 테이블 헤더 셀에 scope="col"', () => {
     const { container } = render(<App />);

@@ -19,8 +19,13 @@ export function Shell() {
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const sync = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem('theme'))
-        document.documentElement.classList.toggle('dark', e.matches);
+      let saved: string | null = null;
+      try {
+        saved = localStorage.getItem('theme');
+      } catch {
+        /* private mode 등 접근 불가 — 시스템 설정을 따른다 */
+      }
+      if (!saved) document.documentElement.classList.toggle('dark', e.matches);
     };
     mq.addEventListener('change', sync);
     return () => mq.removeEventListener('change', sync);
@@ -75,14 +80,18 @@ export function Shell() {
 function ThemeToggle() {
   const toggle = () => {
     const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    try {
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    } catch {
+      /* private mode 등 저장 불가 — 이번 세션 토글은 유지, 선호만 미저장 */
+    }
   };
   return (
     <button
       type="button"
       onClick={toggle}
       aria-label="라이트/다크 테마 전환"
-      className="ml-auto flex size-9 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+      className="ml-auto flex size-11 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-secondary hover:text-foreground"
     >
       <span className="text-base dark:hidden" aria-hidden="true">
         🌙

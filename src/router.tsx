@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Shell } from './components/Shell';
 import { YouthSavings } from './services/youthSavings/YouthSavings';
 import { Transit } from './services/transit/Transit';
@@ -12,6 +12,7 @@ export function AppRoutes() {
       <Route element={<Shell />}>
         <Route path="/" element={<YouthSavings />} />
         <Route path="/transit" element={<Transit />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
   );

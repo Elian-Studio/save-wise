@@ -103,8 +103,10 @@
   --color-fin-blue-soft: var(--fin-blue-soft);
   --color-fin-amber: var(--fin-amber);
   --color-fin-amber-soft: var(--fin-amber-soft);
+  /* 'Pretendard Variable' = 서브셋 CSS가 등록하는 실제 패밀리명(1순위). 미로드 환경은 'Pretendard'(정적)→시스템 폴백. */
   --font-sans:
-    'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+    'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
+    '맑은 고딕', sans-serif;
 }
 
 @layer base {
@@ -152,6 +154,10 @@ input.range {
   border-radius: 99px;
   background: var(--color-line);
   outline: none;
+}
+input.range:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 input.range::-webkit-slider-thumb {
   -webkit-appearance: none;

@@ -517,7 +517,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                   >
                     <div
                       className={`flex h-8 w-8 flex-none items-center justify-center rounded-lg text-[14px] font-extrabold text-white ${
-                        i === 0 ? 'bg-fin-amber' : i === 1 ? 'bg-[#9aa6bc]' : 'bg-[#b97f50]'
+                        i === 0 ? 'bg-fin-amber' : i === 1 ? 'bg-[#6b7688]' : 'bg-[#8a5a34]'
                       }`}
                     >
                       {i + 1}

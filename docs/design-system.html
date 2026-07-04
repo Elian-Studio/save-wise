@@ -31,8 +31,8 @@
         --fin-blue-soft: #eaf2fe;
         --fin-amber: #b45309;
         --fin-amber-soft: #fdf2e2;
-        --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
-          '맑은 고딕', sans-serif;
+        --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+          'Malgun Gothic', '맑은 고딕', sans-serif;
       }
       * {
         box-sizing: border-box;
@@ -385,8 +385,8 @@
 
       <h3>폰트 & 전역 base</h3>
       <div class="card">
-        <p style="margin: 0"><code>--font-sans</code> = <code>'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif</code></p>
-        <p class="mini"><b>Pretendard 로드</b>: <code>pretendard</code> npm(가변·동적 서브셋) self-host. <code>index.css</code> 최상단 <code>@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css'</code> → Vite가 woff2 서브셋 번들·해싱. CDN 미사용.</p>
+        <p style="margin: 0"><code>--font-sans</code> = <code>'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif</code></p>
+        <p class="mini"><b>Pretendard 로드</b>: <code>pretendard</code> npm(가변·동적 서브셋) self-host. <code>index.css</code> 최상단 <code>@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css'</code> → Vite가 woff2 서브셋 번들·해싱. CDN 미사용. <b>1순위는 <code>'Pretendard Variable'</code></b> — 서브셋 <code>@font-face</code> 등록 패밀리명과 일치해야 적용됨(정적 <code>'Pretendard'</code>는 폴백 2순위).</p>
         <p class="mini">전역: <code>-webkit-font-smoothing: antialiased</code> · 한글 줄바꿈 <code>word-break: keep-all</code> + <code>overflow-wrap: anywhere</code> (‘NH농협’, ‘도약 월 3만원’ 중간 깨짐 방지) · <code>* { border-color: var(--border) }</code></p>
       </div>
 
@@ -502,6 +502,8 @@
         <tr><td>fin-blue / blue-soft (Badge blue)</td><td><span class="ng">3.29</span> <code>#3182f6</code></td><td><b>5.18</b> <code>#1b5fd0</code></td><td><span class="ok">AA ✔</span></td></tr>
         <tr><td>muted-foreground / background #edf1f5</td><td><span class="ng">2.68</span> <code>#8b95a1</code></td><td><b>4.79</b> <code>#5f6b78</code></td><td><span class="ok">AA ✔</span></td></tr>
         <tr><td>white / fin-green 솔리드(결과 카드)</td><td><span class="ng">3.10</span></td><td><b>5.40</b></td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>white / 메달 silver (순위 2위)</td><td><span class="ng">2.45</span> <code>#9aa6bc</code></td><td><b>4.59</b> <code>#6b7688</code></td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>white / 메달 bronze (순위 3위)</td><td><span class="ng">3.38</span> <code>#b97f50</code></td><td><b>5.85</b> <code>#8a5a34</code></td><td><span class="ok">AA ✔</span></td></tr>
         <tr><td>fin-amber #b45309 / amber-soft #fdf2e2</td><td>4.54</td><td>4.54 (유지)</td><td><span class="ok">AA ✔</span></td></tr>
         <tr><td>accent-fg #0b6b4f / accent #e7f7f1</td><td>5.87</td><td>5.87 (유지)</td><td><span class="ok">AA ✔</span></td></tr>
         <tr><td>foreground #191f28 / background #edf1f5</td><td>14.59</td><td>14.59 (유지)</td><td><span class="ok">AA ✔</span></td></tr>
