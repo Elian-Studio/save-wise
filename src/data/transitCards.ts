@@ -34,17 +34,16 @@ export const KPASS = {
   minRidesPerMonth: 15,
   rate: { general: 0.2, youth: 0.3, senior: 0.3, low: 0.533 } as Record<AgeTier, number>,
   // 월 환급 기준금액(수도권, 2026-04~09 한시 반값). 실부담 = min(fare, cap).
-  // [R] 지방(비수도권)·반값종료(2026-10~)·youth/senior/low 플러스형 정확값 → molit 공식표 확정 대상.
-  capNormal: { general: 30000, youth: 20000, senior: 20000, low: 20000 } as Record<AgeTier, number>,
-  capPlus: { general: 50000, youth: 40000 /*[R]*/, senior: 40000 /*[R]*/, low: 40000 /*[R]*/ } as Record<
-    AgeTier,
-    number
-  >,
+  // 확정: 국토부 대광위 반값표(korea.kr 148962910). youth·senior = "청년·2자녀·어르신" 티어, low = "3자녀↑·저소득".
+  // [R] 지방(비수도권) 기준금액·반값종료(2026-10~) 정상값은 엔진 미저장(수도권 단일값) → docs/transit-cards-research.md 참조.
+  capNormal: { general: 30000, youth: 25000, senior: 25000, low: 22000 } as Record<AgeTier, number>,
+  capPlus: { general: 50000, youth: 45000, senior: 45000, low: 40000 } as Record<AgeTier, number>,
 } as const;
 
-// ── 대안: 기후동행카드(서울 정액·무제한) ── senior 정확값 [R]
+// ── 대안: 기후동행카드(서울 정액·무제한) ──
+// senior=62000: 어르신 전용 할인권종 없음(서울 할인권종 = 일반/청년/청소년/다자녀/저소득뿐, 65+는 지하철 무임 별도) → 일반요금 적용.
 export const CLIMATE = {
-  price: { general: 62000, youth: 55000, senior: 62000 /*[R]*/, low: 45000 } as Record<AgeTier, number>,
+  price: { general: 62000, youth: 55000, senior: 62000, low: 45000 } as Record<AgeTier, number>,
   bikeAdd: 3000, // 따릉이 포함권 추가
 } as const;
 
@@ -72,9 +71,9 @@ export const TRANSIT_CARDS: TransitCard[] = [
     benefit: { kind: 'flat', amount: 3000, minSpend: 50000 },
     minPrevSpend: 300000,
     annualFee: 0,
-    source: 'kbanknow.com / card-gorilla 2749',
-    grade: 'press',
-    note: '교통 3천은 전월실적 30만↑ 조건[R]',
+    source: 'kbanknow.com / kbanker.co.kr 223448',
+    grade: 'verified',
+    note: '교통 3천: 전월실적 30만↑ + 대중교통 5만↑ 조건(확인)',
   },
   {
     id: 'kakao-friends',
@@ -104,12 +103,12 @@ export const TRANSIT_CARDS: TransitCard[] = [
     issuer: '삼성',
     name: 'K-패스 삼성체크',
     type: 'check',
-    benefit: { kind: 'pct', pct: 0.1, monthlyCap: 2000 }, // 10% 월 한도 2천 추정(동종 체크카드 공통)[R]
+    benefit: { kind: 'pct', pct: 0.1, monthlyCap: 2000 }, // 대중교통 10%·연회비0 확인. 월 한도 2천·실적 20만은 추정[R]
     minPrevSpend: 200000,
     annualFee: 0,
-    source: 'samsungcard.com(캡 재확인)',
+    source: 'samsungcard.com(ABP1800)',
     grade: 'press',
-    note: '월 한도·실적 공식 재확인[R]',
+    note: '공식: 대중교통 캐시백·연회비 없음. 월 한도·전월실적 수치 미공시[R]',
   },
   {
     id: 'woori-cookie',
@@ -263,13 +262,13 @@ export const TRANSIT_CARDS: TransitCard[] = [
     issuer: 'IBK기업',
     name: 'K-패스 신용',
     type: 'credit',
-    // 대중교통 최대 300원/회 → flat 근사[R]
+    // 확인: 300원/회·1일3회·월 1만 한도·전월실적 20만↑·연회비 2천(BC). flat 3천은 보수적 근사.
     benefit: { kind: 'flat', amount: 3000, minSpend: 0 },
     minPrevSpend: 200000,
     annualFee: 2000,
-    source: 'card-gorilla 4035',
-    grade: 'press',
-    note: '1회 최대 300원 정액 → flat 근사[R]',
+    source: 'banksalad CARD004320 / card-gorilla 4035',
+    grade: 'verified',
+    note: '300원/회·1일3회·월 1만 한도 → flat 3천 근사(엔진 단순화)',
   },
   {
     id: 'hyundai-zwork',
@@ -313,12 +312,12 @@ export const TRANSIT_CARDS: TransitCard[] = [
     issuer: '광주은행',
     name: 'K-그린카드 V2',
     type: 'credit',
-    // 전월 30만↑ 대중교통 10% 에코머니 적립(내 5%는 오류). 월 한도 미공시 → 보수적 5천[R].
+    // 확인: 전월 30만↑ 대중교통 10% 에코머니 적립. 월 한도 미공시 → 보수적 5천[R].
     benefit: { kind: 'pct', pct: 0.1, monthlyCap: 5000 },
     minPrevSpend: 300000,
     annualFee: 10000,
-    source: 'kjbank.com',
+    source: 'kjbank.com / wealthywing',
     grade: 'press',
-    note: '에코머니 적립 · 월 한도 공식 재확인[R]',
+    note: '대중교통 10%·전월30만↑ 확인, 월 한도만 미공시[R]',
   },
 ];

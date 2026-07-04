@@ -6,8 +6,9 @@ describe('kpassNet — 모두의카드 실부담(세 방식 최소)', () => {
   it('general·bs·fare 10만: 정률80k vs 일반형cap3만 vs 플러스cap5만 → 3만', () => {
     expect(kpassNet(100000, 'general', 'bs')).toBe(30000);
   });
-  it('low·bs·fare 10만: 정률 46.7k vs 일반형cap2만 → 2만', () => {
-    expect(kpassNet(100000, 'low', 'bs')).toBe(20000);
+  it('low·bs·fare 10만: 정률 46.7k vs 일반형cap 2.2만 → 2.2만', () => {
+    // 반값표 확정(korea.kr 148962910): low(3자녀↑·저소득) 수도권 일반형 = 22,000.
+    expect(kpassNet(100000, 'low', 'bs')).toBe(22000);
   });
   it('wide(GTX)는 일반형 미적용 → 정률 vs 플러스cap 중 최소', () => {
     // general fare 10만: 정률8만 vs 플러스cap5만 → 5만 (일반형 3만은 wide라 제외)
