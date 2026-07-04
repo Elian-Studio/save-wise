@@ -37,7 +37,7 @@ export function Shell() {
             청년적금 갈아타기
           </NavItem>
           <NavItem to="/transit" active={pathname === '/transit'}>
-            K-패스 교통카드
+            교통카드 추천
           </NavItem>
           <ThemeToggle />
         </div>

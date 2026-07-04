@@ -136,10 +136,12 @@ export function Transit() {
         </nav>
 
         {/* key={step}로 스텝 전환마다 재마운트 → fade+slide-up 진입 애니메이션(접근성 motion-reduce).
-            모든 스텝을 hidden으로 전마운트 → 프리렌더에 전 스텝 HTML 유지(SEO). lg:min-h로 입력 스텝 버튼 Y 고정. */}
+            모든 스텝을 hidden으로 전마운트 → 프리렌더에 전 스텝 HTML 유지(SEO).
+            lg:min-h는 가장 큰 입력 스텝(이용 조건 ≈559px 실측)에 여유를 더해 '다음' 버튼 Y좌표를
+            스텝 간 고정(청년적금 Wizard와 동일 기법). 모바일은 편차가 커 데스크톱에만 적용. */}
         <div
           key={step}
-          className="pt-5 pb-4 duration-300 ease-out animate-in fade-in slide-in-from-bottom-3 motion-reduce:animate-none lg:min-h-[480px]"
+          className="pt-5 pb-4 duration-300 ease-out animate-in fade-in slide-in-from-bottom-3 motion-reduce:animate-none lg:min-h-[580px]"
         >
           {/* STEP 0 — 이용 조건 */}
           <section hidden={cur !== 'use'}>
