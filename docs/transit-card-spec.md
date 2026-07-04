@@ -30,10 +30,10 @@
 ## 3. 대안 — 기후동행카드 (서울 정액)
 - 이용가능: `region==='seoul' && transit!=='wide'` (서울 외 하차·GTX·신분당 제외).
 - 월 정액(실부담 고정): { general 62000, youth 55000, low 45000 } + 따릉이 포함 시 +3000. `senior` 62000(어르신 전용 할인권종 없음 → 일반요금, 지하철 무임 별도).
-- 실부담 = 정액요금(무제한). 손익분기 `breakeven = 정액 / (1 − rate)` 이상 이용 시 기후동행 유리.
+- 실부담 = 정액요금(무제한). ~~손익분기 `정액/(1−rate)`~~ → **폐기**(연구 §4): 모두의카드 캡 하에서 정률-only 손익분기는 성립하지 않음. 승자는 실부담 직접 비교로만 판정.
 
 ## 4. 추천 로직
-- **1차(추천 탭)**: K-패스(모두의카드) 실부담 vs 기후동행 실부담 → 낮은 쪽 winner. 손익분기 메시지.
+- **1차(추천 탭)**: K-패스(모두의카드) 실부담 vs 기후동행 실부담 → 낮은 쪽 winner. (손익분기 메시지 폐기 — §3)
 - **2차(카드사별)**: K-패스를 쓸 때, 카드사 **추가혜택**으로 순비용 최소 카드 순위.
   - 카드 추가절감 `add`:
     - `benefit.kind==='pct'`: `add = clip(min(fare × pct, monthlyCap))` (clip=100원 단위 내림). 단 전월실적 `minPrevSpend` 충족 가정(UI 고지).
@@ -51,4 +51,4 @@
 - 기후동행 서울 전용·GTX 제외 각주.
 
 ## 7. 검증
-- `transitCardRec.test.ts`(TDD): 정률 vs 기준금액 최소 선택, 기후동행 손익분기, flat/pct add 계산, discontinued 제외, cardType 필터. 경계값(fare 2만/15만, region별 기후동행 가부).
+- `transitCardRec.test.ts`(TDD): 정률 vs 기준금액 최소 선택, 기후동행 실부담 승자 판정, flat/pct add 계산, discontinued 제외, cardType 필터. 경계값(fare 2만/15만, region별 기후동행 가부).

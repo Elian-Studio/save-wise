@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { kpassNet, climateNet, cardAdd, rankCards, compare } from './transitCardRec';
-import { TRANSIT_CARDS, KPASS } from '../data/transitCards';
+import { TRANSIT_CARDS } from '../data/transitCards';
 
 describe('kpassNet — 모두의카드 실부담(세 방식 최소)', () => {
   it('general·bs·fare 10만: 정률80k vs 일반형cap3만 vs 플러스cap5만 → 3만', () => {
@@ -114,7 +114,7 @@ describe('compare — K-패스 vs 기후동행', () => {
   });
   it('모두의카드 cap(반값 3만)이 기후동행(6.2만)보다 낮아 고액에도 K-패스 승', () => {
     // 2026 모두의카드: 일반형 실부담이 기준금액 3만에 캡 → 기후동행 6.2만보다 항상 저렴.
-    // 디자인의 정률-only 손익분기 전제가 무너지는 지점(제품 결정 필요, 기준금액[R] 의존).
+    // 제품 결정(연구 §4): 정률-only 손익분기는 성립하지 않아 breakeven 필드 제거, 승자는 실부담 직접 비교.
     const r = compare(120000, 'general', 'seoul', 'bs');
     expect(r.kpassNet).toBe(30000);
     expect(r.winner).toBe('kpass');
@@ -124,8 +124,11 @@ describe('compare — K-패스 vs 기후동행', () => {
     expect(r.climateAvailable).toBe(false);
     expect(r.winner).toBe('kpass');
   });
-  it('손익분기 = 정액/(1−정률)', () => {
-    const r = compare(80000, 'general', 'seoul', 'bs');
-    expect(r.breakeven).toBe(Math.round(62000 / (1 - KPASS.rate.general)));
+  it('wide(GTX)는 일반형 캡 미적용 → 플러스 캡 5만 > 기후동행 불가 구간, kpass 실부담 5만', () => {
+    // 일반형이 빠지는 wide에서도 승자 판정이 실부담 비교로 일관되는지 확인.
+    const r = compare(120000, 'general', 'seoul', 'wide');
+    expect(r.climateAvailable).toBe(false); // GTX는 기후동행 제외
+    expect(r.kpassNet).toBe(50000);
+    expect(r.winner).toBe('kpass');
   });
 });

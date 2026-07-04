@@ -64,20 +64,18 @@ export interface TransitResult {
   climateNet: number | null;
   climateAvailable: boolean;
   winner: 'kpass' | 'climate';
-  breakeven: number; // 기후동행이 유리해지는 월 교통비
 }
 
-/** K-패스 vs 기후동행 비교. */
+/** K-패스 vs 기후동행 비교. 승자는 실부담 직접 비교 — 모두의카드(캡 존재) 하에서
+ *  정률-only 손익분기(정액/(1−rate))는 성립하지 않아 제공하지 않는다(연구 §4). */
 export function compare(fare: number, age: AgeTier, region: Region, transit: Transit): TransitResult {
   const kNet = kpassNet(fare, age, transit);
   const cNet = climateNet(age, region, transit);
   const available = cNet != null;
-  const price = CLIMATE.price[age] + (transit === 'bike' ? CLIMATE.bikeAdd : 0);
   return {
     kpassNet: kNet,
     climateNet: cNet,
     climateAvailable: available,
     winner: available && cNet < kNet ? 'climate' : 'kpass',
-    breakeven: Math.round(price / (1 - KPASS.rate[age])),
   };
 }
