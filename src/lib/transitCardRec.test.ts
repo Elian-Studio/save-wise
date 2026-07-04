@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { kpassNet, climateNet, cardAdd, rankCards, compare } from './transitCardRec';
+import { kpassNet, climateNet, cardAdd, effectiveBenefit, rankCards, compare } from './transitCardRec';
 import { TRANSIT_CARDS } from '../data/transitCards';
 
 describe('kpassNet — 모두의카드 실부담(세 방식 최소)', () => {
@@ -50,6 +50,38 @@ describe('cardAdd — 카드 추가절감', () => {
   it('pct: 월 한도 초과 시 cap', () => {
     // BC바로 15%, cap 3만. fare 30만 → 4.5만이나 cap 3만
     expect(cardAdd(bc, 300000)).toBe(30000);
+  });
+  it('경계: fare === minSpend(토스 4만)이면 지급', () => {
+    expect(cardAdd(toss, 40000)).toBe(2000); // >= 이므로 정확히 4만에서 지급
+    expect(cardAdd(toss, 39900)).toBe(0);
+  });
+});
+
+describe('effectiveBenefit / cardAdd — 전월실적 상위 티어', () => {
+  const shinhan = TRANSIT_CARDS.find((c) => c.id === 'shinhan-credit')!; // base cap 7천 / 60만↑ cap 1.5만
+  const timoney = TRANSIT_CARDS.find((c) => c.id === 'timoney-shinhan')!; // 30%: base 7천 / 50만↑ 1.2만 / 100만↑ 1.8만
+  it('기본: 티어 미달이면 base 한도', () => {
+    // prevSpend 50만(<60만) → base cap 7천. fare 20만×10%=2만 → 7천
+    expect((effectiveBenefit(shinhan, 500000) as { monthlyCap: number }).monthlyCap).toBe(7000);
+    expect(cardAdd(shinhan, 200000, 500000)).toBe(7000);
+  });
+  it('적용: 상위 티어면 상향 한도', () => {
+    // prevSpend 60만 → tier cap 1.5만. fare 20만×10%=2만 → 1.5만
+    expect((effectiveBenefit(shinhan, 600000) as { monthlyCap: number }).monthlyCap).toBe(15000);
+    expect(cardAdd(shinhan, 200000, 600000)).toBe(15000);
+  });
+  it('다중 티어: 가장 높은 자격 구간 선택', () => {
+    expect(cardAdd(timoney, 200000, 300000)).toBe(7000); // base(30%, cap7천): 6만→7천
+    expect(cardAdd(timoney, 200000, 500000)).toBe(12000); // 50만↑ cap 1.2만
+    expect(cardAdd(timoney, 200000, 1000000)).toBe(18000); // 100만↑ cap 1.8만
+  });
+  it('prevSpend 생략(기본 Infinity) → 최고 티어 가정', () => {
+    expect(effectiveBenefit(shinhan, Infinity)).not.toBe(shinhan.benefit);
+    expect(cardAdd(shinhan, 200000)).toBe(15000);
+  });
+  it('rankCards가 티어를 반영: 신한 100만 실적에서 add=1.5만', () => {
+    const r = rankCards(200000, 'credit', 1_000_000).find((x) => x.card.id === 'shinhan-credit')!;
+    expect(r.add).toBe(15000);
   });
 });
 

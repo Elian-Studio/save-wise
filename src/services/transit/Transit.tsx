@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Slider, Segments, type SegOption } from '../../components/wizard/controls';
 import { DATA_AS_OF } from '../../data/transitCards';
 import type { AgeTier, CardType, TransitCard, Benefit } from '../../data/transitCards';
@@ -31,10 +31,12 @@ const TYPE_SEGS: SegOption<CardType>[] = [
   { label: '신용카드 (추가할인↑)', value: 'credit' },
   { label: '체크카드 (연회비 0)', value: 'check' },
 ];
-// 전월실적(직전 달 카드 사용액). 카드 추가혜택은 대부분 실적 조건이 붙어, 실제 받는 혜택이 달라진다.
+// 전월실적(직전 달 카드 사용액). 데이터의 실제 임계값(기본 minPrevSpend + tiers)에 맞춤.
 const PREV_SPEND_SEGS: SegOption<number>[] = [
   { label: '실적 없음', value: 0 },
+  { label: '20만↑', value: 200000 },
   { label: '30만↑', value: 300000 },
+  { label: '40만↑', value: 400000 },
   { label: '50만↑', value: 500000 },
   { label: '100만↑', value: 1000000 },
 ];
@@ -44,7 +46,9 @@ const prevLabel = (v: number) => (v === 0 ? '실적 없음' : `전월 ${v / 1000
 const benefitSummary = (b: Benefit) =>
   b.kind === 'pct'
     ? `대중교통 ${b.pct * 100}%${b.monthlyCap ? ` · 월 ${won(b.monthlyCap)} 한도` : ''}`
-    : `교통 ${b.minSpend / 10000}만↑ 시 월 ${won(b.amount)}`;
+    : b.minSpend === 0
+      ? `조건 없이 월 ${won(b.amount)}`
+      : `교통 ${b.minSpend / 10000}만↑ 시 월 ${won(b.amount)}`;
 
 const STEP_KEYS = ['use', 'card', 'result'] as const;
 const STEP_LABELS = ['이용 조건', '카드 조건', '결과'];
@@ -60,8 +64,14 @@ export function Transit() {
 
   const cmp = useMemo(() => compare(fare, age, region, transit), [fare, age, region, transit]);
   const ranked = useMemo(() => rankCards(fare, cardType, prevSpend), [fare, cardType, prevSpend]);
-  const best = ranked.find((r) => r.eligible && r.add > 0);
+  const best = ranked.find((r) => r.eligible && r.monthlyNet > 0); // 연회비 반영 순절감 기준(순위와 동일)
   const top5 = ranked.slice(0, 5);
+
+  // 반값 기준금액 시효(~2026-09) 경고 — 클라 전용(Date.now, 프리렌더 빌드시각과 불일치 방지, D-day 패턴).
+  const [stale, setStale] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- 마운트 1회 클라 전용값, 의도된 단일 추가 렌더
+  useEffect(() => setStale(Date.now() >= new Date('2026-10-01T00:00:00+09:00').getTime()), []);
+  const otherRegion = region === 'other';
 
   const lastStep = STEP_KEYS.length - 1;
   const cur = STEP_KEYS[step];
@@ -77,7 +87,7 @@ export function Transit() {
   // 입력 스텝(이용/카드 조건) 우측 sticky LIVE — K-패스 실부담 실시간 피드백. 결과 스텝에선 히어로로 승격.
   const liveAside = (
     <aside className="rounded-2xl bg-gradient-to-br from-fin-green to-[#0f6b32] p-6 text-white lg:sticky lg:top-4">
-      <div className="text-[11.5px] font-bold tracking-wide opacity-80">내 조건 · K-패스 월 실부담 · LIVE</div>
+      <div className="text-[11.5px] font-bold tracking-wide text-white/95">내 조건 · K-패스 월 실부담 · LIVE</div>
       <div className="mt-1 text-[30px] font-extrabold tabular-nums">{won(cmp.kpassNet)}</div>
       <p className="mt-3 text-[13px] leading-relaxed opacity-95">
         {cmp.climateAvailable
@@ -86,6 +96,11 @@ export function Transit() {
             : `이 구간은 기후동행카드(${won(cmp.climateNet!)})가 더 저렴할 수 있어요. 서울 시내 무제한권입니다.`
           : '서울 외·GTX 구간이라 기후동행카드는 이용 불가 — K-패스가 유일하게 전국에서 환급됩니다.'}
       </p>
+      {otherRegion && (
+        <p className="mt-3 rounded-lg bg-white/15 px-3 py-2 text-[11.5px] leading-relaxed">
+          비수도권 기준금액은 공식 미확정이라 수도권 반값 기준 추정치예요.
+        </p>
+      )}
     </aside>
   );
 
@@ -188,8 +203,13 @@ export function Transit() {
 
           {/* STEP 2 — 결과: K-패스 vs 기후동행 히어로 + best 배너 + TOP5 카드 슬라이드 */}
           <section hidden={cur !== 'result'}>
+            {stale && (
+              <div className="mb-4 rounded-xl border border-[#f0d9b0] bg-fin-amber-soft px-4 py-3 text-[12.5px] leading-relaxed text-fin-amber">
+                반값 기준금액(~2026-09)이 종료됐어요. 데이터 갱신 전까지 실제 실부담과 다를 수 있어요.
+              </div>
+            )}
             <div className="rounded-2xl bg-gradient-to-br from-fin-green to-[#0f6b32] p-6 text-white">
-              <div className="text-[11.5px] font-bold tracking-wide opacity-80">내 조건 · K-패스 월 실부담</div>
+              <div className="text-[11.5px] font-bold tracking-wide text-white/95">내 조건 · K-패스 월 실부담</div>
               <div className="mt-1 text-[34px] font-extrabold tabular-nums">{won(cmp.kpassNet)}</div>
               <p className="mt-3 text-[13.5px] leading-relaxed opacity-95">
                 {cmp.climateAvailable
@@ -198,12 +218,17 @@ export function Transit() {
                     : `이 구간은 기후동행카드(${won(cmp.climateNet!)})가 더 저렴할 수 있어요. 서울 시내 무제한권입니다.`
                   : '서울 외·GTX 구간이라 기후동행카드는 이용 불가 — K-패스가 유일하게 전국에서 환급됩니다.'}
               </p>
+              {otherRegion && (
+                <p className="mt-3 rounded-lg bg-white/15 px-3 py-2 text-[11.5px] leading-relaxed">
+                  비수도권 기준금액은 공식 미확정이라 수도권 반값 기준 추정치예요.
+                </p>
+              )}
             </div>
 
             {best && (
               <div className="mt-4 rounded-xl bg-secondary px-4 py-3 text-[12.5px] leading-relaxed text-muted-foreground">
                 💡 지금 조건이면 <b className="text-ink">{best.card.issuer} {best.card.name}</b>가 K-패스 환급 위에 월{' '}
-                <b className="text-fin-green">{won(best.add)}</b>을 더 아껴줘요.
+                <b className="text-fin-green">{won(best.monthlyNet)}</b>(연회비 반영)을 더 아껴줘요.
               </div>
             )}
 
@@ -267,14 +292,15 @@ function CardTile({
   rankNo: number;
   active: boolean;
 }) {
+  // 메달 그라디언트 — 흰 글자 기준 시작색(밝은 쪽)이 AA 4.5:1↑이도록 어둡게. (실버 4.59 / 브론즈 5.85)
   const medal = !active
     ? 'from-line to-line'
     : rankNo === 1
       ? 'from-fin-green to-[#0f6b32]'
       : rankNo === 2
-        ? 'from-[#9aa6bc] to-[#6b7688]'
+        ? 'from-[#6b7688] to-[#565f6b]'
         : rankNo === 3
-          ? 'from-[#b97f50] to-[#8a5a34]'
+          ? 'from-[#8a5a34] to-[#5f3d22]'
           : 'from-navy to-navy2';
   return (
     <article
@@ -302,6 +328,7 @@ function CardTile({
         연회비 {r.card.annualFee === 0 ? '없음' : won(r.card.annualFee)} · 전월실적{' '}
         {r.card.minPrevSpend === 0 ? '없음' : `${r.card.minPrevSpend / 10000}만↑`}
       </div>
+      {r.card.note && <div className="mt-1 text-[11px] leading-relaxed text-muted-foreground">※ {r.card.note}</div>}
 
       <div className="mt-3">
         {active ? (
@@ -321,7 +348,7 @@ function CardTile({
           href={r.card.applyUrl}
           target="_blank"
           rel="noopener"
-          className="mt-3 block rounded-lg bg-primary py-2 text-center text-[13px] font-bold text-white"
+          className="mt-3 flex min-h-11 items-center justify-center rounded-lg bg-primary text-[13px] font-bold text-white transition hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           신청하러 가기
         </a>

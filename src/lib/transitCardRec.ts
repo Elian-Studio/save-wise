@@ -1,7 +1,7 @@
 // 교통카드 파인더 계산 엔진 — 순수 함수. 근거: docs/transit-card-spec.md.
 // K-패스(모두의카드) 실부담 vs 기후동행 비교 + 카드사 추가혜택 순위.
 import { KPASS, CLIMATE, TRANSIT_CARDS } from '../data/transitCards';
-import type { AgeTier, CardType, TransitCard } from '../data/transitCards';
+import type { AgeTier, Benefit, CardType, TransitCard } from '../data/transitCards';
 
 export type Region = 'seoul' | 'metro' | 'other';
 export type Transit = 'bs' | 'wide' | 'bike';
@@ -22,9 +22,22 @@ export function climateNet(age: AgeTier, region: Region, transit: Transit): numb
   return transit === 'bike' ? base + CLIMATE.bikeAdd : base;
 }
 
-/** 카드 추가절감(전월실적 충족 가정). 100원 단위 내림. */
-export function cardAdd(card: TransitCard, fare: number): number {
-  const b = card.benefit;
+/** 내 전월실적에서 실제 적용되는 혜택 = base에서 시작해, prevSpend가 자격인 가장 높은 tier로 교체. */
+export function effectiveBenefit(card: TransitCard, prevSpend: number): Benefit {
+  let chosen = card.benefit;
+  let chosenMin = -1;
+  for (const t of card.tiers ?? []) {
+    if (prevSpend >= t.minPrevSpend && t.minPrevSpend > chosenMin) {
+      chosen = t.benefit;
+      chosenMin = t.minPrevSpend;
+    }
+  }
+  return chosen;
+}
+
+/** 카드 추가절감(전월실적 충족 가정). 100원 단위 내림. prevSpend 생략 시 tier 미적용(base). */
+export function cardAdd(card: TransitCard, fare: number, prevSpend = Infinity): number {
+  const b = effectiveBenefit(card, prevSpend);
   if (b.kind === 'flat') return fare >= b.minSpend ? b.amount : 0;
   const raw = fare * b.pct;
   const capped = b.monthlyCap == null ? raw : Math.min(raw, b.monthlyCap);
@@ -48,7 +61,7 @@ export function rankCards(fare: number, cardType: CardType, prevSpend: number): 
   return TRANSIT_CARDS.filter((c) => c.type === cardType && !c.discontinued)
     .map((c) => {
       const eligible = prevSpend >= c.minPrevSpend;
-      const add = eligible ? cardAdd(c, fare) : 0;
+      const add = eligible ? cardAdd(c, fare, prevSpend) : 0;
       return { card: c, add, monthlyNet: add - Math.round(c.annualFee / 12), eligible };
     })
     .sort(

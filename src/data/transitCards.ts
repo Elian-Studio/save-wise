@@ -19,7 +19,9 @@ export interface TransitCard {
   issuer: string; // 카드사
   name: string;
   type: CardType;
-  benefit: Benefit;
+  benefit: Benefit; // 기본(base) 구간 혜택 = minPrevSpend 충족 시
+  /** 전월실적 상위 구간의 상향 혜택. prevSpend가 t.minPrevSpend↑인 가장 높은 구간이 base를 대체(근거 있는 카드만). */
+  tiers?: Array<{ minPrevSpend: number; benefit: Benefit }>;
   minPrevSpend: number; // 전월실적(원). 0=무실적
   annualFee: number; // 연회비(원). 0=무료
   source: string;
@@ -69,7 +71,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     issuer: '케이뱅크',
     name: 'ONE 체크',
     type: 'check',
-    // 교통 추가 3천(교통 4만↑)은 전월실적 30만↑ 필요(교통비는 실적 제외). 무실적 '모두다 1%'는 교통 아님.
+    // 교통 추가 3천(교통 5만↑)은 전월실적 30만↑ 필요(교통비는 실적 제외). 무실적 '모두다 1%'는 교통 아님.
     benefit: { kind: 'flat', amount: 3000, minSpend: 50000 },
     minPrevSpend: 300000,
     annualFee: 0,
@@ -132,12 +134,14 @@ export const TRANSIT_CARDS: TransitCard[] = [
     issuer: '하나',
     name: 'K-패스 하나 체크',
     type: 'check',
-    benefit: { kind: 'pct', pct: 0.1, monthlyCap: 3000 }, // 전월 60만↑ 월6천 한도[R]
+    // 대중교통 10% 월 3천 한도·전월 30만↑(엔진 보수값). 상위 실적(60만↑) 상향 한도는 공식 미확인 → 티어 미반영[R].
+    benefit: { kind: 'pct', pct: 0.1, monthlyCap: 3000 },
     minPrevSpend: 300000,
     annualFee: 0,
     source: 'hanacard.co.kr',
-    grade: 'verified',
+    grade: 'press',
     applyUrl: 'https://www.hanacard.co.kr/OPI41000000D.web?CD_PD_SEQ=17033&_frame=no',
+    note: '대중교통 10% 월 3천 한도(엔진 보수값). 60만↑ 상향 한도 공식 미확인[R]',
   },
   {
     id: 'im-check',
@@ -157,6 +161,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     type: 'check',
     // 대중교통 10% + 모빌리티 통합 월 한도: 20~80만 3천, 80만↑ 5천. 교통비도 전월실적에 포함.
     benefit: { kind: 'pct', pct: 0.1, monthlyCap: 3000 },
+    tiers: [{ minPrevSpend: 800000, benefit: { kind: 'pct', pct: 0.1, monthlyCap: 5000 } }],
     minPrevSpend: 200000,
     annualFee: 0,
     source: 'card.nonghyup.com',
@@ -186,6 +191,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     type: 'credit',
     // 대중교통 10%, 전월 30~60만 월 7천 / 60만↑ 월 1.5만 한도. 교통비 실적포함.
     benefit: { kind: 'pct', pct: 0.1, monthlyCap: 7000 },
+    tiers: [{ minPrevSpend: 600000, benefit: { kind: 'pct', pct: 0.1, monthlyCap: 15000 } }],
     minPrevSpend: 300000,
     annualFee: 10000,
     source: 'shinhancard.com',
@@ -212,6 +218,10 @@ export const TRANSIT_CARDS: TransitCard[] = [
     type: 'credit',
     // 대중교통 30% 할인, 전월 30~50만 월 7천 / 50~100만 1.2만 / 100만↑ 1.8만. 모바일티머니 앱 등록 필요.
     benefit: { kind: 'pct', pct: 0.3, monthlyCap: 7000 },
+    tiers: [
+      { minPrevSpend: 500000, benefit: { kind: 'pct', pct: 0.3, monthlyCap: 12000 } },
+      { minPrevSpend: 1000000, benefit: { kind: 'pct', pct: 0.3, monthlyCap: 18000 } },
+    ],
     minPrevSpend: 300000,
     annualFee: 15000,
     source: 'shinhancard.com',
@@ -263,6 +273,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     type: 'credit',
     // 대중교통 10% 청구할인, 월 1만(전월 50만↑)/2만(100만↑). 실적 50만.
     benefit: { kind: 'pct', pct: 0.1, monthlyCap: 10000 },
+    tiers: [{ minPrevSpend: 1000000, benefit: { kind: 'pct', pct: 0.1, monthlyCap: 20000 } }],
     minPrevSpend: 500000,
     annualFee: 10000,
     source: 'hanacard.co.kr',
@@ -291,6 +302,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     type: 'credit',
     // 대중교통 10% 청구할인, 월 6천(전월 50만↑)/1만(100만↑). 실적 50만.
     benefit: { kind: 'pct', pct: 0.1, monthlyCap: 6000 },
+    tiers: [{ minPrevSpend: 1000000, benefit: { kind: 'pct', pct: 0.1, monthlyCap: 10000 } }],
     minPrevSpend: 500000,
     annualFee: 10000,
     source: 'hyundaicard.com',
@@ -304,6 +316,7 @@ export const TRANSIT_CARDS: TransitCard[] = [
     type: 'credit',
     // 전월 40만↑ 대중교통 10% 월 1만 / 80만↑ 15% 월 1.5만. 기본 구간(40만)은 10%.
     benefit: { kind: 'pct', pct: 0.1, monthlyCap: 10000 },
+    tiers: [{ minPrevSpend: 800000, benefit: { kind: 'pct', pct: 0.15, monthlyCap: 15000 } }],
     minPrevSpend: 400000,
     annualFee: 20000,
     source: 'lottecard.co.kr',

@@ -80,4 +80,31 @@ describe('Transit 위저드', () => {
       expect(a.getAttribute('target')).toBe('_blank');
     });
   });
+
+  it('비수도권(그 외 지역) 선택 시 캐비앳 노출', () => {
+    const { getByRole, container } = render(<Transit />);
+    expect(container.textContent).not.toContain('비수도권 기준금액'); // 기본(서울)엔 없음
+    fireEvent.click(getByRole('button', { name: /그 외 지역/ })); // step0 이용 조건에 지역 세그먼트
+    expect(container.textContent).toContain('비수도권 기준금액은 공식 미확정');
+  });
+
+  it('best 배너는 연회비 반영 순절감(monthlyNet) 기준임을 명시', () => {
+    const { getByRole, container } = render(<Transit />);
+    goResult(getByRole);
+    expect(container.textContent).toContain('연회비 반영');
+  });
+
+  it('처음부터 리셋: step 0 복귀 + 입력값 보존', () => {
+    const { getByRole } = render(<Transit />);
+    // 카드 조건 스텝에서 신용카드로 변경 → 결과까지 진행
+    fireEvent.click(getByRole('button', { name: /다음 단계/ }));
+    fireEvent.click(getByRole('button', { name: /신용카드/ }));
+    fireEvent.click(getByRole('button', { name: /다음 단계/ }));
+    fireEvent.click(getByRole('button', { name: /처음부터/ })); // 리셋
+    // step 0 복귀 → 다음 단계 버튼 재노출
+    expect(getByRole('button', { name: /다음 단계/ })).toBeTruthy();
+    // 입력값(카드종류=신용) 보존 확인: 카드 조건 스텝으로 이동해 신용 aria-pressed
+    fireEvent.click(getByRole('button', { name: /다음 단계/ }));
+    expect(getByRole('button', { name: /신용카드/ }).getAttribute('aria-pressed')).toBe('true');
+  });
 });
