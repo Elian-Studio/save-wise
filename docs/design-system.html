@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChoiceWise 디자인 시스템</title>
+    <style>
+      /* 실제 프로젝트 토큰 (src/index.css)과 동일 값 — 스와치가 실색을 렌더한다 */
+      :root {
+        --radius: 0.75rem;
+        --background: #edf1f5;
+        --foreground: #191f28;
+        --card: #ffffff;
+        --primary: #12b886;
+        --primary-foreground: #ffffff;
+        --secondary: #f2f4f6;
+        --secondary-foreground: #333d4b;
+        --muted: #f9fafb;
+        --muted-foreground: #8b95a1;
+        --accent: #e7f7f1;
+        --accent-foreground: #0b6b4f;
+        --destructive: #f04452;
+        --border: #e5e8eb;
+        --input: #d1d6db;
+        --navy: #191f28;
+        --navy2: #333d4b;
+        --line: #e5e8eb;
+        --fin-green: #00a860;
+        --fin-green-soft: #e7f7f1;
+        --fin-blue: #3182f6;
+        --fin-blue-soft: #eaf2fe;
+        --fin-amber: #b45309;
+        --fin-amber-soft: #fdf2e2;
+        --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
+          '맑은 고딕', sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+        line-height: 1.6;
+      }
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 18px 80px;
+      }
+      header.top {
+        background: linear-gradient(to bottom right, var(--navy), var(--navy2));
+        color: #fff;
+        padding: 32px 0;
+      }
+      header.top .wrap {
+        padding-bottom: 32px;
+      }
+      header.top h1 {
+        margin: 0 0 6px;
+        font-size: 26px;
+        letter-spacing: -0.02em;
+      }
+      header.top p {
+        margin: 0;
+        color: #c7d0da;
+        font-size: 14px;
+      }
+      .pill {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 4px 12px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 12px;
+        font-weight: 600;
+      }
+      h2 {
+        margin: 44px 0 14px;
+        padding-left: 12px;
+        border-left: 4px solid var(--primary);
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      h3 {
+        margin: 26px 0 10px;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--navy2);
+      }
+      p.mini {
+        margin: 6px 0 0;
+        font-size: 13px;
+        color: var(--muted-foreground);
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.88em;
+        background: var(--secondary);
+        padding: 1px 6px;
+        border-radius: 6px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        background: var(--secondary);
+        font-weight: 600;
+        color: var(--secondary-foreground);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      /* 색 스와치 그리드 */
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .sw {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background: var(--card);
+      }
+      .sw .chip {
+        height: 64px;
+      }
+      .sw .meta {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      .sw .meta b {
+        display: block;
+        font-size: 12.5px;
+      }
+      .sw .meta span {
+        color: var(--muted-foreground);
+        font-family: ui-monospace, monospace;
+      }
+      /* 반경 데모 */
+      .radii {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .radii .box {
+        width: 84px;
+        height: 84px;
+        background: var(--accent);
+        border: 1px solid var(--primary);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 6px;
+        font-size: 11px;
+        color: var(--accent-foreground);
+      }
+      /* 버튼 프리뷰 */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 36px;
+        padding: 0 16px;
+        border-radius: calc(var(--radius) - 2px);
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-default {
+        background: var(--primary);
+        color: var(--primary-foreground);
+      }
+      .btn-outline {
+        border: 1px solid var(--input);
+        background: var(--card);
+        color: var(--foreground);
+      }
+      .btn-secondary {
+        background: var(--secondary);
+        color: var(--secondary-foreground);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--foreground);
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      /* 뱃지 프리뷰 */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: calc(var(--radius) - 2px);
+        padding: 2px 8px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .b-default {
+        background: var(--primary);
+        color: #fff;
+      }
+      .b-secondary {
+        background: var(--secondary);
+        color: var(--secondary-foreground);
+      }
+      .b-outline {
+        border: 1px solid var(--border);
+        color: var(--foreground);
+      }
+      .b-green {
+        background: var(--fin-green-soft);
+        color: var(--fin-green);
+      }
+      .b-blue {
+        background: var(--fin-blue-soft);
+        color: var(--fin-blue);
+      }
+      .b-amber {
+        background: var(--fin-amber-soft);
+        color: var(--fin-amber);
+      }
+      .b-muted {
+        background: var(--muted);
+        color: var(--muted-foreground);
+      }
+      .gap {
+        background: #fff8e6;
+        border: 1px solid #f4d67a;
+        border-radius: var(--radius);
+        padding: 14px 18px;
+        margin-top: 12px;
+      }
+      .gap b {
+        color: #92600a;
+      }
+      .note {
+        font-size: 12px;
+        color: var(--muted-foreground);
+        margin-top: 4px;
+      }
+      .metaline {
+        margin-top: 14px;
+        font-size: 12px;
+        color: #aeb9c5;
+        font-family: ui-monospace, monospace;
+      }
+      .principles {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 14px;
+      }
+      .principles .card b {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--navy);
+      }
+      .principles .card {
+        border-left: 4px solid var(--primary);
+      }
+      .usage {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      @media (max-width: 620px) {
+        .usage {
+          grid-template-columns: 1fr;
+        }
+      }
+      .usage div {
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+      .use-do {
+        background: var(--fin-green-soft);
+        border: 1px solid #bfe6d4;
+      }
+      .use-do b {
+        color: #0b6b4f;
+      }
+      .use-dont {
+        background: #fdeef0;
+        border: 1px solid #f4c4ca;
+      }
+      .use-dont b {
+        color: #b3121f;
+      }
+      .ok {
+        color: #0b6b4f;
+        font-weight: 700;
+      }
+      .ng {
+        color: #b3121f;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap" style="padding-bottom: 0">
+        <h1>ChoiceWise 디자인 시스템</h1>
+        <p>choicewise.kr — React 19 + Vite + Tailwind v4 (CSS-first). 실제 코드(<code>src/index.css</code>)의 토큰만 인용.</p>
+        <span class="pill">source of truth · src/index.css</span>
+        <div class="metaline">Last updated 2026-07-02 · Owner daniel · SSOT src/index.css</div>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <h2>1. 디자인 원칙</h2>
+      <p class="mini">코드·문구에서 관찰된 원칙만 명문화(발명 없음). 새 컴포넌트·색·카피 결정 시 판단 기준.</p>
+      <div class="principles">
+        <div class="card"><b>명료성 우선</b>계산 결과가 주인공. navy 잉크로 숫자·결론을 또렷이, 근거는 <code>&lt;details&gt;</code>로 접어 노이즈 제거.</div>
+        <div class="card"><b>신뢰·정직</b>“참고용 추정”, “보장되지 않습니다”, 기준일·출처 병기. 수익 단정·과장 금지 — 금융 자문이 아님.</div>
+        <div class="card"><b>한국어 우선 타이포</b><code>word-break: keep-all</code>로 어절 단위 줄바꿈. ‘NH농협’, ‘도약 월 3만원’ 같은 중간 깨짐 방지.</div>
+        <div class="card"><b>절제된 금융 팔레트</b>토스풍 그린·그레이. 의미색(green=이득·blue=정보·amber=주의)만 강조에 쓰고 남발하지 않음.</div>
+      </div>
+
+      <h2>2. 개요</h2>
+      <div class="card">
+        <ul style="margin: 0; padding-left: 20px">
+          <li>토큰 단일 소스는 <code>src/index.css</code>. <code>tailwind.config.*</code> / <code>postcss.config.*</code> 파일 <b>없음</b>.</li>
+          <li>Tailwind는 <code>vite.config.ts</code>의 <code>@tailwindcss/vite</code> 플러그인으로 로드 → 커스텀 토큰은 <code>@theme inline</code> 블록에만 존재.</li>
+          <li>spacing / breakpoint / (sans 외) fontFamily 확장 없음 → Tailwind v4 기본 스케일 사용.</li>
+          <li>클래스 조합 유틸 <code>cn()</code> = <code>twMerge(clsx(inputs))</code> (<code>src/lib/utils.ts</code>).</li>
+        </ul>
+      </div>
+
+      <h2>3. Foundations — 색</h2>
+      <p class="mini">아래 칩은 실제 hex 값으로 렌더된다. shadcn 변수 매핑 (<code>:root</code>, index.css 7–28줄).</p>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background: #edf1f5"></div><div class="meta"><b>--background</b><span>#edf1f5</span></div></div>
+        <div class="sw"><div class="chip" style="background: #191f28"></div><div class="meta"><b>--foreground</b><span>#191f28</span></div></div>
+        <div class="sw"><div class="chip" style="background: #ffffff; border-bottom: 1px solid var(--border)"></div><div class="meta"><b>--card / --popover</b><span>#ffffff</span></div></div>
+        <div class="sw"><div class="chip" style="background: #12b886"></div><div class="meta"><b>--primary / --ring</b><span>#12b886</span></div></div>
+        <div class="sw"><div class="chip" style="background: #f2f4f6"></div><div class="meta"><b>--secondary</b><span>#f2f4f6</span></div></div>
+        <div class="sw"><div class="chip" style="background: #f9fafb"></div><div class="meta"><b>--muted</b><span>#f9fafb</span></div></div>
+        <div class="sw"><div class="chip" style="background: #8b95a1"></div><div class="meta"><b>--muted-foreground</b><span>#8b95a1</span></div></div>
+        <div class="sw"><div class="chip" style="background: #e7f7f1"></div><div class="meta"><b>--accent</b><span>#e7f7f1</span></div></div>
+        <div class="sw"><div class="chip" style="background: #0b6b4f"></div><div class="meta"><b>--accent-foreground</b><span>#0b6b4f</span></div></div>
+        <div class="sw"><div class="chip" style="background: #f04452"></div><div class="meta"><b>--destructive</b><span>#f04452</span></div></div>
+        <div class="sw"><div class="chip" style="background: #e5e8eb"></div><div class="meta"><b>--border</b><span>#e5e8eb</span></div></div>
+        <div class="sw"><div class="chip" style="background: #d1d6db"></div><div class="meta"><b>--input</b><span>#d1d6db</span></div></div>
+      </div>
+
+      <h3>반경 스케일 — <code>--radius: 0.75rem</code> 기준 파생</h3>
+      <div class="radii">
+        <div class="box" style="border-radius: 0.5rem">sm · 0.5rem</div>
+        <div class="box" style="border-radius: 0.625rem">md · 0.625rem</div>
+        <div class="box" style="border-radius: 0.75rem">lg · 0.75rem</div>
+        <div class="box" style="border-radius: 1rem">xl · 1rem</div>
+      </div>
+      <p class="note">sm=<code>calc(r-4px)</code>, md=<code>calc(r-2px)</code>, lg=<code>r</code>, xl=<code>calc(r+4px)</code></p>
+
+      <h3>폰트 & 전역 base</h3>
+      <div class="card">
+        <p style="margin: 0"><code>--font-sans</code> = <code>'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif</code></p>
+        <p class="mini">전역: <code>-webkit-font-smoothing: antialiased</code> · 한글 줄바꿈 <code>word-break: keep-all</code> + <code>overflow-wrap: anywhere</code> (‘NH농협’, ‘도약 월 3만원’ 중간 깨짐 방지) · <code>* { border-color: var(--border) }</code></p>
+      </div>
+
+      <h2>4. Semantic tokens — 금융 시맨틱 색</h2>
+      <p class="mini"><code>@theme inline</code> 57–66줄. shadcn 변수와 별개로 도메인(금융) 의미 색. <b>primary(#12b886)는 브랜드·컨트롤 강조, fin-green(#00a860)은 “절약/이득” 의미색 — 혼용하지 않는다.</b></p>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background: #191f28"></div><div class="meta"><b>--navy / --ink</b><span>#191f28</span></div></div>
+        <div class="sw"><div class="chip" style="background: #333d4b"></div><div class="meta"><b>--navy2</b><span>#333d4b</span></div></div>
+        <div class="sw"><div class="chip" style="background: #00a860"></div><div class="meta"><b>--fin-green</b><span>#00a860 · 절약/양수</span></div></div>
+        <div class="sw"><div class="chip" style="background: #3182f6"></div><div class="meta"><b>--fin-blue</b><span>#3182f6 · 정보/보조</span></div></div>
+        <div class="sw"><div class="chip" style="background: #b45309"></div><div class="meta"><b>--fin-amber</b><span>#b45309 · 주의</span></div></div>
+        <div class="sw"><div class="chip" style="background: #e5e8eb"></div><div class="meta"><b>--line</b><span>#e5e8eb</span></div></div>
+      </div>
+
+      <h2>5. Components — 재사용 프리미티브</h2>
+      <p class="mini"><code>src/components/ui/*</code> — 수동 작성 최소 shadcn 프리미티브. React 19 시그니처(<code>React.ComponentProps</code>), 아이콘 인라인 SVG(lucide 미사용). 모든 프리미티브가 <code>className={cn('...base...', className)}</code>로 오버라이드 허용. <b>cva variant는 Button·Badge 2곳뿐.</b></p>
+
+      <h3>Button <span class="note">(ui/button.tsx)</span></h3>
+      <div class="card">
+        <div class="row">
+          <button class="btn btn-default">default</button>
+          <button class="btn btn-outline">outline</button>
+          <button class="btn btn-secondary">secondary</button>
+          <button class="btn btn-ghost">ghost</button>
+        </div>
+        <p class="note">size: <code>default h-9 px-4 py-2</code> · <code>sm h-8 px-3 text-xs</code> · <code>lg h-10 px-6</code>. 상태: hover(default <code>bg-primary/90</code>), <code>focus-visible:ring-2 ring-ring</code>, <code>disabled:opacity-50 pointer-events-none</code>. <code>asChild</code>(Radix Slot)로 링크를 버튼처럼.</p>
+        <div class="usage">
+          <div class="use-do"><b>When to use</b>주 행동 1개엔 <code>default</code>(primary). 보조 행동은 <code>outline</code>/<code>secondary</code>, 최소 강조는 <code>ghost</code>.</div>
+          <div class="use-dont"><b>Don't</b>한 화면에 default 버튼 여러 개로 위계 흐리기. 링크 대신 버튼 남용. 텍스트만 다른 커스텀 색 새로 만들기.</div>
+        </div>
+      </div>
+
+      <h3>Badge <span class="note">(ui/badge.tsx)</span></h3>
+      <div class="card">
+        <div class="row">
+          <span class="badge b-default">default</span>
+          <span class="badge b-secondary">secondary</span>
+          <span class="badge b-outline">outline</span>
+          <span class="badge b-green">green</span>
+          <span class="badge b-blue">blue</span>
+          <span class="badge b-amber">amber</span>
+          <span class="badge b-muted">muted</span>
+        </div>
+        <p class="note">base <code>rounded-md px-2 py-0.5 text-xs font-bold</code>. green/blue/amber는 금융 시맨틱 soft 배경.</p>
+        <div class="usage">
+          <div class="use-do"><b>When to use</b>의미대로: <code>green</code>=이득/절약, <code>blue</code>=정보/보조, <code>amber</code>=주의, <code>muted</code>=중립 라벨. 상태·분류를 짧게 표시.</div>
+          <div class="use-dont"><b>Don't</b>의미와 다른 색 쓰기(주의에 green). 긴 문장·클릭 액션을 뱃지에 담기. green/blue를 본문급 작은 글자로 — <span class="ng">대비 미달</span>(§7).</div>
+        </div>
+      </div>
+
+      <h3>그 외 프리미티브 & 위저드 컨트롤</h3>
+      <div class="card">
+        <p style="margin: 0 0 8px"><b>cva 없음 (단일 <code>cn()</code> 문자열):</b> Radix 래핑 <code>select</code>/<code>tabs</code>/<code>checkbox</code>/<code>label</code>, 순수 HTML 래퍼 <code>card</code>/<code>input</code>/<code>table</code>(<code>overflow-x-auto</code>).</p>
+        <p style="margin: 0"><b>위저드 전용</b> <code>wizard/controls.tsx</code> (<code>StepBadge</code>/<code>Slider</code>/<code>Segments</code>/<code>ToggleCard</code>)는 cva 대신 삼항(<code>active ? … : …</code>)으로 variant 처리 — ui/ 패턴과 별개.</p>
+      </div>
+
+      <h3>헬퍼 클래스 <span class="note">(@layer components, index.css 87–105줄)</span></h3>
+      <table>
+        <tr><th>클래스</th><th>정의</th><th>용도</th></tr>
+        <tr><td><code>.sec</code></td><td><code>mt-7 mb-3.5 border-l-4 border-primary pl-3 text-lg font-semibold tracking-tight</code></td><td>섹션 제목(좌측 primary 바)</td></tr>
+        <tr><td><code>.mini</code></td><td><code>mt-1 text-xs leading-relaxed text-muted-foreground</code></td><td>보조문구</td></tr>
+        <tr><td><code>summary.disc</code></td><td><code>flex min-h-11 … rounded-lg border border-line bg-secondary px-4 py-3 text-[15px] font-semibold text-navy</code></td><td>&lt;details&gt; 요약 헤더</td></tr>
+      </table>
+
+      <h2>6. Layout & 반복 패턴</h2>
+      <table>
+        <tr><th>패턴</th><th>클래스</th></tr>
+        <tr><td>헤더</td><td><code>bg-gradient-to-br from-navy to-navy2 py-6 text-white</code> + <code>max-w-[1080px] px-[18px]</code> + as-of pill</td></tr>
+        <tr><td>본문</td><td><code>mx-auto max-w-[1080px] px-[18px] pb-20</code></td></tr>
+        <tr><td>2단 그리드</td><td><code>grid gap-6 lg:grid-cols-[1fr_320px] lg:items-start</code> (transit은 <code>[1fr_340px]</code>) + 우측 <code>lg:sticky lg:top-4</code> LIVE 요약</td></tr>
+        <tr><td>Progressive disclosure</td><td><code>&lt;details className="group"&gt;</code> + <code>summary.disc</code> + <code>group-open:rotate-180</code> (닫혀도 DOM 유지 → SEO)</td></tr>
+        <tr><td>셸</td><td><code>Shell.tsx</code>: 브랜드 nav(<code>aria-current</code> active) + <code>&lt;Outlet/&gt;</code> + 푸터 + Analytics, 라우트 전환 시 <code>document.title</code> 동기화</td></tr>
+      </table>
+
+      <h2>7. 반응형 · 접근성 · 모션</h2>
+      <div class="card">
+        <ul style="margin: 0; padding-left: 20px">
+          <li><b>breakpoint</b>: <code>sm:</code> / <code>lg:</code>만. 커스텀 없음(v4 기본). 모바일 1단 → 데스크톱 2단, 데스크톱 <code>lg:sticky lg:top-4</code>.</li>
+          <li><b>접근성/터치</b>: 44px 터치 타깃(<code>min-h-11</code>), 슬라이더 thumb 24px(<code>input.range</code>), 표 <code>overflow-x-auto</code>, 포커스 링 <code>focus-visible:ring-ring</code>, 시맨틱 <code>&lt;nav&gt;/&lt;header&gt;/&lt;footer&gt;</code> + <code>aria-current</code>.</li>
+          <li><b>모션</b>: 라이브러리 없음, <code>tw-animate-css</code>만. 위저드 스텝 <code>animate-in fade-in slide-in-from-bottom-3 duration-300 motion-reduce:animate-none</code>, Select <code>data-[state=open]:animate-in</code>.</li>
+        </ul>
+      </div>
+
+      <h3>색 대비 (WCAG 2.2 AA) — 실측</h3>
+      <p class="mini">sRGB relative luminance 기준 실측. 본문 텍스트 AA=4.5:1, 큰 글자(≥18.66px bold/≥24px)=3:1. <b>text-xs(12px) bold는 “큰 글자” 아님 → 4.5 필요.</b></p>
+      <table>
+        <tr><th>전경 / 배경</th><th>대비</th><th>판정</th></tr>
+        <tr><td>foreground <code>#191f28</code> / background <code>#edf1f5</code></td><td>14.59</td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>accent-fg <code>#0b6b4f</code> / accent <code>#e7f7f1</code></td><td>5.87</td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>fin-amber <code>#b45309</code> / amber-soft <code>#fdf2e2</code> (Badge amber)</td><td>4.54</td><td><span class="ok">AA ✔</span></td></tr>
+        <tr><td>fin-blue <code>#3182f6</code> / blue-soft <code>#eaf2fe</code> (Badge blue)</td><td>3.29</td><td><span class="ng">큰 글자만, 본문 ✘</span></td></tr>
+        <tr><td>muted-foreground <code>#8b95a1</code> / background <code>#edf1f5</code></td><td>2.68</td><td><span class="ng">AA ✘</span></td></tr>
+        <tr><td>fin-green <code>#00a860</code> / green-soft <code>#e7f7f1</code> (Badge green)</td><td>2.80</td><td><span class="ng">AA ✘</span></td></tr>
+        <tr><td>primary-fg <code>#ffffff</code> / primary <code>#12b886</code> (default 버튼)</td><td>2.55</td><td><span class="ng">AA ✘</span></td></tr>
+      </table>
+      <p class="note">브랜드 색 유지가 전제라 코드는 미변경. 보완책: 미달 색은 <b>큰 글자·아이콘·테두리 병행</b>으로 정보를 색에만 싣지 않기, primary 버튼은 대비 확보를 원하면 잉크(navy) 텍스트 또는 더 진한 그린 검토. 결정 전까지 <b>알려진 제약</b>으로 관리.</p>
+
+      <h2>8. Content — 보이스 & 톤</h2>
+      <p class="mini">금융 계산 서비스 카피 규칙. <code>Disclaimer.tsx</code>·as-of pill 관행에서 도출.</p>
+      <div class="usage">
+        <div class="use-do"><b>Do</b>“참고용 추정”·가정 명시, 기준일(<code>DATA_AS_OF</code>)·출처(은행연합회 정본) 병기, 숫자·단위·%p 정확히, 가입 전 재확인 안내.</div>
+        <div class="use-dont"><b>Don't</b>“무조건·보장·최대 수익” 단정, 자문처럼 권유, 근거 없는 비교, 기준일 없는 수치.</div>
+      </div>
+
+      <h2>9. Governance (경량)</h2>
+      <div class="card">
+        <ul style="margin: 0; padding-left: 20px">
+          <li><b>SSOT</b> = <code>src/index.css</code>. 토큰은 여기서만 바꾼다.</li>
+          <li>이 문서(<code>docs/design-system.html</code> · <code>.md</code>)는 <b>수기 복제</b> → 토큰 변경 시 <b>index.css → 문서 동기화 필수</b>(드리프트 주의). 두 문서는 서로 내용 일치 유지.</li>
+          <li>변경 이력·소유자·리뷰는 <b>git 커밋/PR</b>로 갈음. 별도 changelog 파일 없음.</li>
+          <li>시맨틱 버전·리뷰 SLA·전용 툴(zeroheight 등)은 현 규모에 <b>불필요</b>. 기여자가 늘면 그때 도입.</li>
+        </ul>
+      </div>
+
+      <h2>10. Known gaps</h2>
+      <p class="mini">문서화 중 발견한 코드-문서 불일치. <b>기록만 — 코드 미수정.</b></p>
+      <div class="gap"><b>Pretendard 미로드</b> — <code>--font-sans</code> 1순위인데 <code>index.html</code>에 <code>&lt;link&gt;</code>·<code>@font-face</code>·웹폰트 파일 전무. 대부분 환경에서 시스템 폰트 폴백. 의도면 스택에서 제거, 아니면 CDN/self-host 추가.</div>
+      <div class="gap"><b>다크모드 미구현</b> — <code>@custom-variant dark (&amp;:is(.dark *))</code> 선언만 있고 <code>.dark</code> 팔레트 오버라이드 블록 없음 → <code>dark:</code> 유틸 사실상 무효.</div>
+      <div class="gap"><b>미사용 레거시 컴포넌트</b> — <code>VerdictCard</code>(테스트만)/<code>DecisionTable</code>/<code>ComparePanels</code>/<code>BankPick</code>/<code>MiraeSummary</code>/<code>StepsGuide</code>. 라우팅 도달 불가. 신규 작업 참고 대상 제외.</div>
+      <div class="gap"><b>접근성: 주요 색 대비 AA 미달</b> — Badge <code>green</code>(2.8)·<code>blue</code>(3.29), <code>muted-foreground</code> on bg(2.68), default 버튼 흰 글자 on primary(2.55)가 WCAG AA(4.5:1) 미달(§7 실측표). 브랜드 색 유지 시 색 외 단서(굵기·아이콘·테두리) 병행 권장.</div>
+    </div>
+  </body>
+</html>
