@@ -31,6 +31,14 @@ const TYPE_SEGS: SegOption<CardType>[] = [
   { label: '신용카드 (추가할인↑)', value: 'credit' },
   { label: '체크카드 (연회비 0)', value: 'check' },
 ];
+// 전월실적(직전 달 카드 사용액). 카드 추가혜택은 대부분 실적 조건이 붙어, 실제 받는 혜택이 달라진다.
+const PREV_SPEND_SEGS: SegOption<number>[] = [
+  { label: '실적 없음', value: 0 },
+  { label: '30만↑', value: 300000 },
+  { label: '50만↑', value: 500000 },
+  { label: '100만↑', value: 1000000 },
+];
+const prevLabel = (v: number) => (v === 0 ? '실적 없음' : `전월 ${v / 10000}만↑`);
 
 export function Transit() {
   const [region, setRegion] = useState<Region>('seoul');
@@ -38,10 +46,11 @@ export function Transit() {
   const [age, setAge] = useState<AgeTier>('general');
   const [fare, setFare] = useState(75000);
   const [cardType, setCardType] = useState<CardType>('credit');
+  const [prevSpend, setPrevSpend] = useState(0);
 
   const cmp = useMemo(() => compare(fare, age, region, transit), [fare, age, region, transit]);
-  const ranked = useMemo(() => rankCards(fare, cardType), [fare, cardType]);
-  const best = ranked[0];
+  const ranked = useMemo(() => rankCards(fare, cardType, prevSpend), [fare, cardType, prevSpend]);
+  const best = ranked.find((r) => r.eligible && r.add > 0);
 
   return (
     <>
@@ -83,6 +92,12 @@ export function Transit() {
             <Field label="카드 종류">
               <Segments options={TYPE_SEGS} value={cardType} onChange={setCardType} cols={1} aria-label="카드 종류" />
             </Field>
+            <Field label="전월 카드 실적">
+              <Segments options={PREV_SPEND_SEGS} value={prevSpend} onChange={setPrevSpend} aria-label="전월 카드 실적" />
+              <p className="mini">
+                대부분의 교통 추가혜택은 전월실적 조건이 붙어요. 실제 받는 혜택만 순위에 반영합니다.
+              </p>
+            </Field>
           </div>
 
           {/* K-패스 요약 (실엔진) */}
@@ -105,46 +120,62 @@ export function Transit() {
             내 조건 K-패스 {cardType === 'credit' ? '신용' : '체크'}카드 추천
           </div>
           <div className="mb-4 text-[12.5px] text-muted-foreground">
-            월 교통비 {won(fare)} 기준, 카드 추가절감 − 연회비(월환산) 순 · 전월실적 충족 가정
+            월 교통비 {won(fare)} · <b className="text-ink">{prevLabel(prevSpend)}</b> 기준, 실제 받는 카드 추가절감 −
+            연회비(월환산) 순
           </div>
           <div className="flex flex-col gap-3">
-            {ranked.map((r, i) => (
-              <div
-                key={r.card.id}
-                className={`flex items-center gap-3.5 rounded-xl border p-3.5 ${
-                  i === 0 ? 'border-fin-green bg-fin-green-soft' : 'border-line bg-card'
-                }`}
-              >
+            {ranked.map((r, i) => {
+              // 순위 번호는 실제 혜택을 받는(자격+절감>0) 카드에만 매김. 미자격은 회색·하단.
+              const rankNo = ranked.slice(0, i + 1).filter((x) => x.eligible && x.add > 0).length;
+              const active = r.eligible && r.add > 0;
+              return (
                 <div
-                  className={`flex h-8 w-8 flex-none items-center justify-center rounded-lg text-[14px] font-extrabold text-white ${
-                    i === 0 ? 'bg-fin-green' : i === 1 ? 'bg-[#9aa6bc]' : i === 2 ? 'bg-[#b97f50]' : 'bg-line'
+                  key={r.card.id}
+                  className={`flex items-center gap-3.5 rounded-xl border p-3.5 ${
+                    !active ? 'border-line bg-secondary/40 opacity-70' : rankNo === 1 ? 'border-fin-green bg-fin-green-soft' : 'border-line bg-card'
                   }`}
                 >
-                  {i + 1}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-bold">{r.card.issuer}</span>
-                    <span className="text-[13px] text-muted-foreground">{r.card.name}</span>
-                    {r.card.grade === 'press' && (
-                      <span className="rounded bg-fin-amber-soft px-1.5 py-0.5 text-[10px] font-bold text-fin-amber">
-                        확인필요
-                      </span>
+                  <div
+                    className={`flex h-8 w-8 flex-none items-center justify-center rounded-lg text-[14px] font-extrabold text-white ${
+                      !active ? 'bg-line text-muted-foreground' : rankNo === 1 ? 'bg-fin-green' : rankNo === 2 ? 'bg-[#9aa6bc]' : rankNo === 3 ? 'bg-[#b97f50]' : 'bg-line'
+                    }`}
+                  >
+                    {active ? rankNo : '—'}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-bold">{r.card.issuer}</span>
+                      <span className="text-[13px] text-muted-foreground">{r.card.name}</span>
+                      {r.card.grade === 'press' && (
+                        <span className="rounded bg-fin-amber-soft px-1.5 py-0.5 text-[10px] font-bold text-fin-amber">
+                          확인필요
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-0.5 text-[11.5px] text-muted-foreground">
+                      연회비 {r.card.annualFee === 0 ? '없음' : won(r.card.annualFee)} · 전월실적{' '}
+                      {r.card.minPrevSpend === 0 ? '없음' : `${r.card.minPrevSpend / 10000}만↑`}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    {active ? (
+                      <div className="text-[18px] font-extrabold tabular-nums text-fin-green">
+                        +{won(r.add)}
+                        <span className="text-[11px] font-normal text-muted-foreground">/월</span>
+                      </div>
+                    ) : !r.eligible ? (
+                      <div className="text-[11.5px] font-semibold text-muted-foreground">
+                        전월 {r.card.minPrevSpend / 10000}만↑ 필요
+                      </div>
+                    ) : (
+                      <div className="text-[11.5px] font-semibold text-muted-foreground">
+                        +0원<span className="ml-1 font-normal">(교통비 조건 미달)</span>
+                      </div>
                     )}
                   </div>
-                  <div className="mt-0.5 text-[11.5px] text-muted-foreground">
-                    연회비 {r.card.annualFee === 0 ? '없음' : won(r.card.annualFee)} · 전월실적{' '}
-                    {r.card.minPrevSpend === 0 ? '없음' : `${r.card.minPrevSpend / 10000}만↑`}
-                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-[18px] font-extrabold tabular-nums text-fin-green">
-                    +{won(r.add)}
-                    <span className="text-[11px] font-normal text-muted-foreground">/월</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           {best && (
             <div className="mt-4 rounded-xl bg-secondary px-4 py-3 text-[12.5px] leading-relaxed text-muted-foreground">

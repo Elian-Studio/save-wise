@@ -33,18 +33,30 @@ export function cardAdd(card: TransitCard, fare: number): number {
 
 export interface RankedCard {
   card: TransitCard;
-  add: number; // 월 교통 추가절감
+  add: number; // 월 교통 추가절감(자격 미달이면 0)
   monthlyNet: number; // add − 연회비 월환산
+  eligible: boolean; // 내 전월실적이 카드 요건(minPrevSpend) 충족 여부
 }
 
-/** cardType 필터·discontinued 제외 후 월 순절감(add − 연회비/12) 내림차순. */
-export function rankCards(fare: number, cardType: CardType): RankedCard[] {
+const gradeRank = (g: TransitCard['grade']): number => (g === 'verified' ? 0 : 1);
+
+/**
+ * cardType 필터·discontinued 제외 후, 내 전월실적(prevSpend)에서 실제 받는 순절감으로 정렬.
+ * 자격 미달(prevSpend < minPrevSpend) 카드는 add 0. 동률이면 verified·낮은 실적요건 우선.
+ */
+export function rankCards(fare: number, cardType: CardType, prevSpend: number): RankedCard[] {
   return TRANSIT_CARDS.filter((c) => c.type === cardType && !c.discontinued)
     .map((c) => {
-      const add = cardAdd(c, fare);
-      return { card: c, add, monthlyNet: add - Math.round(c.annualFee / 12) };
+      const eligible = prevSpend >= c.minPrevSpend;
+      const add = eligible ? cardAdd(c, fare) : 0;
+      return { card: c, add, monthlyNet: add - Math.round(c.annualFee / 12), eligible };
     })
-    .sort((a, z) => z.monthlyNet - a.monthlyNet);
+    .sort(
+      (a, z) =>
+        z.monthlyNet - a.monthlyNet ||
+        gradeRank(a.card.grade) - gradeRank(z.card.grade) ||
+        a.card.minPrevSpend - z.card.minPrevSpend,
+    );
 }
 
 export interface TransitResult {

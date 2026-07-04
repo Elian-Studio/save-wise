@@ -37,13 +37,14 @@ describe('climateNet — 기후동행 이용가부', () => {
 describe('cardAdd — 카드 추가절감', () => {
   const toss = TRANSIT_CARDS.find((c) => c.id === 'toss-check')!;
   const bc = TRANSIT_CARDS.find((c) => c.id === 'bc-baro')!;
-  const shinhan = TRANSIT_CARDS.find((c) => c.id === 'shinhan-credit')!;
   it('flat: 조건 충족 시 정액, 미달 시 0', () => {
     expect(cardAdd(toss, 50000)).toBe(2000); // 4만↑
     expect(cardAdd(toss, 30000)).toBe(0);
   });
-  it('pct: 10% (한도 없음) 100원 단위 내림', () => {
-    expect(cardAdd(shinhan, 73000)).toBe(7300);
+  it('pct: 월 한도 없는 경우 정률·100원 단위 내림', () => {
+    const noCap = { ...toss, benefit: { kind: 'pct' as const, pct: 0.1, monthlyCap: null } };
+    // 73000 × 10% = 7300 → 100원 단위 그대로
+    expect(cardAdd(noCap, 73000)).toBe(7300);
   });
   it('pct: 월 한도 초과 시 cap', () => {
     // BC바로 15%, cap 3만. fare 30만 → 4.5만이나 cap 3만
@@ -51,9 +52,10 @@ describe('cardAdd — 카드 추가절감', () => {
   });
 });
 
-describe('rankCards — 필터·정렬', () => {
+describe('rankCards — 필터·정렬(전월실적 반영)', () => {
+  const HIGH = 1_000_000; // 실적 충분(모든 카드 자격)
   it('cardType=check만, discontinued(우리COOKIE) 제외, 순절감 내림차순', () => {
-    const ranked = rankCards(70000, 'check');
+    const ranked = rankCards(70000, 'check', HIGH);
     expect(ranked.every((r) => r.card.type === 'check')).toBe(true);
     expect(ranked.some((r) => r.card.discontinued)).toBe(false);
     for (let i = 1; i < ranked.length; i++) {
@@ -61,9 +63,45 @@ describe('rankCards — 필터·정렬', () => {
     }
   });
   it('연회비 있는 신용카드는 월환산 차감', () => {
-    const ranked = rankCards(100000, 'credit');
+    const ranked = rankCards(100000, 'credit', HIGH);
     const shinhan = ranked.find((r) => r.card.id === 'shinhan-credit')!;
     expect(shinhan.monthlyNet).toBe(shinhan.add - Math.round(10000 / 12));
+  });
+
+  it('전월실적 게이팅: 실적 없음이면 minPrevSpend>0 카드 혜택 0·미자격', () => {
+    // 실적 0: KB국민 체크(전월 30만↑ 요건)는 자격 미달 → add 0
+    const zero = rankCards(100000, 'check', 0);
+    const kb = zero.find((r) => r.card.id === 'kb-check')!;
+    expect(kb.eligible).toBe(false);
+    expect(kb.add).toBe(0);
+    // 실적 무관 카드(토스)는 자격 → 상위
+    const toss = zero.find((r) => r.card.id === 'toss-check')!;
+    expect(toss.eligible).toBe(true);
+    expect(zero[0].card.minPrevSpend).toBe(0); // 1등은 실적 무관 카드
+  });
+
+  it('실적 충족 시 10% 카드가 자격 얻고 월 한도(2천) 적용', () => {
+    // 전월 30만↑: KB국민 체크(10%·월 2천 한도) 자격 → fare 10만이어도 cap 2천
+    const met = rankCards(100000, 'check', 300000);
+    const kb = met.find((r) => r.card.id === 'kb-check')!;
+    expect(kb.eligible).toBe(true);
+    expect(kb.add).toBe(2000);
+  });
+
+  it('동률 타이브레이크: verified가 press보다, 실적 낮은 카드가 먼저', () => {
+    const ranked = rankCards(100000, 'check', 1_000_000);
+    for (let i = 1; i < ranked.length; i++) {
+      const a = ranked[i - 1];
+      const b = ranked[i];
+      if (a.monthlyNet === b.monthlyNet) {
+        const g = (x: string) => (x === 'verified' ? 0 : 1);
+        // verified 우선, 같으면 실적 낮은 순
+        expect(
+          g(a.card.grade) < g(b.card.grade) ||
+            (g(a.card.grade) === g(b.card.grade) && a.card.minPrevSpend <= b.card.minPrevSpend),
+        ).toBe(true);
+      }
+    }
   });
 });
 
