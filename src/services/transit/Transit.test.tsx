@@ -7,7 +7,7 @@ import { recommend } from '../../lib/transitSchemeRec';
 
 afterEach(cleanup);
 
-const at = (path = '/transit') =>
+const at = (path = '/') =>
   render(
     <MemoryRouter initialEntries={[path]}>
       <Transit />
@@ -87,7 +87,7 @@ describe('패스픽 Transit', () => {
   });
 
   it('?s=compare 딥링크로 진입하면(효과 이후) 비교 화면이 노출된다', async () => {
-    const { getByRole } = at('/transit?s=compare');
+    const { getByRole } = at('/?s=compare');
     await waitFor(() => expect(getByRole('heading', { name: /다섯 장, 한눈에 비교/ })).toBeTruthy());
   });
 });

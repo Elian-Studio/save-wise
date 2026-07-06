@@ -39,10 +39,10 @@ export function Shell() {
             choicewise
           </Link>
           <NavItem to="/" active={pathname === '/'}>
-            청년적금 갈아타기
-          </NavItem>
-          <NavItem to="/transit" active={pathname === '/transit'}>
             교통카드 추천
+          </NavItem>
+          <NavItem to="/youth-savings" active={pathname === '/youth-savings'}>
+            청년적금 갈아타기
           </NavItem>
           <ThemeToggle />
         </div>

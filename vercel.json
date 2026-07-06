@@ -11,7 +11,7 @@
       "destination": "https://choicewise.kr/:path*",
       "permanent": true
     },
-    { "source": "/youth-savings", "destination": "/", "permanent": true }
+    { "source": "/transit", "destination": "/", "permanent": true }
   ],
   "headers": [
     {

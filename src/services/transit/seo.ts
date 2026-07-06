@@ -2,19 +2,19 @@ import type { RouteSeo } from '../../seo/head';
 import { SCHEMES } from '../../data/transitSchemes';
 
 export const transitSeo: RouteSeo = {
-  path: '/transit',
+  path: '/',
   title: '교통카드 추천 — 기후동행·K-패스 30초 진단 (2026)',
   description:
     '기후동행카드·K-패스·The 경기패스·인천 I-패스·후불카드 5개 제도를 30초 퀴즈로 비교해 내 거주지·나이·교통비에 딱 맞는 교통카드를 찾아주는 무료 진단.',
   keywords:
     '패스픽, 교통카드 추천, 교통카드 비교, 기후동행카드, K패스, K-패스, The 경기패스, 인천 I패스, 후불 교통카드, 나이별 교통카드',
-  canonical: 'https://choicewise.kr/transit',
+  canonical: 'https://choicewise.kr/',
   jsonLd: [
     {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'choicewise 패스픽 — 교통카드 추천',
-      url: 'https://choicewise.kr/transit',
+      url: 'https://choicewise.kr/',
       applicationCategory: 'FinanceApplication',
       operatingSystem: 'Web',
       inLanguage: 'ko-KR',

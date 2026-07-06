@@ -6,13 +6,13 @@ import { SchemeDetail } from './SchemeDetail';
 
 afterEach(cleanup);
 
-// 실제 라우트 element로 감싸 :id 파라미터를 태운다. /transit 프로브로 리다이렉트를 관찰한다.
+// 실제 라우트 element로 감싸 :id 파라미터를 태운다. 홈(/) 프로브로 리다이렉트를 관찰한다.
 function renderAt(path: string) {
   return render(
     <MemoryRouter initialEntries={[path]}>
       <Routes>
         <Route path="/transit/cards/:id" element={<SchemeDetail />} />
-        <Route path="/transit" element={<div>TRANSIT_HOME_PROBE</div>} />
+        <Route path="/" element={<div>TRANSIT_HOME_PROBE</div>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -59,24 +59,24 @@ describe('SchemeDetail 상세 페이지', () => {
     expect(queryAllByRole('link', { name: /신청하러 가기/ })).toHaveLength(0);
   });
 
-  it('잘못된 id는 /transit로 리다이렉트', () => {
+  it('잘못된 id는 홈(/)으로 리다이렉트', () => {
     const { getByText, container } = renderAt('/transit/cards/nope');
     expect(getByText('TRANSIT_HOME_PROBE')).toBeTruthy();
     expect(container.textContent).not.toContain('발급은 이렇게');
   });
 
-  it('하단 CTA 링크는 /transit?s=quiz, /transit?s=compare를 가리킨다', () => {
+  it('하단 CTA 링크는 /?s=quiz, /?s=compare를 가리킨다', () => {
     const { getByRole } = renderAt('/transit/cards/kpass');
     expect(getByRole('link', { name: /나한테 맞는지 확인하기/ }).getAttribute('href')).toBe(
-      '/transit?s=quiz',
+      '/?s=quiz',
     );
     expect(getByRole('link', { name: /다른 카드랑 비교/ }).getAttribute('href')).toBe(
-      '/transit?s=compare',
+      '/?s=compare',
     );
   });
 
-  it('돌아가기 링크는 /transit', () => {
+  it('돌아가기 링크는 홈(/)', () => {
     const { getByRole } = renderAt('/transit/cards/kpass');
-    expect(getByRole('link', { name: /돌아가기/ }).getAttribute('href')).toBe('/transit');
+    expect(getByRole('link', { name: /돌아가기/ }).getAttribute('href')).toBe('/');
   });
 });

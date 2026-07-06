@@ -15,8 +15,8 @@
 ## 링크
 
 - [choicewise — 금융 결정 계산기 모음](https://choicewise.kr/)
-- [패스픽 — 교통카드 추천](https://choicewise.kr/transit) — 기후동행카드·K-패스·The 경기패스·인천 I-패스·후불카드 5개 제도를 30초 퀴즈로 비교해 거주지·나이·이용 패턴에 맞는 교통카드를 추천.
-- [청년도약계좌 ↔ 청년미래적금 갈아타기 계산기](https://choicewise.kr/)
+- [패스픽 — 교통카드 추천](https://choicewise.kr/) — 기후동행카드·K-패스·The 경기패스·인천 I-패스·후불카드 5개 제도를 30초 퀴즈로 비교해 거주지·나이·이용 패턴에 맞는 교통카드를 추천.
+- [청년도약계좌 ↔ 청년미래적금 갈아타기 계산기](https://choicewise.kr/youth-savings)
 
 ### 교통 제도별 상세
 

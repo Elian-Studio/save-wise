@@ -34,7 +34,7 @@ export function SchemeDetail() {
     window.scrollTo(0, 0);
   }, [id]);
 
-  if (!scheme) return <Navigate to="/transit" replace />;
+  if (!scheme) return <Navigate to="/" replace />;
 
   const tint = `${scheme.color}1f`;
 
@@ -47,7 +47,7 @@ export function SchemeDetail() {
       >
         <div className="mx-auto max-w-[880px]">
           <Link
-            to="/transit"
+            to="/"
             className="mb-6 inline-block rounded-full px-4 py-2 text-[13.5px] font-bold transition hover:brightness-110"
             style={{ background: 'rgba(255,255,255,.16)' }}
           >
@@ -194,13 +194,13 @@ export function SchemeDetail() {
         {/* 하단 CTA */}
         <div className="mt-8 flex gap-2.5">
           <Link
-            to="/transit?s=quiz"
+            to="/?s=quiz"
             className="flex-1 rounded-2xl bg-navy px-4 py-4 text-center text-base font-extrabold text-white transition hover:bg-navy2"
           >
             나한테 맞는지 확인하기
           </Link>
           <Link
-            to="/transit?s=compare"
+            to="/?s=compare"
             className="flex-1 rounded-2xl border-[1.5px] border-pp-line bg-pp-card px-4 py-4 text-center text-base font-bold text-pp-ink transition hover:border-pp-ink"
           >
             다른 카드랑 비교
