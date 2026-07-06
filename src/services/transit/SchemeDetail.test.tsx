@@ -23,7 +23,7 @@ describe('SchemeDetail 상세 페이지', () => {
     const { container } = renderAt('/transit/cards/kpass');
     const text = container.textContent ?? '';
     expect(text).toContain('K-패스');
-    expect(text).toContain('돌려주는 전국구 카드야');
+    expect(text).toContain('자동 환급해주는 전국구 카드야');
     // 혜택 타이틀 4개
     expect(text).toContain('쓴 만큼 돌려받기');
     expect(text).toContain('전국 어디서나');

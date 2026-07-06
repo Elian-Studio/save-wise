@@ -14,8 +14,8 @@ const at = (path = '/') =>
     </MemoryRouter>,
   );
 
-// 정답 시나리오: 서울 → 19~34세 → 60번 넘게 → 지하철·시내버스 → 자주 타 = 기후동행카드
-const answerToClimate = (getByRole: (r: string, o: { name: RegExp }) => HTMLElement) => {
+// 시나리오: 서울 → 19~34세 → 60번 넘게 → 지하철·시내버스 → 자주 타 (승자는 엔진이 결정)
+const answerFiveQuestions = (getByRole: (r: string, o: { name: RegExp }) => HTMLElement) => {
   fireEvent.click(getByRole('button', { name: /30초 만에 내 카드 찾기/ }));
   fireEvent.click(getByRole('button', { name: /^서울$/ }));
   fireEvent.click(getByRole('button', { name: /19~34세/ }));
@@ -36,14 +36,13 @@ describe('패스픽 Transit', () => {
     expect(t).toContain('경기도민 전용'); // gyeonggi compareRows
   });
 
-  it('퀴즈 플로우: 5문항 답하면 기후동행카드가 정답으로 나오고 근거·후보가 렌더된다', () => {
+  it('퀴즈 플로우: 5문항 답하면 승자 상세 CTA·근거·후보가 렌더된다', () => {
     const { getByRole, getByText } = at();
-    answerToClimate(getByRole);
+    answerFiveQuestions(getByRole);
     const rec = recommend({ region: 'seoul', age: 'y', trips: 'lots', mode: 'metro', bike: 'often' });
-    expect(rec.list[0].id).toBe('climate'); // 엔진 계약 확인
-    // 결과 화면 노출 + 승자 상세 CTA가 승자 id를 가리킴
+    // 결과 화면 노출 + 승자 상세 CTA가 엔진이 고른 승자 id를 가리킴(이중 환급 반영 → K-패스)
     expect(getByRole('link', { name: /이 카드 자세히 보기/ }).getAttribute('href')).toBe(
-      '/transit/cards/climate',
+      `/transit/cards/${rec.list[0].id}`,
     );
     expect(getByText(rec.list[0].reasons[0])).toBeTruthy(); // 근거
     expect(getByText('아쉽게 밀린 후보들')).toBeTruthy(); // 후보 섹션
@@ -80,7 +79,7 @@ describe('패스픽 Transit', () => {
 
   it('"답 바꿔서 다시 해볼래"는 Q1(진행도 리셋)로 돌아간다', () => {
     const { getByRole } = at();
-    answerToClimate(getByRole);
+    answerFiveQuestions(getByRole);
     fireEvent.click(getByRole('button', { name: /답 바꿔서 다시 해볼래/ }));
     expect(getByRole('heading', { name: '어디 살아?' })).toBeTruthy();
     expect(getByRole('progressbar').getAttribute('aria-valuenow')).toBe('20');
