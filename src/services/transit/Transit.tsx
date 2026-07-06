@@ -96,14 +96,16 @@ export function Transit() {
         hidden={screen !== 'home'}
         className="flex flex-col items-center px-6 pt-16 pb-[120px] text-center duration-500 animate-in fade-in motion-reduce:animate-none"
       >
-        <div className="mb-9 flex items-center" aria-hidden="true">
-          <span className="h-[3px] w-16 bg-pp-deco" />
-          <span className="h-3.5 w-3.5 rounded-full ring-[3px] ring-[#00A167]" style={{ background: '#00A167' }} />
-          <span className="h-[3px] w-16 bg-pp-deco" />
-          <span className="h-3.5 w-3.5 rounded-full ring-[3px] ring-[#3B5BDB]" style={{ background: '#3B5BDB' }} />
-          <span className="h-[3px] w-16 bg-pp-deco" />
-          <span className="h-3.5 w-3.5 rounded-full ring-[3px] ring-[#E8590C]" style={{ background: '#E8590C' }} />
-          <span className="h-[3px] w-16 bg-pp-deco" />
+        <div className="pp-reveal mb-9" aria-hidden="true">
+          <div className="pp-reveal-group">
+            <span className="pp-reveal-bloom" />
+            <span className="pp-reveal-symbol">
+              <span className="pp-reveal-dot pp-reveal-dot-g" />
+              <span className="pp-reveal-dot pp-reveal-dot-b" />
+              <span className="pp-reveal-dot pp-reveal-dot-o" />
+            </span>
+            <span className="pp-reveal-wordmark">패스픽</span>
+          </div>
         </div>
         <h1 className="text-[clamp(38px,6.5vw,74px)] font-extrabold leading-[1.12] tracking-[-0.045em]">
           매달 나가는 교통비,

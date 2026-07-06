@@ -215,3 +215,172 @@ input.range::-moz-range-thumb {
   box-shadow: 0 1px 6px rgba(15, 27, 45, 0.25);
   cursor: pointer;
 }
+
+/* 패스픽 로고 리빌 — 세 점 등장→유영→수렴→정렬, 빛 번짐과 워드마크.
+   SSR: 마크업이 최종 상태를 렌더, 키프레임(fill both)이 여정을 재생.
+   애니메이션 없으면 완성된 로고만 보임. */
+.pp-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+}
+.pp-reveal-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: pp-float 6s ease-in-out 3.7s infinite alternate;
+}
+.pp-reveal-symbol {
+  position: relative;
+  width: 64px;
+  height: 28px;
+}
+.pp-reveal-dot {
+  position: absolute;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  animation: var(--pp-dot-anim) 2.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.pp-reveal-dot-g {
+  left: 0;
+  background: #00a167;
+  --pp-dot-anim: pp-dot-g;
+}
+.pp-reveal-dot-b {
+  left: 18px;
+  background: #3b5bdb;
+  --pp-dot-anim: pp-dot-b;
+  animation-delay: 0.12s;
+}
+.pp-reveal-dot-o {
+  left: 36px;
+  background: #e8590c;
+  --pp-dot-anim: pp-dot-o;
+  animation-delay: 0.24s;
+}
+.pp-reveal-bloom {
+  position: absolute;
+  left: 32px;
+  top: 50%;
+  width: 130px;
+  height: 130px;
+  margin: -65px 0 0 -65px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 70%);
+  animation: pp-bloom 0.9s ease-out 2.65s both;
+}
+.pp-reveal-wordmark {
+  font-weight: 800;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+  color: var(--pp-ink);
+  animation: pp-wordmark 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) 2.85s both;
+}
+
+@keyframes pp-dot-g {
+  0% {
+    opacity: 0;
+    transform: translate(-130px, -36px) scale(0.4);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-118px, -30px) scale(1);
+  }
+  45% {
+    transform: translate(-100px, 8px) scale(1);
+  }
+  82% {
+    transform: translate(5px, -3px) scale(1);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+@keyframes pp-dot-b {
+  0% {
+    opacity: 0;
+    transform: translate(118px, 56px) scale(0.4);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(104px, 46px) scale(1);
+  }
+  45% {
+    transform: translate(84px, 10px) scale(1);
+  }
+  82% {
+    transform: translate(-4px, 3px) scale(1);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+@keyframes pp-dot-o {
+  0% {
+    opacity: 0;
+    transform: translate(44px, -60px) scale(0.4);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(38px, -50px) scale(1);
+  }
+  45% {
+    transform: translate(10px, -44px) scale(1);
+  }
+  82% {
+    transform: translate(3px, 2px) scale(1);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+@keyframes pp-bloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  40% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+@keyframes pp-wordmark {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    text-shadow: 0 0 22px rgba(255, 255, 255, 0.9);
+  }
+  60% {
+    opacity: 1;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.45);
+  }
+  100% {
+    transform: translateY(0);
+    text-shadow: none;
+  }
+}
+@keyframes pp-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pp-reveal-group,
+  .pp-reveal-dot,
+  .pp-reveal-bloom,
+  .pp-reveal-wordmark {
+    animation: none;
+  }
+}
