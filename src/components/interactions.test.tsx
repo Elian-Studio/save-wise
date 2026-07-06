@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup, fireEvent } from '@testing-library/react';
-import App from '../App';
+import { YouthSavings as App } from '../services/youthSavings/YouthSavings';
 
 afterEach(cleanup);
 
@@ -36,6 +36,13 @@ describe('상세 BankRanking 전체보기 토글 (위저드 아래 SEO 섹션)',
     expect(bankTable(container).querySelectorAll('tbody tr').length).toBe(5);
     fireEvent.click(getByRole('button', { name: /전체 \d+개 은행 보기/ }));
     expect(bankTable(container).querySelectorAll('tbody tr').length).toBe(14);
+  });
+});
+
+describe('마감 배너 (결정적 사실 · 무조건 렌더)', () => {
+  it('1차 접수 마감 문구가 존재', () => {
+    const { container } = render(<App />);
+    expect(container.textContent).toContain('청년미래적금 1차 신규 접수가 2026-07-03 마감됐어요.');
   });
 });
 

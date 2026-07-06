@@ -52,7 +52,7 @@ export function Faq({ scenario }: { scenario: Scenario }) {
         <CardContent className="grid gap-4 pt-5 text-[13.5px]">
           {faqs.map((f) => (
             <div key={f.q}>
-              <p className="m-0 font-semibold text-navy">Q. {f.q}</p>
+              <p className="m-0 font-semibold text-ink">Q. {f.q}</p>
               <p className="mt-1.5 text-muted-foreground">{f.a}</p>
             </div>
           ))}

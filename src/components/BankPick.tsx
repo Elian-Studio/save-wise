@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 function Crit({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex gap-2 text-[13.5px]">
-      <span className="h-fit shrink-0 rounded bg-muted px-2 py-0.5 text-xs font-bold text-navy">{label}</span>
+      <span className="h-fit shrink-0 rounded bg-muted px-2 py-0.5 text-xs font-bold text-ink">{label}</span>
       <span>{children}</span>
     </div>
   );

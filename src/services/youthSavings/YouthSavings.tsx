@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { track } from '@vercel/analytics';
-import { Analytics } from '@vercel/analytics/react';
-import { useCalculator } from './hooks/useCalculator';
-import { DATA_AS_OF } from './data/products';
-import { Wizard } from './components/wizard/Wizard';
-import { BankRanking } from './components/BankRanking';
-import { ScenarioTables } from './components/ScenarioTables';
-import { InvestmentCompare } from './components/InvestmentCompare';
-import { ProductCompare } from './components/ProductCompare';
-import { Faq } from './components/Faq';
-import { Sources } from './components/Sources';
-import { Disclaimer } from './components/Disclaimer';
-import { Ad } from './components/AdSlot';
+import { useCalculator } from '../../hooks/useCalculator';
+import { DATA_AS_OF } from '../../data/products';
+import { Wizard } from '../../components/wizard/Wizard';
+import { BankRanking } from '../../components/BankRanking';
+import { ScenarioTables } from '../../components/ScenarioTables';
+import { InvestmentCompare } from '../../components/InvestmentCompare';
+import { ProductCompare } from '../../components/ProductCompare';
+import { Faq } from '../../components/Faq';
+import { Sources } from '../../components/Sources';
+import { Disclaimer } from '../../components/Disclaimer';
+import { Ad } from '../../components/AdSlot';
 
 function ddayTo(date: string): number {
   const dead = new Date(`${date}T23:59:59+09:00`).getTime();
@@ -28,7 +27,7 @@ function salaryBand(man: number): string {
   return '7500+';
 }
 
-export default function App() {
+export function YouthSavings() {
   const api = useCalculator();
   const { inputs, result, rec } = api;
   const isNew = inputs.scenario === 'new';
@@ -72,7 +71,7 @@ export default function App() {
             <span className="rounded-full border border-white/25 bg-white/15 px-2.5 py-1">기준일 {DATA_AS_OF}</span>
             {d !== null && (
               <span className="rounded-full bg-[#ffe2e2] px-2.5 py-1 text-[#a01616]">
-                {d > 0 ? `신청 마감(7/3) D-${d}` : '청년미래적금 신청기간 종료'}
+                {d > 0 ? `신청 마감(7/3) D-${d}` : '1차 접수 마감 · 다음 12월'}
               </span>
             )}
           </div>
@@ -80,6 +79,14 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-[1080px] px-[18px] pb-20">
+        {/* 1차 접수 마감 안내 — 마감일(7/3)이 지나 결정적 사실이므로 무조건 렌더(프리렌더 포함).
+            근거: docs/transit-cards-research.md §5 (korea.kr 148966832, 연 2회 접수). */}
+        <div className="mt-5 rounded-[10px] border border-[#f0d9b0] bg-fin-amber-soft px-[15px] py-3.5 text-[13px] text-[#6b4310]">
+          <b className="text-[#7a3b06]">청년미래적금 1차 신규 접수가 2026-07-03 마감됐어요.</b> 다음 접수는{' '}
+          <b className="text-[#7a3b06]">2026년 12월 예정</b>(연 2회)입니다. 가입 예정자의 사전 비교와 기가입자의
+          갈아타기·만기 계산은 계속 이용할 수 있어요.
+        </div>
+
         {/* 메인 흐름: Switch Advisor 스텝 위저드(실엔진 구동) */}
         <Wizard api={api} />
 
@@ -129,7 +136,6 @@ export default function App() {
         <Ad slot="foot" />
         <Disclaimer scenario={inputs.scenario} />
       </main>
-      <Analytics />
     </>
   );
 }

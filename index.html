@@ -2,6 +2,17 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <!-- 다크모드 초기 적용 (FOUC 방지): 저장된 선호 → 없으면 시스템 설정. 하이드레이션 전에 실행. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <!-- 구글 서치콘솔 소유 확인 -->
     <meta name="google-site-verification" content="l_whixRLi4AVay_uSzURnhAxWnBUA_b4COQnngayD98" />
     <!-- 네이버 웹마스터 도구 소유 확인 -->
@@ -10,91 +21,22 @@
     <meta name="google-adsense-account" content="ca-pub-7278925724289481" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>청년도약계좌 vs 청년미래적금 갈아타기 계산기 (2026)</title>
-    <meta
-      name="description"
-      content="청년도약계좌 유지 vs 청년미래적금 갈아타기, 내 소득·거래은행으로 비교하고 가장 유리한 은행까지 찾는 무료 계산기."
-    />
-    <meta
-      name="keywords"
-      content="청년미래적금, 청년도약계좌, 청년미래적금 갈아타기, 청년도약계좌 갈아타기, 청년미래적금 은행, 청년미래적금 금리, 갈아타기 계산기, 정부기여금"
-    />
-    <link rel="canonical" href="https://choicewise.kr/" />
     <meta name="robots" content="index, follow" />
 
-    <!-- Open Graph -->
+    <!-- Open Graph (전역 공통). 라우트별 title·description·keywords·canonical·og:title/description/url·JSON-LD은
+         빌드 타임 프리렌더(scripts/prerender.mjs)가 </head> 직전에 주입한다. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
-    <meta property="og:title" content="청년도약계좌 vs 청년미래적금 갈아타기 계산기" />
-    <meta
-      property="og:description"
-      content="유지할까 갈아탈까? 내 조건으로 비교하고 가장 유리한 은행까지 찾아주는 무료 계산기 (2026 기준)."
-    />
-    <meta property="og:url" content="https://choicewise.kr/" />
     <meta property="og:site_name" content="choicewise" />
     <meta property="og:image" content="https://choicewise.kr/og.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="청년도약계좌 갈아타야 할까? — 유지 vs 전환 분석·은행 추천" />
+    <meta property="og:image:alt" content="choicewise — 내 조건으로 비교하는 금융 결정 계산기" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="청년도약계좌 vs 청년미래적금 갈아타기 계산기" />
-    <meta
-      name="twitter:description"
-      content="유지할까 갈아탈까? 내 조건으로 비교하고 가장 유리한 은행까지 찾아주는 무료 계산기 (2026 기준)."
-    />
     <meta name="twitter:image" content="https://choicewise.kr/og.jpg" />
 
-    <!-- FAQ 구조화 데이터 (SEO) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "도약계좌 없이 청년미래적금만 신규로 가입해도 되나요?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "네. 청년미래적금은 단독 신규 가입이 가능합니다. 도약계좌 보유자가 받는 '도약 연계' 우대는, 신규 가입자도 대부분 은행에서 '첫거래(예적금 미보유)' 조건으로 동일하게 받을 수 있습니다(해당 은행 직전 6개월~1년 예적금이 없는 첫거래 기준 — 기존 예적금이 있으면 빠질 수 있음)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "청년도약계좌에서 청년미래적금으로 갈아타면 기존 혜택을 잃나요?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "청년미래적금에 먼저 가입·계좌개설한 뒤 청년도약계좌를 '특별중도해지'하면 기존 납입분의 정부기여금과 비과세가 손실 없이 환급됩니다. 순서를 어겨 도약계좌를 먼저 해지하면 혜택이 사라집니다."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "청년미래적금 우대형(정부기여금 12%) 조건은 무엇인가요?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "중소기업 신규취업자(전년도 최초 취업 + 현재 중소기업 재직 등)가 대표적입니다. 일반형은 납입액의 6%, 우대형은 12%를 정부가 매월 매칭 지급합니다."
-            }
-          }
-        ]
-      }
-    </script>
-
-    <!-- 계산기 앱 구조화 데이터 (AEO — AI 답변엔진이 '무료 청년적금 계산기'로 분류) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "choicewise — 청년도약계좌 vs 청년미래적금 갈아타기 계산기",
-        "url": "https://choicewise.kr/",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Web",
-        "inLanguage": "ko-KR",
-        "description": "청년도약계좌 유지 vs 청년미래적금 갈아타기를 내 소득·거래은행 기준으로 비교하고, 가장 유리한 은행까지 찾아주는 무료 계산기.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
-      }
-    </script>
-
-    <!-- 사이트·발행처 구조화 데이터 (브랜드·E-E-A-T 신호) -->
+    <!-- 전역 사이트·발행처 구조화 데이터 (브랜드·E-E-A-T 신호) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
