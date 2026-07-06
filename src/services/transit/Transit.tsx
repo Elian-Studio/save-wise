@@ -1,367 +1,161 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Slider, Segments, type SegOption } from '../../components/wizard/controls';
-import { DATA_AS_OF } from '../../data/transitCards';
-import type { AgeTier, CardType, TransitCard, Benefit } from '../../data/transitCards';
-import {
-  compare,
-  rankCards,
-  type Region,
-  type Transit as TransitMode,
-} from '../../lib/transitCardRec';
+import { Link, useSearchParams } from 'react-router-dom';
+import { SCHEMES, QUIZ_QUESTIONS } from '../../data/transitSchemes';
+import { recommend, type QuizAnswers } from '../../lib/transitSchemeRec';
+import { Quiz } from './Quiz';
+import { Result } from './Result';
+import { Compare } from './Compare';
 
-const won = (n: number) => `${Math.round(n).toLocaleString('ko-KR')}원`;
+type Screen = 'home' | 'quiz' | 'result' | 'compare';
 
-const REGION_SEGS: SegOption<Region>[] = [
-  { label: '서울 위주', value: 'seoul' },
-  { label: '수도권(경기·인천)', value: 'metro' },
-  { label: '그 외 지역', value: 'other' },
-];
-const TRANSIT_SEGS: SegOption<TransitMode>[] = [
-  { label: '지하철·버스', value: 'bs' },
-  { label: 'GTX·신분당·광역', value: 'wide' },
-  { label: '따릉이 포함', value: 'bike' },
-];
-const AGE_SEGS: SegOption<AgeTier>[] = [
-  { label: '일반', value: 'general' },
-  { label: '청년 19~34', value: 'youth' },
-  { label: '저소득', value: 'low' },
-  { label: '어르신 65+', value: 'senior' },
-];
-const TYPE_SEGS: SegOption<CardType>[] = [
-  { label: '신용카드 (추가할인↑)', value: 'credit' },
-  { label: '체크카드 (연회비 0)', value: 'check' },
-];
-// 전월실적(직전 달 카드 사용액). 데이터의 실제 임계값(기본 minPrevSpend + tiers)에 맞춤.
-const PREV_SPEND_SEGS: SegOption<number>[] = [
-  { label: '실적 없음', value: 0 },
-  { label: '20만↑', value: 200000 },
-  { label: '30만↑', value: 300000 },
-  { label: '40만↑', value: 400000 },
-  { label: '50만↑', value: 500000 },
-  { label: '100만↑', value: 1000000 },
-];
-const prevLabel = (v: number) => (v === 0 ? '실적 없음' : `전월 ${v / 10000}만↑`);
-
-// 카드 혜택을 한 줄로 요약 — pct(대중교통 %·월 한도) / flat(월 교통 minSpend↑ 시 정액).
-const benefitSummary = (b: Benefit) =>
-  b.kind === 'pct'
-    ? `대중교통 ${b.pct * 100}%${b.monthlyCap ? ` · 월 ${won(b.monthlyCap)} 한도` : ''}`
-    : b.minSpend === 0
-      ? `조건 없이 월 ${won(b.amount)}`
-      : `교통 ${b.minSpend / 10000}만↑ 시 월 ${won(b.amount)}`;
-
-const STEP_KEYS = ['use', 'card', 'result'] as const;
-const STEP_LABELS = ['이용 조건', '카드 조건', '결과'];
+// 결과 컨테이너는 전마운트(SEO)라 답이 없을 때도 결정적 기본값으로 recommend() → SSR 동일 출력 보장.
+const DEFAULT_ANSWERS: QuizAnswers = { region: 'seoul', age: 'y', trips: 'mid', mode: 'metro', bike: 'no' };
+const QKEYS = QUIZ_QUESTIONS.map((q) => q.id);
 
 export function Transit() {
-  const [region, setRegion] = useState<Region>('seoul');
-  const [transit, setTransit] = useState<TransitMode>('bs');
-  const [age, setAge] = useState<AgeTier>('general');
-  const [fare, setFare] = useState(75000);
-  const [cardType, setCardType] = useState<CardType>('check');
-  const [prevSpend, setPrevSpend] = useState(0);
-  const [step, setStep] = useState(0);
+  const [screen, setScreen] = useState<Screen>('home');
+  const [answers, setAnswers] = useState<Partial<QuizAnswers>>({});
+  const [qIndex, setQIndex] = useState(0);
+  const [params] = useSearchParams();
 
-  const cmp = useMemo(() => compare(fare, age, region, transit), [fare, age, region, transit]);
-  const ranked = useMemo(() => rankCards(fare, cardType, prevSpend), [fare, cardType, prevSpend]);
-  const best = ranked.find((r) => r.eligible && r.monthlyNet > 0); // 연회비 반영 순절감 기준(순위와 동일)
-  const top5 = ranked.slice(0, 5);
-
-  // 반값 기준금액 시효(~2026-09) 경고 — 클라 전용(Date.now, 프리렌더 빌드시각과 불일치 방지, D-day 패턴).
-  const [stale, setStale] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- 마운트 1회 클라 전용값, 의도된 단일 추가 렌더
-  useEffect(() => setStale(Date.now() >= new Date('2026-10-01T00:00:00+09:00').getTime()), []);
-  const otherRegion = region === 'other';
-
-  const lastStep = STEP_KEYS.length - 1;
-  const cur = STEP_KEYS[step];
-  const next = () => {
-    setStep((s) => (s < lastStep ? s + 1 : 0));
-    window.scrollTo({ top: 0 });
+  const toTop = () => window.scrollTo({ top: 0 });
+  const goHome = () => {
+    setScreen('home');
+    toTop();
   };
-  const prev = () => {
-    setStep((s) => Math.max(0, s - 1));
-    window.scrollTo({ top: 0 });
+  const startQuiz = () => {
+    setAnswers({});
+    setQIndex(0);
+    setScreen('quiz');
+    toTop();
+  };
+  const goCompare = () => {
+    setScreen('compare');
+    toTop();
+  };
+  const quizBack = () => {
+    if (qIndex === 0) goHome();
+    else setQIndex((i) => i - 1);
+  };
+  const pick = (value: string) => {
+    const key = QUIZ_QUESTIONS[qIndex].id;
+    setAnswers((a) => ({ ...a, [key]: value }) as Partial<QuizAnswers>);
+    if (qIndex >= QUIZ_QUESTIONS.length - 1) {
+      setScreen('result');
+      toTop();
+    } else {
+      setQIndex((i) => i + 1);
+    }
   };
 
-  // 입력 스텝(이용/카드 조건) 우측 sticky LIVE — K-패스 실부담 실시간 피드백. 결과 스텝에선 히어로로 승격.
-  const liveAside = (
-    <aside className="rounded-2xl bg-gradient-to-br from-fin-green to-[#0f6b32] p-6 text-white lg:sticky lg:top-4">
-      <div className="text-[11.5px] font-bold tracking-wide text-white/95">내 조건 · K-패스 월 실부담 · LIVE</div>
-      <div className="mt-1 text-[30px] font-extrabold tabular-nums">{won(cmp.kpassNet)}</div>
-      <p className="mt-3 text-[13px] leading-relaxed opacity-95">
-        {cmp.climateAvailable
-          ? cmp.winner === 'kpass'
-            ? `기후동행카드(${won(cmp.climateNet!)})보다 유리해요. 월 15회 이상 이용 시 자동 환급됩니다.`
-            : `이 구간은 기후동행카드(${won(cmp.climateNet!)})가 더 저렴할 수 있어요. 서울 시내 무제한권입니다.`
-          : '서울 외·GTX 구간이라 기후동행카드는 이용 불가 — K-패스가 유일하게 전국에서 환급됩니다.'}
-      </p>
-      {otherRegion && (
-        <p className="mt-3 rounded-lg bg-white/15 px-3 py-2 text-[11.5px] leading-relaxed">
-          비수도권 기준금액은 공식 미확정이라 수도권 반값 기준 추정치예요.
-        </p>
-      )}
-    </aside>
+  // 딥링크(?s=quiz|compare)를 하이드레이션 후 효과에서만 1회 반영 — 초기 렌더는 항상 'home'이라 SSR 결정적.
+  useEffect(() => {
+    const s = params.get('s');
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- URL 기반 초기 화면, 의도된 단일 갱신
+    if (s === 'quiz' || s === 'compare') setScreen(s);
+  }, [params]);
+
+  const complete = QKEYS.every((k) => answers[k] != null);
+  const rec = useMemo(
+    () => recommend(complete ? (answers as QuizAnswers) : DEFAULT_ANSWERS),
+    [answers, complete],
   );
 
   return (
-    <>
-      <header className="bg-gradient-to-br from-navy to-navy2 py-6 text-white">
-        <div className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-3 px-[18px]">
-          <h1 className="text-xl font-extrabold tracking-tight">K-패스 모두의카드 교통카드 추천</h1>
-          <span className="rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[12.5px] font-semibold">
-            혜택 기준 {DATA_AS_OF} · 매월 변동
+    <div className="min-h-screen bg-pp-bg text-pp-ink">
+      {/* 서브헤더 — Shell 내비와 별개인 패스픽 로컬 헤더(비-sticky) */}
+      <div className="flex items-center justify-between px-5 py-4 sm:px-8">
+        <button type="button" onClick={goHome} className="flex items-center gap-2.5" aria-label="패스픽 홈">
+          <span className="flex items-center" aria-hidden="true">
+            <span className="h-4 w-4 rounded-full" style={{ background: '#00A167' }} />
+            <span className="-ml-1.5 h-4 w-4 rounded-full" style={{ background: '#3B5BDB' }} />
+            <span className="-ml-1.5 h-4 w-4 rounded-full" style={{ background: '#E8590C' }} />
           </span>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-[1080px] px-[18px] pb-20 pt-6">
-        <p className="mb-2 text-[15px] leading-relaxed text-muted-foreground">
-          2026 K-패스는 <b className="text-ink">모두의카드</b>(정액제·초과분 전액환급)로 바뀌어, 대부분{' '}
-          <b className="text-ink">K-패스가 기후동행보다 유리</b>합니다. 그럼 <b className="text-ink">어느 카드사</b>가
-          가장 좋을까요? 내 조건으로 찾아드립니다.
-        </p>
-
-        {/* 진행 단계 — 뒤로만 클릭 가능. done=✓, active=primary. */}
-        <nav aria-label="진행 단계" className="flex flex-wrap items-center gap-1.5 pt-3">
-          {STEP_LABELS.map((label, i) => {
-            const active = step === i;
-            const done = step > i;
-            return (
-              <button
-                key={label}
-                type="button"
-                onClick={() => i < step && setStep(i)}
-                disabled={i > step}
-                className={`flex items-center gap-2 rounded-full px-3 py-1.5 transition ${
-                  active ? 'bg-accent text-ink' : 'text-muted-foreground'
-                } ${i > step ? 'cursor-default opacity-60' : ''}`}
-              >
-                <span
-                  className={`flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold ${
-                    active ? 'bg-primary text-white' : done ? 'bg-fin-green text-white' : 'bg-line text-muted-foreground'
-                  }`}
-                >
-                  {done ? '✓' : i + 1}
-                </span>
-                <span className="text-[12.5px] font-bold">{label}</span>
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* key={step}로 스텝 전환마다 재마운트 → fade+slide-up 진입 애니메이션(접근성 motion-reduce).
-            모든 스텝을 hidden으로 전마운트 → 프리렌더에 전 스텝 HTML 유지(SEO).
-            lg:min-h는 가장 큰 입력 스텝(이용 조건 ≈559px 실측)에 여유를 더해 '다음' 버튼 Y좌표를
-            스텝 간 고정(청년적금 Wizard와 동일 기법). 모바일은 편차가 커 데스크톱에만 적용. */}
-        <div
-          key={step}
-          className="pt-5 pb-4 duration-300 ease-out animate-in fade-in slide-in-from-bottom-3 motion-reduce:animate-none lg:min-h-[580px]"
-        >
-          {/* STEP 0 — 이용 조건 */}
-          <section hidden={cur !== 'use'}>
-            <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-start">
-              <div className="flex flex-col gap-5 rounded-2xl border border-line bg-card p-6">
-                <Field label="주로 어디서 타나요?">
-                  <Segments options={REGION_SEGS} value={region} onChange={setRegion} cols={1} aria-label="거주/이용 지역" />
-                </Field>
-                <Field label="주 이용 수단">
-                  <Segments options={TRANSIT_SEGS} value={transit} onChange={setTransit} cols={1} aria-label="이용 수단" />
-                </Field>
-                <Field label="대상 유형">
-                  <Segments options={AGE_SEGS} value={age} onChange={setAge} aria-label="대상 유형" />
-                </Field>
-              </div>
-              {liveAside}
-            </div>
-          </section>
-
-          {/* STEP 1 — 카드 조건 */}
-          <section hidden={cur !== 'card'}>
-            <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-start">
-              <div className="flex flex-col gap-5 rounded-2xl border border-line bg-card p-6">
-                <div>
-                  <div className="mb-1 flex items-baseline justify-between">
-                    <label className="text-[14px] font-bold text-ink">월 평균 교통비</label>
-                    <div className="text-[18px] font-bold tabular-nums text-primary">{won(fare)}</div>
-                  </div>
-                  <Slider min={20000} max={150000} step={5000} value={fare} onChange={setFare} aria-label="월 평균 교통비" />
-                </div>
-                <Field label="카드 종류">
-                  <Segments options={TYPE_SEGS} value={cardType} onChange={setCardType} cols={1} aria-label="카드 종류" />
-                </Field>
-                <Field label="전월 카드 실적">
-                  <Segments options={PREV_SPEND_SEGS} value={prevSpend} onChange={setPrevSpend} aria-label="전월 카드 실적" />
-                  <p className="mini">
-                    대부분의 교통 추가혜택은 전월실적 조건이 붙어요. 실제 받는 혜택만 순위에 반영합니다.
-                  </p>
-                </Field>
-              </div>
-              {liveAside}
-            </div>
-          </section>
-
-          {/* STEP 2 — 결과: K-패스 vs 기후동행 히어로 + best 배너 + TOP5 카드 슬라이드 */}
-          <section hidden={cur !== 'result'}>
-            {stale && (
-              <div className="mb-4 rounded-xl border border-[#f0d9b0] bg-fin-amber-soft px-4 py-3 text-[12.5px] leading-relaxed text-fin-amber">
-                반값 기준금액(~2026-09)이 종료됐어요. 데이터 갱신 전까지 실제 실부담과 다를 수 있어요.
-              </div>
-            )}
-            <div className="rounded-2xl bg-gradient-to-br from-fin-green to-[#0f6b32] p-6 text-white">
-              <div className="text-[11.5px] font-bold tracking-wide text-white/95">내 조건 · K-패스 월 실부담</div>
-              <div className="mt-1 text-[34px] font-extrabold tabular-nums">{won(cmp.kpassNet)}</div>
-              <p className="mt-3 text-[13.5px] leading-relaxed opacity-95">
-                {cmp.climateAvailable
-                  ? cmp.winner === 'kpass'
-                    ? `기후동행카드(${won(cmp.climateNet!)})보다 유리해요. 월 15회 이상 이용 시 자동 환급됩니다.`
-                    : `이 구간은 기후동행카드(${won(cmp.climateNet!)})가 더 저렴할 수 있어요. 서울 시내 무제한권입니다.`
-                  : '서울 외·GTX 구간이라 기후동행카드는 이용 불가 — K-패스가 유일하게 전국에서 환급됩니다.'}
-              </p>
-              {otherRegion && (
-                <p className="mt-3 rounded-lg bg-white/15 px-3 py-2 text-[11.5px] leading-relaxed">
-                  비수도권 기준금액은 공식 미확정이라 수도권 반값 기준 추정치예요.
-                </p>
-              )}
-            </div>
-
-            {best && (
-              <div className="mt-4 rounded-xl bg-secondary px-4 py-3 text-[12.5px] leading-relaxed text-muted-foreground">
-                💡 지금 조건이면 <b className="text-ink">{best.card.issuer} {best.card.name}</b>가 K-패스 환급 위에 월{' '}
-                <b className="text-fin-green">{won(best.monthlyNet)}</b>(연회비 반영)을 더 아껴줘요.
-              </div>
-            )}
-
-            <div className="mt-6 text-[17px] font-extrabold">
-              내 조건 K-패스 {cardType === 'credit' ? '신용' : '체크'}카드 TOP5
-            </div>
-            <div className="mb-3 text-[12.5px] text-muted-foreground">
-              월 교통비 {won(fare)} · <b className="text-ink">{prevLabel(prevSpend)}</b> 기준, 실제 받는 카드 추가절감 −
-              연회비(월환산) 순 · 좌우로 넘겨보세요
-            </div>
-            <div className="-mx-[18px] flex snap-x snap-mandatory gap-3.5 overflow-x-auto px-[18px] pb-2">
-              {top5.map((r, i) => {
-                // 순위 번호는 실제 혜택을 받는(자격+절감>0) 카드에만. 미자격은 회색.
-                const rankNo = top5.slice(0, i + 1).filter((x) => x.eligible && x.add > 0).length;
-                const active = r.eligible && r.add > 0;
-                return <CardTile key={r.card.id} r={r} rankNo={rankNo} active={active} />;
-              })}
-            </div>
-          </section>
-        </div>
-
-        {/* 하단 sticky 네비 — 이전 / 다음 단계 → / 마지막은 처음부터 리셋. */}
-        <div className="sticky bottom-0 z-20 flex items-center justify-between gap-4 py-3 lg:justify-end">
+          <span className="text-[19px] font-extrabold tracking-[-0.03em]">패스픽</span>
+        </button>
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={prev}
-            disabled={step === 0}
-            className="min-h-11 rounded-xl border border-line bg-card px-5 font-bold text-muted-foreground disabled:opacity-40"
+            onClick={goCompare}
+            className="min-h-11 rounded-full border border-pp-line2 px-4 text-[14px] font-semibold text-pp-ink hover:bg-pp-card"
           >
-            ← 이전
+            카드 비교
           </button>
           <button
             type="button"
-            onClick={next}
-            className={`min-h-11 rounded-xl px-6 font-bold ${
-              step < lastStep ? 'bg-primary text-white shadow-sm' : 'border border-line bg-card text-muted-foreground'
-            }`}
+            onClick={startQuiz}
+            className="min-h-11 rounded-full bg-navy px-[18px] text-[14px] font-bold text-white hover:bg-navy2"
           >
-            {step < lastStep ? '다음 단계 →' : '↻ 처음부터'}
+            내 카드 찾기
           </button>
         </div>
+      </div>
 
-        <p className="mt-5 text-[11.5px] leading-relaxed text-muted-foreground">
-          ※ 추천은 거주지·연령·전월실적에 따라 달라지며, 카드 추가혜택은 전월실적 충족을 가정한 추정치입니다. K-패스
-          환급은 정부(월 15회 이상)가, 카드 추가혜택은 각 카드사가 제공합니다. ‘확인필요’ 표시 카드와 모든 수치는
-          가입 전 각 카드사 공식 페이지에서 재확인하세요. 기후동행카드는 서울 시내 전용이며 GTX·신분당선·서울 외
-          하차는 제외됩니다. 혜택은 매월 변동될 수 있습니다({DATA_AS_OF} 기준).
+      {/* 홈 — 히어로형. 지하철 라인 데코 + 히어로 카피 + CTA + 제도 칩 */}
+      <div
+        hidden={screen !== 'home'}
+        className="flex flex-col items-center px-6 pt-16 pb-[120px] text-center duration-500 animate-in fade-in motion-reduce:animate-none"
+      >
+        <div className="mb-9 flex items-center" aria-hidden="true">
+          <span className="h-[3px] w-16 bg-pp-deco" />
+          <span className="h-3.5 w-3.5 rounded-full ring-[3px] ring-[#00A167]" style={{ background: '#00A167' }} />
+          <span className="h-[3px] w-16 bg-pp-deco" />
+          <span className="h-3.5 w-3.5 rounded-full ring-[3px] ring-[#3B5BDB]" style={{ background: '#3B5BDB' }} />
+          <span className="h-[3px] w-16 bg-pp-deco" />
+          <span className="h-3.5 w-3.5 rounded-full ring-[3px] ring-[#E8590C]" style={{ background: '#E8590C' }} />
+          <span className="h-[3px] w-16 bg-pp-deco" />
+        </div>
+        <h1 className="text-[clamp(38px,6.5vw,74px)] font-extrabold leading-[1.12] tracking-[-0.045em]">
+          매달 나가는 교통비,
+          <br />
+          아깝지 않게.
+        </h1>
+        <p className="mt-[22px] text-[clamp(16px,2vw,20px)] font-medium leading-relaxed text-pp-muted">
+          기후동행카드? K-패스? 뭐가 뭔지 몰라도 괜찮아.
+          <br />
+          질문 5개만 답하면 너한테 딱 맞는 카드 찾아줄게.
         </p>
-      </main>
-    </>
-  );
-}
-
-// 결과 스텝 카드 타일 — 실물 카드 비율(~1.58:1) 카드 그래픽 + 혜택/실적/절감/신청.
-function CardTile({
-  r,
-  rankNo,
-  active,
-}: {
-  r: { card: TransitCard; eligible: boolean; add: number };
-  rankNo: number;
-  active: boolean;
-}) {
-  // 메달 그라디언트 — 흰 글자 기준 시작색(밝은 쪽)이 AA 4.5:1↑이도록 어둡게. (실버 4.59 / 브론즈 5.85)
-  const medal = !active
-    ? 'from-line to-line'
-    : rankNo === 1
-      ? 'from-fin-green to-[#0f6b32]'
-      : rankNo === 2
-        ? 'from-[#6b7688] to-[#565f6b]'
-        : rankNo === 3
-          ? 'from-[#8a5a34] to-[#5f3d22]'
-          : 'from-navy to-navy2';
-  return (
-    <article
-      className={`w-[248px] shrink-0 snap-start rounded-2xl border p-3.5 ${
-        !active ? 'border-line bg-secondary/40 opacity-70' : 'border-line bg-card'
-      }`}
-    >
-      <div className={`flex aspect-[1.58/1] flex-col justify-between rounded-xl bg-gradient-to-br ${medal} p-4 text-white`}>
-        <div className="flex items-start justify-between">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-[15px] font-extrabold">
-            {active ? rankNo : '—'}
-          </span>
-          {r.card.grade === 'press' && (
-            <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-bold">확인필요</span>
-          )}
-        </div>
-        <div>
-          <div className="text-[13px] font-semibold opacity-90">{r.card.issuer}</div>
-          <div className="text-[15px] font-extrabold leading-tight">{r.card.name}</div>
-        </div>
-      </div>
-
-      <div className="mt-3 text-[12px] leading-relaxed text-muted-foreground">{benefitSummary(r.card.benefit)}</div>
-      <div className="mt-1 text-[11.5px] text-muted-foreground">
-        연회비 {r.card.annualFee === 0 ? '없음' : won(r.card.annualFee)} · 전월실적{' '}
-        {r.card.minPrevSpend === 0 ? '없음' : `${r.card.minPrevSpend / 10000}만↑`}
-      </div>
-      {r.card.note && <div className="mt-1 text-[11px] leading-relaxed text-muted-foreground">※ {r.card.note}</div>}
-
-      <div className="mt-3">
-        {active ? (
-          <div className="text-[20px] font-extrabold tabular-nums text-fin-green">
-            +{won(r.add)}
-            <span className="text-[11px] font-normal text-muted-foreground">/월</span>
-          </div>
-        ) : !r.eligible ? (
-          <div className="text-[12px] font-semibold text-muted-foreground">전월 {r.card.minPrevSpend / 10000}만↑ 필요</div>
-        ) : (
-          <div className="text-[12px] font-semibold text-muted-foreground">+0원 (교통비 조건 미달)</div>
-        )}
-      </div>
-
-      {r.card.applyUrl && (
-        <a
-          href={r.card.applyUrl}
-          target="_blank"
-          rel="noopener"
-          className="mt-3 flex min-h-11 items-center justify-center rounded-lg bg-primary text-[13px] font-bold text-white transition hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        <button
+          type="button"
+          onClick={startQuiz}
+          className="mt-10 min-h-11 rounded-full bg-navy px-[42px] py-[19px] text-[19px] font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-navy2"
         >
-          신청하러 가기
-        </a>
-      )}
-    </article>
-  );
-}
+          30초 만에 내 카드 찾기 →
+        </button>
+        <div className="mt-14 flex flex-wrap justify-center gap-2.5">
+          {SCHEMES.map((s) => (
+            <Link
+              key={s.id}
+              to={`/transit/cards/${s.id}`}
+              className="flex items-center gap-2 rounded-full border border-pp-line bg-pp-card px-4 py-2.5 text-[14px] font-semibold text-pp-ink transition hover:-translate-y-px hover:border-navy"
+            >
+              <span className="h-2.5 w-2.5 rounded-full" style={{ background: s.color }} aria-hidden="true" />
+              {s.name}
+            </Link>
+          ))}
+        </div>
+      </div>
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="mb-2.5 block text-[14px] font-bold text-ink">{label}</label>
-      {children}
+      {/* 퀴즈 */}
+      <div hidden={screen !== 'quiz'}>
+        <Quiz
+          question={QUIZ_QUESTIONS[qIndex]}
+          qIndex={qIndex}
+          total={QUIZ_QUESTIONS.length}
+          onPick={pick}
+          onBack={quizBack}
+        />
+      </div>
+
+      {/* 결과 */}
+      <div hidden={screen !== 'result'}>
+        <Result rec={rec} onCompare={goCompare} onRestart={startQuiz} />
+      </div>
+
+      {/* 비교 */}
+      <div hidden={screen !== 'compare'}>
+        <Compare onQuiz={startQuiz} />
+      </div>
     </div>
   );
 }

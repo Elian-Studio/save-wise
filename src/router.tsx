@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Shell } from './components/Shell';
 import { YouthSavings } from './services/youthSavings/YouthSavings';
 import { Transit } from './services/transit/Transit';
+import { SchemeDetail } from './services/transit/SchemeDetail';
 
 // 클라(BrowserRouter)·서버(StaticRouter) 공용 라우트 트리.
 // 홈(/)은 청년적금 계산기(리치 콘텐츠·SEO), 다른 서비스는 자체 경로. 별도 허브 없음.
@@ -12,6 +13,7 @@ export function AppRoutes() {
       <Route element={<Shell />}>
         <Route path="/" element={<YouthSavings />} />
         <Route path="/transit" element={<Transit />} />
+        <Route path="/transit/cards/:id" element={<SchemeDetail />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
