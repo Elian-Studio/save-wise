@@ -24,7 +24,9 @@
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph (전역 공통). 라우트별 title·description·keywords·canonical·og:title/description/url·JSON-LD은
-         빌드 타임 프리렌더(scripts/prerender.mjs)가 </head> 직전에 주입한다. -->
+         빌드 타임 프리렌더(scripts/prerender.mjs)가 head 닫는 태그 직전에 주입한다.
+         주의: 이 주석에 head 닫는 태그를 리터럴로 쓰면 안 된다 — 프리렌더 치환이 주석 안을 첫 일치로 잡아
+         CSS/JS/title이 통째로 주석 속에 갇힌다(2026-07-06 프로덕션 스타일 전멸 사고의 원인). -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:site_name" content="choicewise" />
