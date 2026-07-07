@@ -53,6 +53,15 @@ describe('SchemeDetail 상세 페이지', () => {
     expect(shinhan.getAttribute('rel')).toBe('noopener noreferrer');
   });
 
+  it('kpass 가이드: 계산 예시 환급액(68,000원)·주의할 점·첫 FAQ 질문을 렌더', () => {
+    const { container } = renderAt('/transit/cards/kpass');
+    const text = container.textContent ?? '';
+    expect(text).toContain('얼마나 돌려받을까');
+    expect(text).toContain('68,000원'); // kpassRefund(93000,youth,false)
+    expect(text).toContain('주의할 점');
+    expect(text).toContain('청년 환급률 30%는 몇 살까지야?'); // 첫 FAQ 질문
+  });
+
   it('climate: 픽이 전부 external(url 없음) → 신청하러 가기 링크 0개', () => {
     const { queryAllByRole, container } = renderAt('/transit/cards/climate');
     expect(container.textContent).toContain('기후동행카드');

@@ -1,7 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
-import { CONTACT_EMAIL } from '../config/ads';
 import { ROUTE_SEO } from '../seo/routes';
 
 // 앱 전역 레이아웃: 상단 브랜드 내비 + <Outlet/> + 공통 푸터 + Vercel Analytics.
@@ -61,12 +60,13 @@ export function Shell() {
               개인정보처리방침
             </a>
             <span aria-hidden="true">·</span>
-            <a
-              className="inline-block py-1.5 underline hover:text-foreground"
-              href={`mailto:${CONTACT_EMAIL}`}
-            >
+            <Link className="inline-block py-1.5 underline hover:text-foreground" to="/about">
+              서비스 소개
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link className="inline-block py-1.5 underline hover:text-foreground" to="/contact">
               문의
-            </a>
+            </Link>
           </p>
         </div>
       </footer>

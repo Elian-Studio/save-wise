@@ -3,6 +3,8 @@ import { Shell } from './components/Shell';
 import { YouthSavings } from './services/youthSavings/YouthSavings';
 import { Transit } from './services/transit/Transit';
 import { SchemeDetail } from './services/transit/SchemeDetail';
+import { About } from './services/site/About';
+import { Contact } from './services/site/Contact';
 
 // 클라(BrowserRouter)·서버(StaticRouter) 공용 라우트 트리.
 // 홈(/)은 패스픽 교통카드 추천, 청년적금 계산기는 /youth-savings. 별도 허브 없음.
@@ -14,6 +16,8 @@ export function AppRoutes() {
         <Route path="/" element={<Transit />} />
         <Route path="/youth-savings" element={<YouthSavings />} />
         <Route path="/transit/cards/:id" element={<SchemeDetail />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

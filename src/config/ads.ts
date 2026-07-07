@@ -22,4 +22,4 @@ export const ADS = {
 } as const;
 
 /** 문의 이메일 — 푸터·개인정보처리방침에서 사용. 전용 주소를 쓰려면 여기만 바꾸면 됨. */
-export const CONTACT_EMAIL = 'danielmrbang@gmail.com';
+export const CONTACT_EMAIL = 'bangseongmin@naver.com';

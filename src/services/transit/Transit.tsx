@@ -5,6 +5,7 @@ import { recommend, type QuizAnswers } from '../../lib/transitSchemeRec';
 import { Quiz } from './Quiz';
 import { Result } from './Result';
 import { Compare } from './Compare';
+import { HomeGuide } from './HomeGuide';
 
 type Screen = 'home' | 'quiz' | 'result' | 'compare';
 
@@ -136,6 +137,8 @@ export function Transit() {
             </Link>
           ))}
         </div>
+
+        <HomeGuide onStartQuiz={startQuiz} />
       </div>
 
       {/* 퀴즈 */}

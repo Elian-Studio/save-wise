@@ -71,4 +71,10 @@ describe('Shell', () => {
     expect(document.documentElement.classList.contains('dark')).toBe(true);
     expect(localStorage.getItem('theme')).toBe('dark');
   });
+
+  it('푸터에 서비스 소개·문의 링크 노출', () => {
+    const { getByText } = renderAt('/');
+    expect(getByText('서비스 소개').getAttribute('href')).toBe('/about');
+    expect(getByText('문의').getAttribute('href')).toBe('/contact');
+  });
 });

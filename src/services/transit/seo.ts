@@ -1,5 +1,17 @@
 import type { RouteSeo } from '../../seo/head';
 import { SCHEMES } from '../../data/transitSchemes';
+import { SCHEME_GUIDES, HOME_FAQ } from '../../data/transitSchemeGuides';
+
+// 가시 렌더 FAQ와 동일 Q&A를 FAQPage 구조화 데이터로. mainEntity가 화면 콘텐츠와 일치해야 함.
+const faqPageLd = (faq: { q: string; a: string }[]): object => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+});
 
 export const transitSeo: RouteSeo = {
   path: '/',
@@ -22,6 +34,7 @@ export const transitSeo: RouteSeo = {
         '기후동행카드·K-패스·The 경기패스·인천 I-패스·후불카드를 거주지·나이·교통비 기준 30초 퀴즈로 비교해 가장 유리한 교통카드를 추천하는 무료 진단.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' },
     },
+    faqPageLd(HOME_FAQ),
   ],
 };
 
@@ -49,15 +62,10 @@ export const schemeSeos: RouteSeo[] = SCHEMES.map((s) => {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: '홈', item: 'https://choicewise.kr/' },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: '교통카드 추천',
-            item: 'https://choicewise.kr/transit',
-          },
-          { '@type': 'ListItem', position: 3, name: s.name, item: url },
+          { '@type': 'ListItem', position: 2, name: s.name, item: url },
         ],
       },
+      faqPageLd(SCHEME_GUIDES[s.id].faq),
     ],
   };
 });

@@ -36,6 +36,14 @@ describe('패스픽 Transit', () => {
     expect(t).toContain('경기도민 전용'); // gyeonggi compareRows
   });
 
+  it('SSG: 초기 DOM에 홈 가이드 헤딩·HOME_FAQ 첫 질문이 존재', () => {
+    const { container } = at();
+    const t = container.textContent ?? '';
+    expect(t).toContain('2026 교통카드 5종, 한눈에');
+    expect(t).toContain('어떤 카드를 골라야 하나');
+    expect(t).toContain('K-패스랑 기후동행카드, 둘 다 만들어도 돼?'); // HOME_FAQ 첫 질문
+  });
+
   it('퀴즈 플로우: 5문항 답하면 승자 상세 CTA·근거·후보가 렌더된다', () => {
     const { getByRole, getByText } = at();
     answerFiveQuestions(getByRole);

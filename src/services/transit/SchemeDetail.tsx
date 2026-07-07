@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { SCHEMES, type Scheme, type SchemePick } from '../../data/transitSchemes';
 import { TRANSIT_CARDS } from '../../data/transitCards';
+import { SCHEME_GUIDES } from '../../data/transitSchemeGuides';
 
 // 픽을 화면 표시용으로 정규화. 카드형은 TRANSIT_CARDS에서 표시명/신청링크를 파생한다.
 function resolvePick(pick: SchemePick): {
@@ -37,6 +38,7 @@ export function SchemeDetail() {
   if (!scheme) return <Navigate to="/" replace />;
 
   const tint = `${scheme.color}1f`;
+  const guide = SCHEME_GUIDES[scheme.id];
 
   return (
     <div className="min-h-screen bg-pp-bg pb-24">
@@ -191,8 +193,104 @@ export function SchemeDetail() {
           </div>
         </div>
 
+        {/* 심층 가이드 — 누가/신청 상세/계산 예시/주의/FAQ */}
+        <div className="mt-11">
+          <div className="mb-3.5 text-[17px] font-extrabold text-pp-ink">{guide.eligibility.heading}</div>
+          <div className="flex flex-col gap-3">
+            {guide.eligibility.paras.map((p) => (
+              <p key={p} className="text-[15px] font-medium leading-[1.65] text-pp-body">
+                {p}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-9">
+          <div className="mb-3.5 text-[17px] font-extrabold text-pp-ink">신청, 자세히 보면</div>
+          <div className="flex flex-col">
+            {guide.applyDetail.map((s, i) => (
+              <div key={s.step} className="flex items-start gap-3.5 border-b border-pp-line py-3.5">
+                <span
+                  className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full text-[13px] font-extrabold text-white"
+                  style={{ background: scheme.color }}
+                >
+                  {i + 1}
+                </span>
+                <div className="pt-0.5">
+                  <div className="text-[15px] font-extrabold text-pp-ink">{s.step}</div>
+                  <div className="mt-1 text-[14.5px] font-medium leading-[1.55] text-pp-muted">
+                    {s.detail}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-9">
+          <div className="mb-3.5 text-[17px] font-extrabold text-pp-ink">얼마나 돌려받을까</div>
+          <div className="rounded-[18px] border border-pp-line bg-pp-card p-5.5">
+            <div className="text-base font-extrabold text-pp-ink">{guide.calcExample.title}</div>
+            <div className="mt-3.5 flex flex-col">
+              {guide.calcExample.rows.map((r, i) => (
+                <div
+                  key={r.label}
+                  className={`flex items-center justify-between gap-4 py-2.5 ${
+                    i < guide.calcExample.rows.length - 1 ? 'border-b border-pp-line' : ''
+                  }`}
+                >
+                  <span className="text-[14.5px] font-medium text-pp-muted">{r.label}</span>
+                  <span
+                    className={`flex-shrink-0 text-right font-extrabold ${
+                      i === guide.calcExample.rows.length - 1
+                        ? 'text-[17px]'
+                        : 'text-[15px] text-pp-body'
+                    }`}
+                    style={i === guide.calcExample.rows.length - 1 ? { color: scheme.colorDark } : undefined}
+                  >
+                    {r.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3.5 text-[13px] font-medium leading-[1.5] text-pp-muted">
+              {guide.calcExample.note}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-9">
+          <div className="mb-3.5 text-[17px] font-extrabold text-pp-ink">주의할 점</div>
+          <ul className="flex flex-col gap-2.5">
+            {guide.cautions.map((c) => (
+              <li key={c} className="flex items-start gap-2.5">
+                <span
+                  className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                  style={{ background: scheme.color }}
+                  aria-hidden="true"
+                />
+                <span className="text-[14.5px] font-medium leading-[1.55] text-pp-body">{c}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-9">
+          <div className="mb-3.5 text-[17px] font-extrabold text-pp-ink">자주 묻는 질문</div>
+          <div className="flex flex-col gap-3">
+            {guide.faq.map((f) => (
+              <div key={f.q} className="rounded-[18px] border border-pp-line bg-pp-card p-5">
+                <div className="text-[15px] font-extrabold text-pp-ink">Q. {f.q}</div>
+                <div className="mt-1.5 text-[14.5px] font-medium leading-[1.6] text-pp-muted">
+                  {f.a}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* 하단 CTA */}
-        <div className="mt-8 flex gap-2.5">
+        <div className="mt-10 flex gap-2.5">
           <Link
             to="/?s=quiz"
             className="flex-1 rounded-2xl bg-navy px-4 py-4 text-center text-base font-extrabold text-white transition hover:bg-navy2"

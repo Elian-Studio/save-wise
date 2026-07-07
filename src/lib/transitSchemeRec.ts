@@ -33,7 +33,7 @@ const fmt = (n: number): string => n.toLocaleString('ko-KR');
 const manwon = (won: number): string => `${won / 10000}만원`; // 25000→'2.5만원', 30000→'3만원'
 
 // K-패스 계열 환급: 비율 환급과 기준금액 초과분 환급 중 더 유리한 쪽을 자동 선택.
-function kpassRefund(
+export function kpassRefund(
   spend: number,
   tier: AgeTier,
   wide: boolean,
