@@ -2,16 +2,22 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Shell } from './components/Shell';
 import { YouthSavings } from './services/youthSavings/YouthSavings';
 import { Transit } from './services/transit/Transit';
+import { SchemeDetail } from './services/transit/SchemeDetail';
+import { About } from './services/site/About';
+import { Contact } from './services/site/Contact';
 
 // 클라(BrowserRouter)·서버(StaticRouter) 공용 라우트 트리.
-// 홈(/)은 청년적금 계산기(리치 콘텐츠·SEO), 다른 서비스는 자체 경로. 별도 허브 없음.
-// 옛 /youth-savings 링크는 vercel.json에서 / 로 301 리다이렉트.
+// 홈(/)은 패스픽 교통카드 추천, 청년적금 계산기는 /youth-savings. 별도 허브 없음.
+// 옛 /transit·구 /youth-savings 링크는 vercel.json에서 / 로 301 리다이렉트.
 export function AppRoutes() {
   return (
     <Routes>
       <Route element={<Shell />}>
-        <Route path="/" element={<YouthSavings />} />
-        <Route path="/transit" element={<Transit />} />
+        <Route path="/" element={<Transit />} />
+        <Route path="/youth-savings" element={<YouthSavings />} />
+        <Route path="/transit/cards/:id" element={<SchemeDetail />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

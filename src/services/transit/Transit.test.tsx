@@ -1,110 +1,100 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { Transit } from './Transit';
-import { compare, rankCards } from '../../lib/transitCardRec';
+import { recommend } from '../../lib/transitSchemeRec';
 
 afterEach(cleanup);
 
-const won = (n: number) => `${Math.round(n).toLocaleString('ko-KR')}원`;
-// 결과 스텝으로 이동(다음 단계 2회).
-const goResult = (getByRole: (r: string, o: { name: RegExp }) => HTMLElement) => {
-  fireEvent.click(getByRole('button', { name: /다음 단계/ }));
-  fireEvent.click(getByRole('button', { name: /다음 단계/ }));
+const at = (path = '/') =>
+  render(
+    <MemoryRouter initialEntries={[path]}>
+      <Transit />
+    </MemoryRouter>,
+  );
+
+// 시나리오: 서울 → 19~34세 → 60번 넘게 → 지하철·시내버스 → 자주 타 (승자는 엔진이 결정)
+const answerFiveQuestions = (getByRole: (r: string, o: { name: RegExp }) => HTMLElement) => {
+  fireEvent.click(getByRole('button', { name: /30초 만에 내 카드 찾기/ }));
+  fireEvent.click(getByRole('button', { name: /^서울$/ }));
+  fireEvent.click(getByRole('button', { name: /19~34세/ }));
+  fireEvent.click(getByRole('button', { name: /60번 넘게/ }));
+  fireEvent.click(getByRole('button', { name: /지하철·시내버스/ }));
+  fireEvent.click(getByRole('button', { name: /자주 타/ }));
 };
 
-describe('Transit 위저드', () => {
-  it('hidden 전마운트: 초기 DOM에 결과 스텝(히어로·카드명)이 존재 → 프리렌더 SEO', () => {
-    const { container } = render(<Transit />);
-    expect(container.textContent).toContain('K-패스 월 실부담'); // 결과 히어로
-    expect(container.textContent).toContain('TOP5');
-    expect(container.textContent).toContain('토스뱅크'); // 카드 데이터
+describe('패스픽 Transit', () => {
+  it('SSG: 초기 DOM에 홈 히어로·5개 제도명·비교표 텍스트가 모두 존재(hidden 전마운트)', () => {
+    const { container } = at();
+    const t = container.textContent ?? '';
+    expect(t).toContain('매달 나가는 교통비');
+    for (const name of ['기후동행카드', 'K-패스', 'The 경기패스', '인천 I-패스', '후불 교통카드']) {
+      expect(t).toContain(name);
+    }
+    expect(t).toContain('서울 전용'); // climate compareRows
+    expect(t).toContain('경기도민 전용'); // gyeonggi compareRows
   });
 
-  it('스텝 전환: 다음→다음→결과, 그리고 진행 칩으로 뒤로가기', () => {
-    const { getByRole } = render(<Transit />);
-    // 첫 스텝: 마지막 버튼 아님
-    expect(getByRole('button', { name: /다음 단계/ })).toBeTruthy();
-    goResult(getByRole);
-    // 결과 스텝 도달 → 리셋 버튼 노출
-    expect(getByRole('button', { name: /처음부터/ })).toBeTruthy();
-    // 진행 칩(이용 조건)으로 뒤로 → 다시 다음 단계 버튼
-    fireEvent.click(getByRole('button', { name: /이용 조건/ }));
-    expect(getByRole('button', { name: /다음 단계/ })).toBeTruthy();
+  it('SSG: 초기 DOM에 홈 가이드 헤딩·HOME_FAQ 첫 질문이 존재', () => {
+    const { container } = at();
+    const t = container.textContent ?? '';
+    expect(t).toContain('2026 교통카드 5종, 한눈에');
+    expect(t).toContain('어떤 카드를 골라야 하나');
+    expect(t).toContain('K-패스랑 기후동행카드, 둘 다 만들어도 돼?'); // HOME_FAQ 첫 질문
   });
 
-  it('슬라이더 변경 → LIVE 실부담 갱신', () => {
-    const { getByRole, getByLabelText, container } = render(<Transit />);
-    fireEvent.click(getByRole('button', { name: /다음 단계/ })); // 카드 조건 스텝(슬라이더 노출)
-    const changed = won(compare(20000, 'general', 'seoul', 'bs').kpassNet);
-    const initial = won(compare(75000, 'general', 'seoul', 'bs').kpassNet);
-    expect(initial).not.toBe(changed); // sanity
-    fireEvent.change(getByLabelText(/월 평균 교통비/), { target: { value: '20000' } });
-    expect(container.textContent).toContain(changed);
+  it('퀴즈 플로우: 5문항 답하면 승자 상세 CTA·근거·후보가 렌더된다', () => {
+    const { getByRole, getByText } = at();
+    answerFiveQuestions(getByRole);
+    const rec = recommend({ region: 'seoul', age: 'y', trips: 'lots', mode: 'metro', bike: 'often' });
+    // 결과 화면 노출 + 승자 상세 CTA가 엔진이 고른 승자 id를 가리킴(이중 환급 반영 → K-패스)
+    expect(getByRole('link', { name: /이 카드 자세히 보기/ }).getAttribute('href')).toBe(
+      `/transit/cards/${rec.list[0].id}`,
+    );
+    expect(getByText(rec.list[0].reasons[0])).toBeTruthy(); // 근거
+    expect(getByText('아쉽게 밀린 후보들')).toBeTruthy(); // 후보 섹션
   });
 
-  it('전월실적 0 → 실적 필요한 카드 미자격(회색) 처리', () => {
-    const { getByRole, container } = render(<Transit />);
-    goResult(getByRole);
-    expect(container.textContent).toContain('필요'); // "전월 N만↑ 필요"
-    // 미자격 타일은 opacity-70 회색 클래스
-    expect(container.querySelector('article.opacity-70')).toBeTruthy();
+  it('진행도: Q1은 progressbar 20%, ← 이전은 홈으로 복귀', () => {
+    const { getByRole } = at();
+    fireEvent.click(getByRole('button', { name: /30초 만에 내 카드 찾기/ }));
+    expect(getByRole('progressbar').getAttribute('aria-valuenow')).toBe('20');
+    fireEvent.click(getByRole('button', { name: /이전/ }));
+    // 홈 복귀 → 히어로 CTA 다시 노출
+    expect(getByRole('button', { name: /30초 만에 내 카드 찾기/ })).toBeTruthy();
   });
 
-  it('결과 카드 타일은 5개 이하(TOP5)', () => {
-    const { getByRole, container } = render(<Transit />);
-    goResult(getByRole);
-    const tiles = container.querySelectorAll('article');
-    const expected = Math.min(rankCards(75000, 'check', 0).length, 5);
-    expect(tiles.length).toBe(expected);
-    expect(tiles.length).toBeLessThanOrEqual(5);
+  it('홈 제도 칩 5개는 각 상세 경로로 링크된다', () => {
+    const { getByRole } = at();
+    const cases: [RegExp, string][] = [
+      [/기후동행카드/, '/transit/cards/climate'],
+      [/^K-패스$/, '/transit/cards/kpass'],
+      [/The 경기패스/, '/transit/cards/gyeonggi'],
+      [/인천 I-패스/, '/transit/cards/incheon'],
+      [/후불 교통카드/, '/transit/cards/postpaid'],
+    ];
+    for (const [name, href] of cases) {
+      expect(getByRole('link', { name }).getAttribute('href')).toBe(href);
+    }
   });
 
-  it('기본 카드 종류 = 체크카드(aria-pressed)', () => {
-    const { getByRole } = render(<Transit />);
-    fireEvent.click(getByRole('button', { name: /다음 단계/ })); // 카드 조건 스텝
-    expect(getByRole('button', { name: /체크카드/ }).getAttribute('aria-pressed')).toBe('true');
-    expect(getByRole('button', { name: /신용카드/ }).getAttribute('aria-pressed')).toBe('false');
+  it('헤더 "카드 비교"는 비교 화면을 노출한다', () => {
+    const { getByRole } = at();
+    fireEvent.click(getByRole('button', { name: /카드 비교/ }));
+    expect(getByRole('heading', { name: /다섯 장, 한눈에 비교/ })).toBeTruthy();
   });
 
-  it('applyUrl 있는 카드만 신청 링크 + rel="noopener" target 새 탭', () => {
-    const { getByRole, container } = render(<Transit />);
-    goResult(getByRole);
-    const links = [...container.querySelectorAll('a')].filter((a) => /신청하러 가기/.test(a.textContent || ''));
-    const expected = rankCards(75000, 'check', 0)
-      .slice(0, 5)
-      .filter((r) => r.card.applyUrl).length;
-    expect(links.length).toBe(expected); // 데이터에 applyUrl 채워지면 자동 증가
-    links.forEach((a) => {
-      expect(a.getAttribute('rel')).toContain('noopener');
-      expect(a.getAttribute('target')).toBe('_blank');
-    });
+  it('"답 바꿔서 다시 해볼래"는 Q1(진행도 리셋)로 돌아간다', () => {
+    const { getByRole } = at();
+    answerFiveQuestions(getByRole);
+    fireEvent.click(getByRole('button', { name: /답 바꿔서 다시 해볼래/ }));
+    expect(getByRole('heading', { name: '어디 살아?' })).toBeTruthy();
+    expect(getByRole('progressbar').getAttribute('aria-valuenow')).toBe('20');
   });
 
-  it('비수도권(그 외 지역) 선택 시 캐비앳 노출', () => {
-    const { getByRole, container } = render(<Transit />);
-    expect(container.textContent).not.toContain('비수도권 기준금액'); // 기본(서울)엔 없음
-    fireEvent.click(getByRole('button', { name: /그 외 지역/ })); // step0 이용 조건에 지역 세그먼트
-    expect(container.textContent).toContain('비수도권 기준금액은 공식 미확정');
-  });
-
-  it('best 배너는 연회비 반영 순절감(monthlyNet) 기준임을 명시', () => {
-    const { getByRole, container } = render(<Transit />);
-    goResult(getByRole);
-    expect(container.textContent).toContain('연회비 반영');
-  });
-
-  it('처음부터 리셋: step 0 복귀 + 입력값 보존', () => {
-    const { getByRole } = render(<Transit />);
-    // 카드 조건 스텝에서 신용카드로 변경 → 결과까지 진행
-    fireEvent.click(getByRole('button', { name: /다음 단계/ }));
-    fireEvent.click(getByRole('button', { name: /신용카드/ }));
-    fireEvent.click(getByRole('button', { name: /다음 단계/ }));
-    fireEvent.click(getByRole('button', { name: /처음부터/ })); // 리셋
-    // step 0 복귀 → 다음 단계 버튼 재노출
-    expect(getByRole('button', { name: /다음 단계/ })).toBeTruthy();
-    // 입력값(카드종류=신용) 보존 확인: 카드 조건 스텝으로 이동해 신용 aria-pressed
-    fireEvent.click(getByRole('button', { name: /다음 단계/ }));
-    expect(getByRole('button', { name: /신용카드/ }).getAttribute('aria-pressed')).toBe('true');
+  it('?s=compare 딥링크로 진입하면(효과 이후) 비교 화면이 노출된다', async () => {
+    const { getByRole } = at('/?s=compare');
+    await waitFor(() => expect(getByRole('heading', { name: /다섯 장, 한눈에 비교/ })).toBeTruthy());
   });
 });

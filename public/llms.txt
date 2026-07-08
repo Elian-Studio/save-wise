@@ -15,8 +15,18 @@
 ## 링크
 
 - [choicewise — 금융 결정 계산기 모음](https://choicewise.kr/)
-- [K-패스 모두의카드 교통카드 추천](https://choicewise.kr/transit) — 나이·거주지·교통비로 가장 유리한 카드사 카드 추천. 2026 K-패스는 모두의카드(정액제·초과분 전액환급)로 개편돼 대부분 기후동행보다 유리.
-- [청년도약계좌 ↔ 청년미래적금 갈아타기 계산기](https://choicewise.kr/)
+- [패스픽 — 교통카드 추천](https://choicewise.kr/) — 기후동행카드·K-패스·The 경기패스·인천 I-패스·후불카드 5개 제도를 30초 퀴즈로 비교해 거주지·나이·이용 패턴에 맞는 교통카드를 추천.
+- [청년도약계좌 ↔ 청년미래적금 갈아타기 계산기](https://choicewise.kr/youth-savings)
+
+### 교통 제도별 상세
+
+- [기후동행카드 총정리](https://choicewise.kr/transit/cards/climate) — 서울 무제한 정기권(월 62,000원). 서울 안에서 한 달 40번 넘게 타는 사람에게 유리.
+- [K-패스 총정리](https://choicewise.kr/transit/cards/kpass) — 전국 환급형(20~53%). 월 15회 이상 타면 어디 살든 쓸 수 있는 만능형.
+- [The 경기패스 총정리](https://choicewise.kr/transit/cards/gyeonggi) — 경기도민 전용 K-패스 업그레이드. 환급 횟수 무제한, 청년 기준 39세까지.
+- [인천 I-패스 총정리](https://choicewise.kr/transit/cards/incheon) — 인천시민 전용 K-패스 업그레이드. 환급 횟수 무제한, 65세 이상 30% 상향.
+- [후불 교통카드 총정리](https://choicewise.kr/transit/cards/postpaid) — 충전·조건 없이 찍고 타는 신용·체크카드. 가끔 타는 사람에게 적합.
+- [서비스 소개](https://choicewise.kr/about) — choicewise가 무엇을 하는지, 데이터 출처·갱신 정책·한계 고지.
+- [문의](https://choicewise.kr/contact) — 데이터 오류·제도 변경 제보, 제휴 문의.
 - [개인정보처리방침](https://choicewise.kr/privacy.html)
 
 ## 출처

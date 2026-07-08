@@ -40,7 +40,7 @@ const renderAt = (path: string) =>
       <Routes>
         <Route element={<Shell />}>
           <Route path="/" element={<div>home</div>} />
-          <Route path="/transit" element={<div>transit</div>} />
+          <Route path="/youth-savings" element={<div>youth-savings</div>} />
         </Route>
       </Routes>
     </MemoryRouter>,
@@ -48,8 +48,8 @@ const renderAt = (path: string) =>
 
 describe('Shell', () => {
   it('라우트 전환 시 document.title 동기화', () => {
-    renderAt('/transit');
-    expect(document.title).toBe(ROUTE_SEO.find((s) => s.path === '/transit')!.title);
+    renderAt('/youth-savings');
+    expect(document.title).toBe(ROUTE_SEO.find((s) => s.path === '/youth-savings')!.title);
   });
 
   it('저장된 theme가 있으면 시스템 변경을 무시(게이트)', () => {
@@ -70,5 +70,11 @@ describe('Shell', () => {
     fireEvent.click(getByLabelText('라이트/다크 테마 전환'));
     expect(document.documentElement.classList.contains('dark')).toBe(true);
     expect(localStorage.getItem('theme')).toBe('dark');
+  });
+
+  it('푸터에 서비스 소개·문의 링크 노출', () => {
+    const { getByText } = renderAt('/');
+    expect(getByText('서비스 소개').getAttribute('href')).toBe('/about');
+    expect(getByText('문의').getAttribute('href')).toBe('/contact');
   });
 });

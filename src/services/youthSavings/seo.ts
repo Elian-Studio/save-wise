@@ -1,14 +1,14 @@
 import type { RouteSeo } from '../../seo/head';
 
-// 홈(/) = 청년적금 계산기. path·canonical을 루트로(구조 A). 옛 /youth-savings는 vercel 301→/.
+// 청년적금 계산기 — 이제 서브 경로(/youth-savings), 홈(/)은 패스픽 교통카드 추천.
 export const youthSavingsSeo: RouteSeo = {
-  path: '/',
+  path: '/youth-savings',
   title: '청년도약계좌 vs 청년미래적금 갈아타기 계산기 (2026)',
   description:
     '청년도약계좌 유지 vs 청년미래적금 갈아타기, 내 소득·거래은행으로 비교하고 가장 유리한 은행까지 찾는 무료 계산기. 1차 신규 접수는 마감(다음 접수 2026년 12월), 기가입자 계산은 계속 이용 가능.',
   keywords:
     '청년미래적금, 청년도약계좌, 청년미래적금 갈아타기, 청년도약계좌 갈아타기, 청년미래적금 은행, 청년미래적금 금리, 갈아타기 계산기, 정부기여금',
-  canonical: 'https://choicewise.kr/',
+  canonical: 'https://choicewise.kr/youth-savings',
   jsonLd: [
     {
       '@context': 'https://schema.org',
@@ -44,7 +44,7 @@ export const youthSavingsSeo: RouteSeo = {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'choicewise — 청년도약계좌 vs 청년미래적금 갈아타기 계산기',
-      url: 'https://choicewise.kr/',
+      url: 'https://choicewise.kr/youth-savings',
       applicationCategory: 'FinanceApplication',
       operatingSystem: 'Web',
       inLanguage: 'ko-KR',

@@ -1,7 +1,9 @@
 import type { RouteSeo } from './head';
 import { youthSavingsSeo } from '../services/youthSavings/seo';
-import { transitSeo } from '../services/transit/seo';
+import { transitSeo, schemeSeos } from '../services/transit/seo';
+import { aboutSeo, contactSeo } from '../services/site/seo';
 
-// 프리렌더 대상 라우트 목록(순서 무관). '/'(youthSavings)는 dist/index.html, 나머지는 dist/<path>/index.html.
-// 홈은 청년적금 계산기(구조 A) — 별도 허브 없음.
-export const ROUTE_SEO: RouteSeo[] = [youthSavingsSeo, transitSeo];
+// 프리렌더 대상 라우트 목록(순서 무관). '/'(transit)는 dist/index.html, 나머지는 dist/<path>/index.html.
+// 홈은 패스픽 교통카드 추천, /youth-savings는 청년적금 계산기 서브 경로. schemeSeos = /transit/cards/:id 5개.
+// aboutSeo/contactSeo = 신뢰 페이지(/about, /contact).
+export const ROUTE_SEO: RouteSeo[] = [youthSavingsSeo, transitSeo, ...schemeSeos, aboutSeo, contactSeo];
