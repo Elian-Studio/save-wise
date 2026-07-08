@@ -12,11 +12,13 @@ const buttonVariants = cva(
         outline: 'border border-input bg-card hover:bg-accent hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
+        navy: 'bg-navy text-white hover:bg-navy2',
       },
       size: {
         default: 'h-9 px-4 py-2',
         sm: 'h-8 px-3 text-xs',
         lg: 'h-10 px-6',
+        pill: 'h-auto rounded-full px-6 py-3.5 text-base',
       },
     },
     defaultVariants: { variant: 'default', size: 'default' },

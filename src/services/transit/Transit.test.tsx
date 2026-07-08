@@ -79,10 +79,17 @@ describe('패스픽 Transit', () => {
     }
   });
 
-  it('헤더 "카드 비교"는 비교 화면을 노출한다', () => {
+  it('홈 "5개 카드 한눈에 비교하기" 링크는 비교 화면을 노출한다', () => {
     const { getByRole } = at();
-    fireEvent.click(getByRole('button', { name: /카드 비교/ }));
+    fireEvent.click(getByRole('button', { name: /5개 카드 한눈에 비교하기/ }));
     expect(getByRole('heading', { name: /다섯 장, 한눈에 비교/ })).toBeTruthy();
+  });
+
+  it('비교 화면의 "← 홈으로"는 홈 히어로로 복귀한다', () => {
+    const { getByRole } = at();
+    fireEvent.click(getByRole('button', { name: /5개 카드 한눈에 비교하기/ }));
+    fireEvent.click(getByRole('button', { name: /← 홈으로/ }));
+    expect(getByRole('button', { name: /30초 만에 내 카드 찾기/ })).toBeTruthy();
   });
 
   it('"답 바꿔서 다시 해볼래"는 Q1(진행도 리셋)로 돌아간다', () => {
