@@ -9,7 +9,9 @@
    primary·fin-green·fin-blue·muted-foreground는 WCAG AA(4.5:1)를 만족하도록 조정됨. */
 :root {
   --radius: 0.75rem;
-  --background: #edf1f5;
+  /* 사이트 전역 표면 = 웜 크림(패스픽 팔레트로 통일). 중립 표면·보더만 데우고
+     primary·accent·fin-*·navy 의미색은 유지. 다크(.dark)는 이미 통일돼 변경 없음. */
+  --background: #f6f5f0;
   --foreground: #191f28;
   --card: #ffffff;
   --card-foreground: #191f28;
@@ -17,16 +19,16 @@
   --popover-foreground: #191f28;
   --primary: #068068; /* 토스 그린 계열 accent (브랜드·K-패스). 흰 글자 대비 4.89:1 */
   --primary-foreground: #ffffff;
-  --secondary: #f2f4f6;
+  --secondary: #f0ede4; /* 웜 크림 칩 */
   --secondary-foreground: #333d4b;
-  --muted: #f9fafb;
-  --muted-foreground: #5f6b78; /* 배경/카드 위 4.5:1↑ */
+  --muted: #f2f0e9; /* 웜 크림 틴트 */
+  --muted-foreground: #6b6558; /* 크림·흰 배경 위 5.3:1 */
   --accent: #e7f7f1; /* 소프트 그린 틴트 */
   --accent-foreground: #0b6b4f;
   --destructive: #f04452;
   --destructive-foreground: #ffffff;
-  --border: #e5e8eb;
-  --input: #d1d6db;
+  --border: #ebe8df; /* 웜 크림 보더 */
+  --input: #ddd8cc; /* 웜 크림 인풋 보더 */
   --ring: #068068;
 
   /* 금융 시맨틱 색 (라이트) — @theme inline이 var()로 참조해 다크에서 스왑 가능하게 함.
@@ -34,27 +36,13 @@
   --navy: #191f28;
   --navy2: #333d4b;
   --ink: #191f28;
-  --line: #e5e8eb;
+  --line: #ebe8df; /* 웜 크림 보더(= --border) */
   --fin-green: #157a3f; /* 절약·양수. 흰 글자 5.4:1, green-soft 위 4.88:1 */
   --fin-green-soft: #e7f7f1;
   --fin-blue: #1b5fd0; /* 정보·보조. blue-soft 위 5.18:1 */
   --fin-blue-soft: #eaf2fe;
   --fin-amber: #b45309; /* 주의. amber-soft 위 4.54:1 */
   --fin-amber-soft: #fdf2e2;
-
-  /* 패스픽(/transit) 웜 크림 팔레트 — 라이트에서 디자인 시안 색, 다크에선 사이트 중립으로 스왑.
-     텍스트 3단(ink/body/muted)은 크림·흰 배경 위 AA 4.5:1 확보(muted #6b6558 = 5.3:1).
-     어두운 CTA/배너 표면은 기존 navy/navy2 토큰 재사용(테마 불변). */
-  --pp-bg: #f6f5f0;
-  --pp-card: #ffffff;
-  --pp-ink: #191f28;
-  --pp-body: #3d3a32;
-  --pp-muted: #6b6558;
-  --pp-line: #ebe8df;
-  --pp-line2: #e3e0d7;
-  --pp-track: #e7e4db;
-  --pp-chip: #f0ede4;
-  --pp-deco: #d9d5cb;
 }
 
 /* 다크 팔레트 (클래스 전략 .dark, index.html FOUC 스크립트가 초기 적용).
@@ -78,18 +66,6 @@
   --input: #3a414d;
   --ink: #f0f2f5;
   --line: #2c313b;
-
-  /* 패스픽 다크 — 웜 크림을 사이트 다크 중립으로 degrade */
-  --pp-bg: #16181d;
-  --pp-card: #1e222b;
-  --pp-ink: #f0f2f5;
-  --pp-body: #d3d8e0;
-  --pp-muted: #98a1ad;
-  --pp-line: #2c313b;
-  --pp-line2: #333945;
-  --pp-track: #2c313b;
-  --pp-chip: #2a2f3a;
-  --pp-deco: #3a414d;
 }
 
 @theme inline {
@@ -129,16 +105,6 @@
   --color-fin-blue-soft: var(--fin-blue-soft);
   --color-fin-amber: var(--fin-amber);
   --color-fin-amber-soft: var(--fin-amber-soft);
-  --color-pp-bg: var(--pp-bg);
-  --color-pp-card: var(--pp-card);
-  --color-pp-ink: var(--pp-ink);
-  --color-pp-body: var(--pp-body);
-  --color-pp-muted: var(--pp-muted);
-  --color-pp-line: var(--pp-line);
-  --color-pp-line2: var(--pp-line2);
-  --color-pp-track: var(--pp-track);
-  --color-pp-chip: var(--pp-chip);
-  --color-pp-deco: var(--pp-deco);
   /* 'Pretendard Variable' = 서브셋 CSS가 등록하는 실제 패밀리명(1순위). 미로드 환경은 'Pretendard'(정적)→시스템 폴백. */
   --font-sans:
     'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
@@ -279,7 +245,7 @@ input.range::-moz-range-thumb {
   font-weight: 800;
   font-size: 34px;
   letter-spacing: -0.03em;
-  color: var(--pp-ink);
+  color: var(--ink);
   animation: pp-wordmark 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) 2.85s both;
 }
 

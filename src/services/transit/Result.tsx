@@ -18,9 +18,9 @@ export function Result({
   const w = byId(top.id);
   const runners = rec.list.slice(1, 3);
   return (
-    <div className="flex flex-col items-center px-6 pt-12 pb-[140px]">
+    <div className="mx-auto flex max-w-[1080px] flex-col items-center px-[18px] pt-12 pb-[140px]">
       <div className="w-full max-w-[640px] text-center">
-        <div className="text-[15px] font-bold text-pp-muted">답변 다 확인했어. 너한테는—</div>
+        <div className="text-[15px] font-bold text-muted-foreground">답변 다 확인했어. 너한테는—</div>
 
         <div
           className="relative mt-[18px] overflow-hidden rounded-[28px] px-8 pt-10 pb-9 text-white duration-300 animate-in fade-in zoom-in-95 motion-reduce:animate-none"
@@ -41,8 +41,8 @@ export function Result({
           </div>
         </div>
 
-        <div className="mt-6 rounded-[22px] border border-pp-line bg-pp-card p-7 text-left">
-          <div className="mb-3.5 text-[15px] font-extrabold text-pp-ink">왜 이 카드냐면</div>
+        <div className="mt-6 rounded-[22px] border border-line bg-card p-7 text-left">
+          <div className="mb-3.5 text-[15px] font-extrabold text-ink">왜 이 카드냐면</div>
           <div className="flex flex-col gap-3">
             {top.reasons.map((r) => (
               <div key={r} className="flex items-start gap-2.5">
@@ -53,7 +53,7 @@ export function Result({
                 >
                   ✓
                 </span>
-                <span className="text-[15.5px] font-medium leading-relaxed text-pp-body">{r}</span>
+                <span className="text-[15.5px] font-medium leading-relaxed text-foreground/90">{r}</span>
               </div>
             ))}
           </div>
@@ -73,7 +73,7 @@ export function Result({
           <button
             type="button"
             onClick={onCompare}
-            className="flex-1 rounded-2xl border border-pp-line bg-pp-card px-4 py-[17px] text-[16px] font-bold text-pp-ink hover:border-navy"
+            className="flex-1 rounded-2xl border border-line bg-card px-4 py-[17px] text-[16px] font-bold text-ink hover:border-navy"
           >
             전체 비교하기
           </button>
@@ -81,7 +81,7 @@ export function Result({
 
         {runners.length > 0 && (
           <div className="mt-11 text-left">
-            <div className="mb-3 text-[14px] font-extrabold text-pp-muted">아쉽게 밀린 후보들</div>
+            <div className="mb-3 text-[14px] font-extrabold text-muted-foreground">아쉽게 밀린 후보들</div>
             <div className="flex flex-col gap-2">
               {runners.map((ru) => {
                 const s = byId(ru.id);
@@ -89,15 +89,15 @@ export function Result({
                   <Link
                     key={ru.id}
                     to={`/transit/cards/${s.id}`}
-                    className="flex items-center gap-3 rounded-[14px] border border-pp-line bg-pp-card px-[18px] py-[15px] text-left hover:border-navy"
+                    className="flex items-center gap-3 rounded-[14px] border border-line bg-card px-[18px] py-[15px] text-left hover:border-navy"
                   >
                     <span
                       className="h-3 w-3 flex-shrink-0 rounded-full"
                       style={{ background: s.color }}
                       aria-hidden="true"
                     />
-                    <span className="text-[15px] font-bold text-pp-ink">{s.name}</span>
-                    <span className="ml-auto text-[13.5px] font-medium text-pp-muted">{ru.note}</span>
+                    <span className="text-[15px] font-bold text-ink">{s.name}</span>
+                    <span className="ml-auto text-[13.5px] font-medium text-muted-foreground">{ru.note}</span>
                   </Link>
                 );
               })}
@@ -108,7 +108,7 @@ export function Result({
         <button
           type="button"
           onClick={onRestart}
-          className="mt-[30px] min-h-11 text-[14px] font-semibold text-pp-muted underline underline-offset-[3px] hover:text-pp-ink"
+          className="mt-[30px] min-h-11 text-[14px] font-semibold text-muted-foreground underline underline-offset-[3px] hover:text-ink"
         >
           답 바꿔서 다시 해볼래
         </button>

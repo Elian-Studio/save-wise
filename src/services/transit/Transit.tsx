@@ -63,39 +63,11 @@ export function Transit() {
   );
 
   return (
-    <div className="min-h-screen bg-pp-bg text-pp-ink">
-      {/* 서브헤더 — Shell 내비와 별개인 패스픽 로컬 헤더(비-sticky) */}
-      <div className="flex items-center justify-between px-5 py-4 sm:px-8">
-        <button type="button" onClick={goHome} className="flex items-center gap-2.5" aria-label="패스픽 홈">
-          <span className="flex items-center" aria-hidden="true">
-            <span className="h-4 w-4 rounded-full" style={{ background: '#00A167' }} />
-            <span className="-ml-1.5 h-4 w-4 rounded-full" style={{ background: '#3B5BDB' }} />
-            <span className="-ml-1.5 h-4 w-4 rounded-full" style={{ background: '#E8590C' }} />
-          </span>
-          <span className="text-[19px] font-extrabold tracking-[-0.03em]">패스픽</span>
-        </button>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={goCompare}
-            className="min-h-11 rounded-full border border-pp-line2 px-4 text-[14px] font-semibold text-pp-ink hover:bg-pp-card"
-          >
-            카드 비교
-          </button>
-          <button
-            type="button"
-            onClick={startQuiz}
-            className="min-h-11 rounded-full bg-navy px-[18px] text-[14px] font-bold text-white hover:bg-navy2"
-          >
-            내 카드 찾기
-          </button>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-background text-ink">
       {/* 홈 — 히어로형. 지하철 라인 데코 + 히어로 카피 + CTA + 제도 칩 */}
       <div
         hidden={screen !== 'home'}
-        className="flex flex-col items-center px-6 pt-16 pb-[120px] text-center duration-500 animate-in fade-in motion-reduce:animate-none"
+        className="mx-auto flex max-w-[1080px] flex-col items-center px-[18px] pt-16 pb-[120px] text-center duration-500 animate-in fade-in motion-reduce:animate-none"
       >
         <div className="pp-reveal mb-9" aria-hidden="true">
           <div className="pp-reveal-group">
@@ -113,7 +85,7 @@ export function Transit() {
           <br />
           아깝지 않게.
         </h1>
-        <p className="mt-[22px] text-[clamp(16px,2vw,20px)] font-medium leading-relaxed text-pp-muted">
+        <p className="mt-[22px] text-[clamp(16px,2vw,20px)] font-medium leading-relaxed text-muted-foreground">
           기후동행카드? K-패스? 뭐가 뭔지 몰라도 괜찮아.
           <br />
           질문 5개만 답하면 너한테 딱 맞는 카드 찾아줄게.
@@ -130,13 +102,20 @@ export function Transit() {
             <Link
               key={s.id}
               to={`/transit/cards/${s.id}`}
-              className="flex items-center gap-2 rounded-full border border-pp-line bg-pp-card px-4 py-2.5 text-[14px] font-semibold text-pp-ink transition hover:-translate-y-px hover:border-navy"
+              className="flex items-center gap-2 rounded-full border border-line bg-card px-4 py-2.5 text-[14px] font-semibold text-ink transition hover:-translate-y-px hover:border-navy"
             >
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: s.color }} aria-hidden="true" />
               {s.name}
             </Link>
           ))}
         </div>
+        <button
+          type="button"
+          onClick={goCompare}
+          className="mt-6 min-h-11 text-[14px] font-semibold text-muted-foreground underline underline-offset-[3px] hover:text-ink"
+        >
+          5개 카드 한눈에 비교하기
+        </button>
 
         <HomeGuide onStartQuiz={startQuiz} />
       </div>
@@ -159,7 +138,7 @@ export function Transit() {
 
       {/* 비교 */}
       <div hidden={screen !== 'compare'}>
-        <Compare onQuiz={startQuiz} />
+        <Compare onQuiz={startQuiz} onHome={goHome} />
       </div>
     </div>
   );

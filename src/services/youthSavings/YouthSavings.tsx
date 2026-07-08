@@ -62,13 +62,15 @@ export function YouthSavings() {
 
   return (
     <>
-      <header className="bg-gradient-to-br from-navy to-navy2 py-6 text-white">
+      <header className="border-b border-line bg-card py-5 text-ink">
         <div className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-3 px-[18px]">
           <h1 className="text-xl font-extrabold tracking-tight">
             {isNew ? '청년미래적금 계산기 — 신규 가입' : '청년도약계좌 ↔ 청년미래적금 갈아타기 계산기'}
           </h1>
           <div className="flex flex-wrap gap-2 text-[12.5px] font-semibold">
-            <span className="rounded-full border border-white/25 bg-white/15 px-2.5 py-1">기준일 {DATA_AS_OF}</span>
+            <span className="rounded-full border border-line bg-secondary px-2.5 py-1 text-muted-foreground">
+              기준일 {DATA_AS_OF}
+            </span>
             {d !== null && (
               <span className="rounded-full bg-[#ffe2e2] px-2.5 py-1 text-[#a01616]">
                 {d > 0 ? `신청 마감(7/3) D-${d}` : '1차 접수 마감 · 다음 12월'}
