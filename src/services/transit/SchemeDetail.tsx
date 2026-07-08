@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { SCHEMES, type Scheme, type SchemePick } from '../../data/transitSchemes';
 import { TRANSIT_CARDS } from '../../data/transitCards';
 import { SCHEME_GUIDES } from '../../data/transitSchemeGuides';
+import { Button } from '@/components/ui/button';
 
 // 픽을 화면 표시용으로 정규화. 카드형은 TRANSIT_CARDS에서 표시명/신청링크를 파생한다.
 function resolvePick(pick: SchemePick): {
@@ -66,7 +67,7 @@ export function SchemeDetail() {
               </p>
             </div>
             <div
-              className="rounded-[18px] px-6 py-4.5 text-right"
+              className="rounded-2xl px-6 py-4.5 text-right"
               style={{ background: 'rgba(255,255,255,.14)' }}
             >
               <div className="text-[13px] font-bold opacity-80">{scheme.priceLabel}</div>
@@ -97,7 +98,7 @@ export function SchemeDetail() {
           style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))' }}
         >
           {scheme.benefits.map((b) => (
-            <div key={b.title} className="rounded-[18px] border border-line bg-card p-5.5">
+            <div key={b.title} className="rounded-2xl border border-line bg-card p-5.5">
               <div className="text-base font-extrabold text-ink">{b.title}</div>
               <div className="mt-1.5 text-[14.5px] font-medium leading-[1.55] text-muted-foreground">
                 {b.desc}
@@ -118,7 +119,7 @@ export function SchemeDetail() {
               return (
                 <div
                   key={`${p.name}-${i}`}
-                  className="flex items-start gap-4 rounded-[18px] border border-line bg-card p-5"
+                  className="flex items-start gap-4 rounded-2xl border border-line bg-card p-5"
                 >
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2.5">
@@ -147,7 +148,7 @@ export function SchemeDetail() {
                   </div>
                   {p.best && (
                     <div
-                      className="min-w-[88px] flex-shrink-0 rounded-[14px] px-3.5 py-2.5 text-center"
+                      className="min-w-[88px] flex-shrink-0 rounded-xl px-3.5 py-2.5 text-center"
                       style={{ background: tint }}
                     >
                       <div
@@ -229,7 +230,7 @@ export function SchemeDetail() {
 
         <div className="mt-9">
           <div className="mb-3.5 text-[17px] font-extrabold text-ink">얼마나 돌려받을까</div>
-          <div className="rounded-[18px] border border-line bg-card p-5.5">
+          <div className="rounded-2xl border border-line bg-card p-5.5">
             <div className="text-base font-extrabold text-ink">{guide.calcExample.title}</div>
             <div className="mt-3.5 flex flex-col">
               {guide.calcExample.rows.map((r, i) => (
@@ -279,7 +280,7 @@ export function SchemeDetail() {
           <div className="mb-3.5 text-[17px] font-extrabold text-ink">자주 묻는 질문</div>
           <div className="flex flex-col gap-3">
             {guide.faq.map((f) => (
-              <div key={f.q} className="rounded-[18px] border border-line bg-card p-5">
+              <div key={f.q} className="rounded-2xl border border-line bg-card p-5">
                 <div className="text-[15px] font-extrabold text-ink">Q. {f.q}</div>
                 <div className="mt-1.5 text-[14.5px] font-medium leading-[1.6] text-muted-foreground">
                   {f.a}
@@ -291,18 +292,12 @@ export function SchemeDetail() {
 
         {/* 하단 CTA */}
         <div className="mt-10 flex gap-2.5">
-          <Link
-            to="/?s=quiz"
-            className="flex-1 rounded-2xl bg-navy px-4 py-4 text-center text-base font-extrabold text-white transition hover:bg-navy2"
-          >
-            나한테 맞는지 확인하기
-          </Link>
-          <Link
-            to="/?s=compare"
-            className="flex-1 rounded-2xl border-[1.5px] border-line bg-card px-4 py-4 text-center text-base font-bold text-ink transition hover:border-ink"
-          >
-            다른 카드랑 비교
-          </Link>
+          <Button asChild variant="navy" className="h-auto flex-1 py-4 text-base font-extrabold">
+            <Link to="/?s=quiz">나한테 맞는지 확인하기</Link>
+          </Button>
+          <Button asChild variant="outline" className="h-auto flex-1 py-4 text-base font-bold text-ink">
+            <Link to="/?s=compare">다른 카드랑 비교</Link>
+          </Button>
         </div>
       </div>
     </div>

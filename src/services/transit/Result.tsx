@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import { SCHEMES } from '../../data/transitSchemes';
 import type { SchemeRecResult } from '../../lib/transitSchemeRec';
+import { Button } from '@/components/ui/button';
+import { ResultHero } from '@/components/patterns/ResultHero';
+import { ReasonList } from '@/components/patterns/ReasonList';
 
 const byId = (id: string) => SCHEMES.find((s) => s.id === id)!;
 
@@ -22,15 +25,12 @@ export function Result({
       <div className="w-full max-w-[640px] text-center">
         <div className="text-[15px] font-bold text-muted-foreground">답변 다 확인했어. 너한테는—</div>
 
-        <div
-          className="relative mt-[18px] overflow-hidden rounded-[28px] px-8 pt-10 pb-9 text-white duration-300 animate-in fade-in zoom-in-95 motion-reduce:animate-none"
+        <ResultHero
           style={{ background: `linear-gradient(160deg, ${w.color}, ${w.colorDark})` }}
+          deco
+          animate
+          className="mt-[18px] px-8 pt-10 pb-9 text-center"
         >
-          <div
-            className="pointer-events-none absolute -top-10 -right-10 h-44 w-44 rounded-full"
-            style={{ background: 'rgba(255,255,255,.1)' }}
-            aria-hidden="true"
-          />
           <div className="text-[14px] font-bold opacity-85">{w.tag}</div>
           <div className="mt-1.5 text-[clamp(34px,6vw,48px)] font-extrabold tracking-[-0.04em]">{w.name}</div>
           <div
@@ -39,24 +39,11 @@ export function Result({
           >
             {top.savings}
           </div>
-        </div>
+        </ResultHero>
 
-        <div className="mt-6 rounded-[22px] border border-line bg-card p-7 text-left">
+        <div className="mt-6 rounded-2xl border border-line bg-card p-7 text-left">
           <div className="mb-3.5 text-[15px] font-extrabold text-ink">왜 이 카드냐면</div>
-          <div className="flex flex-col gap-3">
-            {top.reasons.map((r) => (
-              <div key={r} className="flex items-start gap-2.5">
-                <span
-                  className="mt-px flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[12px] font-extrabold text-white"
-                  style={{ background: w.color }}
-                  aria-hidden="true"
-                >
-                  ✓
-                </span>
-                <span className="text-[15.5px] font-medium leading-relaxed text-foreground/90">{r}</span>
-              </div>
-            ))}
-          </div>
+          <ReasonList reasons={top.reasons} variant="check" accent={w.color} />
         </div>
 
         <p className="mini mt-3">
@@ -64,19 +51,16 @@ export function Result({
         </p>
 
         <div className="mt-3 flex gap-2.5">
-          <Link
-            to={`/transit/cards/${w.id}`}
-            className="flex-1 rounded-2xl bg-navy px-4 py-[17px] text-center text-[16px] font-extrabold text-white hover:bg-navy2"
-          >
-            이 카드 자세히 보기
-          </Link>
-          <button
-            type="button"
+          <Button asChild variant="navy" className="h-auto flex-1 py-[17px] text-[16px] font-extrabold">
+            <Link to={`/transit/cards/${w.id}`}>이 카드 자세히 보기</Link>
+          </Button>
+          <Button
+            variant="outline"
             onClick={onCompare}
-            className="flex-1 rounded-2xl border border-line bg-card px-4 py-[17px] text-[16px] font-bold text-ink hover:border-navy"
+            className="h-auto flex-1 py-[17px] text-[16px] font-bold text-ink"
           >
             전체 비교하기
-          </button>
+          </Button>
         </div>
 
         {runners.length > 0 && (
@@ -89,7 +73,7 @@ export function Result({
                   <Link
                     key={ru.id}
                     to={`/transit/cards/${s.id}`}
-                    className="flex items-center gap-3 rounded-[14px] border border-line bg-card px-[18px] py-[15px] text-left hover:border-navy"
+                    className="flex items-center gap-3 rounded-xl border border-line bg-card px-[18px] py-[15px] text-left hover:border-navy"
                   >
                     <span
                       className="h-3 w-3 flex-shrink-0 rounded-full"

@@ -6,6 +6,7 @@ import { Quiz } from './Quiz';
 import { Result } from './Result';
 import { Compare } from './Compare';
 import { HomeGuide } from './HomeGuide';
+import { Button } from '@/components/ui/button';
 
 type Screen = 'home' | 'quiz' | 'result' | 'compare';
 
@@ -90,13 +91,14 @@ export function Transit() {
           <br />
           질문 5개만 답하면 너한테 딱 맞는 카드 찾아줄게.
         </p>
-        <button
-          type="button"
+        <Button
+          variant="navy"
+          size="pill"
           onClick={startQuiz}
-          className="mt-10 min-h-11 rounded-full bg-navy px-[42px] py-[19px] text-[19px] font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-navy2"
+          className="mt-10 px-[42px] py-[19px] text-[19px] font-extrabold shadow-lg hover:-translate-y-0.5"
         >
           30초 만에 내 카드 찾기 →
-        </button>
+        </Button>
         <div className="mt-14 flex flex-wrap justify-center gap-2.5">
           {SCHEMES.map((s) => (
             <Link

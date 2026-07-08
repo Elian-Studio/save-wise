@@ -6,6 +6,8 @@ import { MAN, MIRAE, INCOME } from '../../data/products';
 import { fmtMoney, pct, won2man } from '../../lib/format';
 import { ShareButton } from '../ShareButton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ResultHero } from '@/components/patterns/ResultHero';
+import { ReasonList } from '@/components/patterns/ReasonList';
 import { Slider, Segments, ToggleCard, type SegOption } from './controls';
 
 // Switch Advisor(Claude Design)의 스텝 위저드 UX를 실엔진(calc.ts) 위로 포팅.
@@ -439,7 +441,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
           ) : (
             <>
               {/* verdict hero — 실엔진 rec */}
-              <section className={`rounded-2xl bg-gradient-to-br ${vTone} p-7 text-white`}>
+              <ResultHero tone={`bg-gradient-to-br ${vTone}`}>
                 <div className="flex flex-wrap items-start gap-5">
                   <div className="text-5xl leading-none">
                     {rec.verdict === 'switch' ? '🚀' : rec.verdict === 'stay' ? '🛡️' : '⚖️'}
@@ -447,13 +449,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                   <div className="min-w-[240px] flex-1">
                     <div className="text-[13px] font-bold opacity-70">최종 판단 · RECOMMENDATION</div>
                     <h3 className="my-1.5 text-[30px] font-extrabold tracking-tight">{rec.main}</h3>
-                    <ul className="mt-2 grid gap-1.5">
-                      {rec.reasons.map((r, i) => (
-                        <li key={i} className="rounded-lg bg-white/15 px-3 py-1.5 text-[13.5px]">
-                          {r}
-                        </li>
-                      ))}
-                    </ul>
+                    <ReasonList reasons={rec.reasons} variant="chip" />
                   </div>
                   <div className="rounded-xl border border-white/25 bg-white/15 px-5 py-4 text-center">
                     <div className="text-[11.5px] font-bold opacity-80">같은 돈 3년 기준</div>
@@ -464,7 +460,7 @@ export function Wizard({ api }: { api: CalculatorApi }) {
                     <div className="text-[11px] opacity-75">{C.diff3yr >= 0 ? '전환 우위' : '유지 우위'}</div>
                   </div>
                 </div>
-              </section>
+              </ResultHero>
 
               {/* 비교 — 공정 기준(같은 월납입·같은 3년). 만기·한도 차이를 보정해 verdict와 일치시킴 */}
               <section className="mt-4 rounded-2xl border border-line bg-card p-6">
