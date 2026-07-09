@@ -1,6 +1,7 @@
 // 청년 지원금 통합 자격진단 단일 출처. 정본: docs/youth-benefits-spec.md (2026-07-09, deep-research 검증).
 // 정직성 규칙: 출처 없는 수치 금지. [R](미확정)은 카드에 caveat로 "확인 필요" 표기, eligible 단정 금지.
 import type { QuizAnswers } from '../lib/youthBenefitRec';
+import type { QuizQuestion } from '../components/quiz/Quiz';
 
 // 가구원 수. 6인 이상은 '6plus'로 6인 값 사용(스펙 §2).
 export type Household = '1' | '2' | '3' | '4' | '5' | '6plus';
@@ -137,17 +138,8 @@ export const ENDED: EndedProgram[] = [
   },
 ];
 
-// 퀴즈 질문 스키마. transitSchemes의 QuizQuestion 매핑 타입과 동일한 형태.
-export type QuizQuestion = {
-  [K in keyof QuizAnswers]: {
-    id: K;
-    title: string;
-    hint?: string;
-    options: { v: QuizAnswers[K]; label: string; desc?: string }[];
-  };
-}[keyof QuizAnswers];
-
-export const QUIZ_QUESTIONS: QuizQuestion[] = [
+// 퀴즈 질문 7문항. option v는 QuizAnswers 해당 키와 일치(공용 QuizQuestion 제네릭으로 강제).
+export const QUIZ_QUESTIONS: QuizQuestion<QuizAnswers>[] = [
   {
     id: 'age',
     title: '나이가 어떻게 돼?',

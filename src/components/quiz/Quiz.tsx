@@ -1,8 +1,19 @@
-import type { QuizQuestion } from '../../data/transitSchemes';
-
 type Opt = { v: string; label: string; desc?: string };
 
-// 퀴즈 화면 — 현재 질문 1개만 렌더(key={qIndex}로 재마운트해 rise 애니메이션). 상태는 Transit이 소유.
+// 공용 퀴즈 질문 스키마 — 서비스별 답 스키마 A에 대해 id·옵션값이 A와 일치하도록 강제(패스픽·청년지원금 공유).
+export type QuizQuestion<A> = {
+  [K in keyof A]: {
+    id: K;
+    title: string;
+    hint?: string;
+    options: { v: A[K]; label: string; desc?: string }[];
+  };
+}[keyof A];
+
+// 표현 컴포넌트가 받는 느슨한 질문 형태 — 어떤 A로 인스턴스화한 QuizQuestion도 여기에 assign된다.
+type AnyQuestion = { id: string; title: string; hint?: string; options: Opt[] };
+
+// 퀴즈 화면 — 현재 질문 1개만 렌더(key={qIndex}로 재마운트해 rise 애니메이션). 상태는 상위 컨테이너가 소유.
 export function Quiz({
   question,
   qIndex,
@@ -10,14 +21,14 @@ export function Quiz({
   onPick,
   onBack,
 }: {
-  question: QuizQuestion;
+  question: AnyQuestion;
   qIndex: number;
   total: number;
   onPick: (value: string) => void;
   onBack: () => void;
 }) {
   const pct = Math.round(((qIndex + 1) / total) * 100);
-  const options = question.options as Opt[];
+  const options = question.options;
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col items-center px-[18px] pt-12 pb-20">
       <div className="w-full max-w-[600px]">

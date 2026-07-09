@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { SCHEMES, QUIZ_QUESTIONS } from '../../data/transitSchemes';
 import { recommend, type QuizAnswers } from '../../lib/transitSchemeRec';
-import { Quiz } from './Quiz';
+import { Quiz } from '@/components/quiz/Quiz';
 import { Result } from './Result';
 import { Compare } from './Compare';
 import { HomeGuide } from './HomeGuide';
