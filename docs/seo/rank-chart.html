@@ -189,32 +189,47 @@ function buildChart(engine) {
 var charts = document.getElementById('charts');
 ENGINES.forEach(function (e) { charts.appendChild(buildChart(e)); });
 
-// 변화표: 직전 스냅샷 대비
-var prev = snaps.length > 1 ? snaps[snaps.length - 2] : null;
-var curr = snaps[snaps.length - 1];
-document.getElementById('tableTitle').textContent = '전체 키워드 변화 — ' +
-  (prev ? prev.date + ' → ' + curr.date : curr.date + ' (베이스라인, 비교 대상 없음)');
+// 변화표: 키워드별 "최근 2회 실측정" 비교.
+// 스냅샷이 일부 키워드만 담을 수 있으므로(부분 측정), 스냅샷 인덱스가 아니라
+// 해당 키워드가 실제 측정된 시점(undefined 제외, null=미노출은 측정임)끼리 비교한다.
+var latest = snaps[snaps.length - 1];
+document.getElementById('tableTitle').textContent =
+  '전체 키워드 변화 — 키워드별 최근 2회 측정 비교 (최신 스냅샷 ' + latest.date + ')';
 
-function chip(pv, cv) {
-  var fmt = function (v) { return v === undefined ? '·' : (v === null ? '미노출' : v + '위'); };
-  if (cv === undefined && pv === undefined) return '<span class="chip na">·</span>';
-  if (!prev) return '<span class="chip flat">' + fmt(cv) + '</span>';
+function measurements(kw, engine) {
+  var out = [];
+  snaps.forEach(function (s) {
+    var r = rankOf(s, kw, engine);
+    if (r !== undefined) out.push({ date: s.date, r: r });
+  });
+  return out;
+}
+
+function chip(kw, engine) {
+  var fmt = function (v) { return v === null ? '미노출' : v + '위'; };
+  var m = measurements(kw, engine);
+  if (!m.length) return '<span class="chip na">·</span>';
+  var last = m[m.length - 1];
+  // 최신 스냅샷에서 측정 안 된 키워드는 측정 시점을 병기해 오해를 막는다
+  var when = last.date !== latest.date ? ' <span class="chip na">(' + last.date + ')</span>' : '';
+  if (m.length === 1) return '<span class="chip flat">' + fmt(last.r) + '</span>' + when + ' <span class="chip na">첫 측정</span>';
+  var pv = m[m.length - 2].r, cv = last.r;
   var pn = typeof pv === 'number', cn = typeof cv === 'number';
-  if (!pn && !cn) return '<span class="chip na">미노출</span>';
+  if (!pn && !cn) return '<span class="chip na">미노출</span>' + when;
   var base = fmt(pv) + ' → ' + fmt(cv) + ' ';
   if (pn && cn) {
     var d = pv - cv; // 순위 숫자가 줄면 상승
-    if (d > 0) return base + '<span class="chip up">▲' + d + '</span>';
-    if (d < 0) return base + '<span class="chip down">▼' + (-d) + '</span>';
-    return base + '<span class="chip flat">—</span>';
+    if (d > 0) return base + '<span class="chip up">▲' + d + '</span>' + when;
+    if (d < 0) return base + '<span class="chip down">▼' + (-d) + '</span>' + when;
+    return base + '<span class="chip flat">—</span>' + when;
   }
-  return base + (cn ? '<span class="chip new">NEW</span>' : '<span class="chip out">OUT</span>');
+  return base + (cn ? '<span class="chip new">NEW</span>' : '<span class="chip out">OUT</span>') + when;
 }
 
 var rows = kws.map(function (kw) {
   return '<tr><td class="kw">' + kw + '</td>' +
-    '<td>' + chip(prev ? rankOf(prev, kw, 'naver') : undefined, rankOf(curr, kw, 'naver')) + '</td>' +
-    '<td>' + chip(prev ? rankOf(prev, kw, 'google') : undefined, rankOf(curr, kw, 'google')) + '</td></tr>';
+    '<td>' + chip(kw, 'naver') + '</td>' +
+    '<td>' + chip(kw, 'google') + '</td></tr>';
 });
 document.getElementById('deltaTable').innerHTML =
   '<thead><tr><th>키워드</th><th>네이버</th><th>구글</th></tr></thead><tbody>' +
