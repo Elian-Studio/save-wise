@@ -42,17 +42,24 @@ export const transitSeo: RouteSeo = {
 export const schemeSeos: RouteSeo[] = SCHEMES.map((s) => {
   const url = `https://choicewise.kr/transit/cards/${s.id}`;
   const description = `${s.summary} ${s.tag}`.slice(0, 150);
+  // 종료 제도(endNotice)는 검색 의도가 '종료/폐지 안내'로 이동하므로 title·keywords를 종료형으로 조준.
+  const title = s.endNotice
+    ? `${s.name} 충전 종료 — 마감 일정·기존 카드·K-패스 전환 (2026)`
+    : `${s.name} 총정리 — 혜택·발급·이런 사람 (2026)`;
+  const keywords = s.endNotice
+    ? [s.name, `${s.name} 종료`, `${s.name} 충전 종료`, `${s.name} 폐지`, 'K-패스 전환', ...s.fit].join(', ')
+    : [s.name, s.tag, ...s.fit].join(', ');
   return {
     path: `/transit/cards/${s.id}`,
-    title: `${s.name} 총정리 — 혜택·발급·이런 사람 (2026)`,
+    title,
     description,
-    keywords: [s.name, s.tag, ...s.fit].join(', '),
+    keywords,
     canonical: url,
     jsonLd: [
       {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        name: `${s.name} 총정리`,
+        name: s.endNotice ? `${s.name} 충전 종료 안내` : `${s.name} 총정리`,
         description,
         url,
         inLanguage: 'ko-KR',
