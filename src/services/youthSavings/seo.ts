@@ -1,6 +1,6 @@
 import type { RouteSeo } from '../../seo/head';
 
-// 청년적금 계산기 — 이제 서브 경로(/youth-savings), 홈(/)은 패스픽 교통카드 추천.
+// 청년적금 계산기 — 이제 서브 경로(/youth-savings), 홈(/)은 패스와이즈 교통카드 추천.
 export const youthSavingsSeo: RouteSeo = {
   path: '/youth-savings',
   title: '청년도약계좌 vs 청년미래적금 갈아타기 계산기 (2026)',

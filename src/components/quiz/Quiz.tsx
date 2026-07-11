@@ -1,6 +1,6 @@
 type Opt = { v: string; label: string; desc?: string };
 
-// 공용 퀴즈 질문 스키마 — 서비스별 답 스키마 A에 대해 id·옵션값이 A와 일치하도록 강제(패스픽·청년지원금 공유).
+// 공용 퀴즈 질문 스키마 — 서비스별 답 스키마 A에 대해 id·옵션값이 A와 일치하도록 강제(패스와이즈·청년지원금 공유).
 export type QuizQuestion<A> = {
   [K in keyof A]: {
     id: K;

@@ -4,20 +4,19 @@ import type { QuizAnswers } from './transitSchemeRec';
 import { SCHEMES } from '../data/transitSchemes';
 import { TRANSIT_CARDS } from '../data/transitCards';
 
-const base: QuizAnswers = { region: 'seoul', age: 'y', trips: 'mid', mode: 'metro', bike: 'no' };
+const base: QuizAnswers = { region: 'seoul', age: 'y', trips: 'mid', mode: 'metro' };
 const ans = (over: Partial<QuizAnswers>): QuizAnswers => ({ ...base, ...over });
 
-describe('recommend — 패스픽 추천 엔진(이중 환급)', () => {
-  it('서울+청년+lots+지하철+따릉이 → K-패스 1위(기준금액 초과분 74,200원)', () => {
+describe('recommend — 패스와이즈 추천 엔진(이중 환급)', () => {
+  it('서울+청년+lots+지하철 → K-패스 1위, 기후동행은 추천에서 제외(충전 종료)', () => {
     // spend 99,200. kpass youth: max(round(99200*0.3)=29,760, 99200-25000=74,200)=74,200
-    // climate: 99,200-62,000=37,200
-    const r = recommend(ans({ region: 'seoul', age: 'y', trips: 'lots', mode: 'metro', bike: 'often' }));
+    const r = recommend(ans({ region: 'seoul', age: 'y', trips: 'lots', mode: 'metro' }));
     expect(r.list[0].id).toBe('kpass');
     expect(r.list[0].benefit).toBe(74200);
     expect(r.list[0].savings).toContain('74,200');
     expect(r.list[0].reasons.some((x) => x.includes('기준금액') && x.includes('2.5만원'))).toBe(true);
-    const climate = r.list.find((x) => x.id === 'climate');
-    expect(climate?.benefit).toBe(37200);
+    // 기후동행카드는 30일권 충전 종료로 추천 엔진에서 제외 — 서울이어도 list에 없어야 함
+    expect(r.list.map((x) => x.id)).not.toContain('climate');
   });
 
   it('경기+y39+many+광역 → 경기패스 1위(기준금액 초과분 32,500 > K-패스 27,500)', () => {

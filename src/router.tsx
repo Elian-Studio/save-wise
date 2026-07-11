@@ -8,7 +8,7 @@ import { About } from './services/site/About';
 import { Contact } from './services/site/Contact';
 
 // 클라(BrowserRouter)·서버(StaticRouter) 공용 라우트 트리.
-// 홈(/)은 패스픽 교통카드 추천, 청년적금 계산기는 /youth-savings. 별도 허브 없음.
+// 홈(/)은 패스와이즈 교통카드 추천, 청년적금 계산기는 /youth-savings. 별도 허브 없음.
 // 옛 /transit·구 /youth-savings 링크는 vercel.json에서 / 로 301 리다이렉트.
 export function AppRoutes() {
   return (

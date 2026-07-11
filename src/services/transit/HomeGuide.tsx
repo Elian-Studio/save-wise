@@ -14,9 +14,10 @@ export function HomeGuide({ onStartQuiz }: { onStartQuiz: () => void }) {
       </h2>
       <div className="mt-4 flex flex-col gap-3.5">
         <p className="text-[15.5px] font-medium leading-[1.7] text-foreground/90">
-          2026년 교통카드는 크게 세 갈래야 — 서울 안에서 무제한으로 타는 <b>정기권</b>(기후동행카드), 전국에서
-          쓴 만큼 돌려받는 <b>환급형</b>(K-패스·The 경기패스·인천 I-패스), 조건 없이 찍고 타는{' '}
-          <b>후불카드</b>. 사는 곳과 이용 패턴에 따라 이득이 갈려.
+          2026년 교통카드는 크게 두 갈래야 — 전국에서 쓴 만큼 돌려받는 <b>환급형</b>(K-패스·The 경기패스·인천
+          I-패스)과 조건 없이 찍고 타는 <b>후불카드</b>. 서울 정기권이던 기후동행카드는 선불 30일권이 2026년 7월
+          31일(후불형 8월 31일) 충전 종료라, 새로 시작한다면 K-패스로 보는 게 맞아. 사는 곳과 이용 패턴에 따라 이득이
+          갈려.
         </p>
         <p className="text-[15.5px] font-medium leading-[1.7] text-foreground/90">
           2026년 환급형은 크게 바뀌었어. 비율 환급(20~53%)에 더해 <b>기준금액 초과분 환급</b>이 생겨서, 둘 중
@@ -74,9 +75,9 @@ export function HomeGuide({ onStartQuiz }: { onStartQuiz: () => void }) {
       <div className="mt-4 flex flex-col gap-3.5">
         <p className="text-[15.5px] font-medium leading-[1.7] text-foreground/90">
           순서대로 따져보면 쉬워. <b>①</b> 먼저 한 달에 15번도 안 탄다면 환급 조건이 안 되니 후불카드가 편해.{' '}
-          <b>②</b> 서울 안에서 월 40번 넘게 탄다면 기후동행카드 정기권이 이득이야. <b>③</b> 경기도나 인천에
-          살면 별도 신청 없이 자동 적용되는 The 경기패스·인천 I-패스를 먼저 봐(환급 횟수 무제한). <b>④</b> 그 밖의
-          지역이거나 여러 지역을 오가면 전국에서 쓰는 K-패스가 정답이야.
+          <b>②</b> 경기도나 인천에 살면 별도 신청 없이 자동 적용되는 The 경기패스·인천 I-패스를 먼저 봐(환급 횟수
+          무제한). <b>③</b> 그 밖의 지역이거나 여러 지역을 오가면 전국에서 쓰는 K-패스가 정답이야. 서울 정기권이던
+          기후동행카드는 30일권 충전이 2026년 7월 말 종료라, 이미 충전한 카드가 아니면 K-패스로 갈아타야 해.
         </p>
         <p className="text-[15.5px] font-medium leading-[1.7] text-foreground/90">
           나이도 변수야 — 청년(K-패스는 34세, 경기·인천은 39세까지)은 환급률이 30%로 올라가고, 65세 이상
