@@ -5,8 +5,8 @@ export const aboutSeo: RouteSeo = {
   path: '/about',
   title: '서비스 소개 — choicewise',
   description:
-    'choicewise는 교통카드 추천(패스와이즈)과 청년 금융상품 계산기를 제공하는 무료 비교·계산 도구입니다. 정부 공식 자료를 검증해 내 상황에 맞는 선택지를 한 곳에서 비교합니다.',
-  keywords: 'choicewise 소개, 데이터 출처, 갱신 정책, 무료 계산기, 교통카드 추천, 청년적금 계산기',
+    'choicewise는 교통카드 추천(패스와이즈), 청년적금 계산기, 청년 지원금 추천을 제공하는 무료 비교·계산 도구입니다. 정부 공식 자료를 검증해 내 상황에 맞는 선택지를 한 곳에서 비교합니다.',
+  keywords: 'choicewise 소개, 데이터 출처, 갱신 정책, 무료 계산기, 교통카드 추천, 청년적금 계산기, 청년 지원금 추천',
   canonical: 'https://choicewise.kr/about',
   jsonLd: [
     {
@@ -15,7 +15,7 @@ export const aboutSeo: RouteSeo = {
       name: '서비스 소개 — choicewise',
       url: 'https://choicewise.kr/about',
       description:
-        'choicewise는 교통카드 추천과 청년 금융상품 계산기를 제공하는 무료 비교·계산 도구입니다. 정부 공식 자료 기반, 회원가입·개인정보 수집 없음.',
+        'choicewise는 교통카드 추천, 청년적금 계산기, 청년 지원금 추천을 제공하는 무료 비교·계산 도구입니다. 정부 공식 자료 기반, 회원가입·개인정보 수집 없음.',
       inLanguage: 'ko-KR',
     },
   ],
