@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 type Screen = 'home' | 'quiz' | 'result' | 'compare';
 
 // 결과 컨테이너는 전마운트(SEO)라 답이 없을 때도 결정적 기본값으로 recommend() → SSR 동일 출력 보장.
-const DEFAULT_ANSWERS: QuizAnswers = { region: 'seoul', age: 'y', trips: 'mid', mode: 'metro', bike: 'no' };
+const DEFAULT_ANSWERS: QuizAnswers = { region: 'seoul', age: 'y', trips: 'mid', mode: 'metro' };
 const QKEYS = QUIZ_QUESTIONS.map((q) => q.id);
 
 export function Transit() {
@@ -78,7 +78,7 @@ export function Transit() {
               <span className="pp-reveal-dot pp-reveal-dot-b" />
               <span className="pp-reveal-dot pp-reveal-dot-o" />
             </span>
-            <span className="pp-reveal-wordmark">패스픽</span>
+            <span className="pp-reveal-wordmark">패스와이즈</span>
           </div>
         </div>
         <h1 className="text-[clamp(38px,6.5vw,74px)] font-extrabold leading-[1.12] tracking-[-0.045em]">
@@ -87,9 +87,9 @@ export function Transit() {
           아깝지 않게.
         </h1>
         <p className="mt-[22px] text-[clamp(16px,2vw,20px)] font-medium leading-relaxed text-muted-foreground">
-          기후동행카드? K-패스? 뭐가 뭔지 몰라도 괜찮아.
+          K-패스? 경기패스? 뭐가 뭔지 몰라도 괜찮아.
           <br />
-          질문 5개만 답하면 너한테 딱 맞는 카드 찾아줄게.
+          질문 4개만 답하면 너한테 딱 맞는 카드 찾아줄게.
         </p>
         <Button
           variant="navy"

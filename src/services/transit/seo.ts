@@ -15,23 +15,23 @@ const faqPageLd = (faq: { q: string; a: string }[]): object => ({
 
 export const transitSeo: RouteSeo = {
   path: '/',
-  title: '교통카드 추천 — 기후동행·K-패스 30초 진단 (2026)',
+  title: '교통카드 추천 — K-패스·경기패스 30초 진단 (2026)',
   description:
-    '기후동행카드·K-패스·The 경기패스·인천 I-패스·후불카드 5개 제도를 30초 퀴즈로 비교해 내 거주지·나이·교통비에 딱 맞는 교통카드를 찾아주는 무료 진단.',
+    'K-패스·The 경기패스·인천 I-패스·후불카드를 30초 퀴즈로 비교해 내 거주지·나이·교통비에 딱 맞는 교통카드를 찾아주는 무료 진단. 기후동행카드는 30일권 충전 종료(2026-07-31) 안내 포함.',
   keywords:
-    '패스픽, 교통카드 추천, 교통카드 비교, 기후동행카드, K패스, K-패스, The 경기패스, 인천 I패스, 후불 교통카드, 나이별 교통카드',
+    '패스와이즈, 교통카드 추천, 교통카드 비교, K패스, K-패스, The 경기패스, 인천 I패스, 후불 교통카드, 나이별 교통카드, 기후동행카드, 기후동행카드 종료',
   canonical: 'https://choicewise.kr/',
   jsonLd: [
     {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
-      name: 'choicewise 패스픽 — 교통카드 추천',
+      name: 'choicewise 패스와이즈 — 교통카드 추천',
       url: 'https://choicewise.kr/',
       applicationCategory: 'FinanceApplication',
       operatingSystem: 'Web',
       inLanguage: 'ko-KR',
       description:
-        '기후동행카드·K-패스·The 경기패스·인천 I-패스·후불카드를 거주지·나이·교통비 기준 30초 퀴즈로 비교해 가장 유리한 교통카드를 추천하는 무료 진단.',
+        'K-패스·The 경기패스·인천 I-패스·후불카드를 거주지·나이·교통비 기준 30초 퀴즈로 비교해 가장 유리한 교통카드를 추천하는 무료 진단. 기후동행카드 30일권은 2026-07-31 충전 종료.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' },
     },
     faqPageLd(HOME_FAQ),

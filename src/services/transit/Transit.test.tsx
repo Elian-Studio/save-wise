@@ -14,17 +14,16 @@ const at = (path = '/') =>
     </MemoryRouter>,
   );
 
-// 시나리오: 서울 → 19~34세 → 60번 넘게 → 지하철·시내버스 → 자주 타 (승자는 엔진이 결정)
-const answerFiveQuestions = (getByRole: (r: string, o: { name: RegExp }) => HTMLElement) => {
+// 시나리오: 서울 → 19~34세 → 60번 넘게 → 지하철·시내버스 (4문항, 승자는 엔진이 결정)
+const answerAllQuestions = (getByRole: (r: string, o: { name: RegExp }) => HTMLElement) => {
   fireEvent.click(getByRole('button', { name: /30초 만에 내 카드 찾기/ }));
   fireEvent.click(getByRole('button', { name: /^서울$/ }));
   fireEvent.click(getByRole('button', { name: /19~34세/ }));
   fireEvent.click(getByRole('button', { name: /60번 넘게/ }));
   fireEvent.click(getByRole('button', { name: /지하철·시내버스/ }));
-  fireEvent.click(getByRole('button', { name: /자주 타/ }));
 };
 
-describe('패스픽 Transit', () => {
+describe('패스와이즈 Transit', () => {
   it('SSG: 초기 DOM에 홈 히어로·5개 제도명·비교표 텍스트가 모두 존재(hidden 전마운트)', () => {
     const { container } = at();
     const t = container.textContent ?? '';
@@ -41,13 +40,13 @@ describe('패스픽 Transit', () => {
     const t = container.textContent ?? '';
     expect(t).toContain('2026 교통카드 5종, 한눈에');
     expect(t).toContain('어떤 카드를 골라야 하나');
-    expect(t).toContain('K-패스랑 기후동행카드, 둘 다 만들어도 돼?'); // HOME_FAQ 첫 질문
+    expect(t).toContain('기후동행카드 아직 만들 수 있어?'); // HOME_FAQ 첫 질문(충전 종료 반영)
   });
 
-  it('퀴즈 플로우: 5문항 답하면 승자 상세 CTA·근거·후보가 렌더된다', () => {
+  it('퀴즈 플로우: 4문항 답하면 승자 상세 CTA·근거·후보가 렌더된다', () => {
     const { getByRole, getByText } = at();
-    answerFiveQuestions(getByRole);
-    const rec = recommend({ region: 'seoul', age: 'y', trips: 'lots', mode: 'metro', bike: 'often' });
+    answerAllQuestions(getByRole);
+    const rec = recommend({ region: 'seoul', age: 'y', trips: 'lots', mode: 'metro' });
     // 결과 화면 노출 + 승자 상세 CTA가 엔진이 고른 승자 id를 가리킴(이중 환급 반영 → K-패스)
     expect(getByRole('link', { name: /이 카드 자세히 보기/ }).getAttribute('href')).toBe(
       `/transit/cards/${rec.list[0].id}`,
@@ -56,10 +55,10 @@ describe('패스픽 Transit', () => {
     expect(getByText('아쉽게 밀린 후보들')).toBeTruthy(); // 후보 섹션
   });
 
-  it('진행도: Q1은 progressbar 20%, ← 이전은 홈으로 복귀', () => {
+  it('진행도: Q1은 progressbar 25%, ← 이전은 홈으로 복귀', () => {
     const { getByRole } = at();
     fireEvent.click(getByRole('button', { name: /30초 만에 내 카드 찾기/ }));
-    expect(getByRole('progressbar').getAttribute('aria-valuenow')).toBe('20');
+    expect(getByRole('progressbar').getAttribute('aria-valuenow')).toBe('25');
     fireEvent.click(getByRole('button', { name: /이전/ }));
     // 홈 복귀 → 히어로 CTA 다시 노출
     expect(getByRole('button', { name: /30초 만에 내 카드 찾기/ })).toBeTruthy();
@@ -94,10 +93,10 @@ describe('패스픽 Transit', () => {
 
   it('"답 바꿔서 다시 해볼래"는 Q1(진행도 리셋)로 돌아간다', () => {
     const { getByRole } = at();
-    answerFiveQuestions(getByRole);
+    answerAllQuestions(getByRole);
     fireEvent.click(getByRole('button', { name: /답 바꿔서 다시 해볼래/ }));
     expect(getByRole('heading', { name: '어디 살아?' })).toBeTruthy();
-    expect(getByRole('progressbar').getAttribute('aria-valuenow')).toBe('20');
+    expect(getByRole('progressbar').getAttribute('aria-valuenow')).toBe('25');
   });
 
   it('?s=compare 딥링크로 진입하면(효과 이후) 비교 화면이 노출된다', async () => {
