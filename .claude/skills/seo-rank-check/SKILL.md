@@ -36,15 +36,20 @@ description: >
    `snapshots` 배열 끝에 추가한다. **기존 스냅샷은 절대 수정하지 않는다.**
    저장 후 `python3 -m json.tool docs/seo/rank-tracking.json > /dev/null`로 검증.
 
-5. **보고**: 직전 스냅샷 대비 변화표를 출력한다.
+5. **그래프 갱신**: `node scripts/seo-rank-chart.mjs` 실행 →
+   `docs/seo/rank-chart.html` 재생성(자기완결 HTML, 데이터 인라인).
+   `open docs/seo/rank-chart.html`로 브라우저에 띄워 사용자에게 보여준다.
+   차트 스타일·렌더 로직 변경은 이 스크립트만 수정하면 된다(JSON 스키마는 건드리지 않는다).
+
+6. **보고**: 직전 스냅샷 대비 변화표를 출력한다.
    - 형식: 키워드 | 네이버 이전→현재 (▲n/▼n/—/NEW/OUT) | 구글 이전→현재
    - 순위 외 신호도 요약: 인덱스 페이지 수 변화, 스니펫 갱신 여부(구 '패스픽'/'총정리' 캐시 소멸),
      신규 경쟁 진입.
    - 판단 주의: 스냅샷 간격이 2주 미만이면 "추세 판단은 이르다"를 명시한다.
 
-6. **커밋**: 변경된 rank-tracking.json은 main에 직접 커밋하지 않는다.
-   사용자 확인 후 `docs/seo-rank-<YYYYMMDD>` 브랜치 → 커밋 → push → PR. 사용자가 커밋을 원치
-   않으면 워킹트리에 남겨둔다.
+7. **커밋**: 변경된 rank-tracking.json은 main에 직접 커밋하지 않는다.
+   사용자 확인 후 `docs/seo-rank-<YYYYMMDD>` 브랜치 → 커밋 → push → PR
+   (rank-chart.html도 함께 커밋). 사용자가 커밋을 원치 않으면 워킹트리에 남겨둔다.
 
 ## 주의
 
