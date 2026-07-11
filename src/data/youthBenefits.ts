@@ -27,11 +27,14 @@ export const INCOME_REP: Record<IncomeBucket, number> = {
   o800: 9000000,
 };
 
+// 자격 판정 대상 4개 제도 id. 상세페이지(ProgramDetail)·가이드(BENEFIT_GUIDES)·SEO 파생이 공유.
+export type BenefitId = 'niljeo' | 'chwiup' | 'jutaek' | 'wolse';
+
 export type Cta = { kind: 'apply'; url: string } | { kind: 'internal'; to: string };
 
 // 자격 판정 대상 카드.
 export interface BenefitCard {
-  id: string;
+  id: BenefitId;
   name: string;
   category: string;
   summary: string;

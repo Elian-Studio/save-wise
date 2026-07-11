@@ -19,6 +19,30 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://choicewise.kr/youth-benefits/programs/niljeo</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://choicewise.kr/youth-benefits/programs/chwiup</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://choicewise.kr/youth-benefits/programs/jutaek</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://choicewise.kr/youth-benefits/programs/wolse</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://choicewise.kr/transit/cards/climate</loc>
     <lastmod>2026-07-07</lastmod>
     <changefreq>weekly</changefreq>

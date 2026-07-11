@@ -1,6 +1,6 @@
 import type { RouteSeo } from './head';
 import { youthSavingsSeo } from '../services/youthSavings/seo';
-import { youthBenefitsSeo } from '../services/youthBenefits/seo';
+import { youthBenefitsSeo, programSeos } from '../services/youthBenefits/seo';
 import { transitSeo, schemeSeos } from '../services/transit/seo';
 import { aboutSeo, contactSeo } from '../services/site/seo';
 
@@ -10,6 +10,7 @@ import { aboutSeo, contactSeo } from '../services/site/seo';
 export const ROUTE_SEO: RouteSeo[] = [
   youthSavingsSeo,
   youthBenefitsSeo,
+  ...programSeos,
   transitSeo,
   ...schemeSeos,
   aboutSeo,

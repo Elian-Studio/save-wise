@@ -1,4 +1,6 @@
 import type { RouteSeo } from '../../seo/head';
+import { BENEFITS, type BenefitId } from '../../data/youthBenefits';
+import { BENEFIT_GUIDES } from '../../data/youthBenefitGuides';
 
 // 가시 렌더 FAQ = FAQPage 구조화 데이터. 홈 화면에 그대로 노출되는 Q&A와 1:1 일치해야 함.
 export const YOUTH_FAQ: { q: string; a: string }[] = [
@@ -50,3 +52,60 @@ export const youthBenefitsSeo: RouteSeo = {
     faqPageLd(YOUTH_FAQ),
   ],
 };
+
+// 제도별 추가 검색어(제도명+조건/자격/신청 실수요). base 키워드에 이어 붙는다.
+const EXTRA_KEYWORDS: Record<BenefitId, string[]> = {
+  niljeo: ['청년내일저축계좌 신청기간', '자산형성 통장'],
+  chwiup: ['구직촉진수당', '국민취업지원제도 I유형'],
+  jutaek: ['청년 청약통장', '주택드림 대출'],
+  wolse: ['청년월세지원 조건', '청년 월세 지원금'],
+};
+
+// 제도별 상세 라우트(/youth-benefits/programs/:id) SEO. BENEFITS·BENEFIT_GUIDES 단일 출처에서 파생.
+export const programSeos: RouteSeo[] = BENEFITS.map((b) => {
+  const url = `https://choicewise.kr/youth-benefits/programs/${b.id}`;
+  const guide = BENEFIT_GUIDES[b.id];
+  const description = `${b.name} 조건·자격·신청방법. ${guide.eligibility.paras[0]} 지원 규모는 ${b.amountLabel}.`.slice(
+    0,
+    150,
+  );
+  const keywords = [
+    `${b.name} 조건`,
+    `${b.name} 자격`,
+    `${b.name} 신청`,
+    `${b.name} 신청방법`,
+    ...EXTRA_KEYWORDS[b.id],
+  ].join(', ');
+  return {
+    path: `/youth-benefits/programs/${b.id}`,
+    title: `${b.name} 조건·자격·신청방법 (2026)`,
+    description,
+    keywords,
+    canonical: url,
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: `${b.name} 조건·자격·신청방법`,
+        description,
+        url,
+        inLanguage: 'ko-KR',
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '홈', item: 'https://choicewise.kr/' },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: '청년 지원금 자격진단',
+            item: 'https://choicewise.kr/youth-benefits',
+          },
+          { '@type': 'ListItem', position: 3, name: b.name, item: url },
+        ],
+      },
+      faqPageLd(guide.faq),
+    ],
+  };
+});

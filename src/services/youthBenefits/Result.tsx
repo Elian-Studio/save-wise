@@ -54,6 +54,12 @@ function BenefitCardView({ item, tone }: { item: BenefitItem; tone: 'eligible' |
         </p>
       )}
       <CtaButton cta={item.cta} className="mt-5 h-auto w-full py-[15px] text-[15px] font-extrabold" />
+      <Link
+        to={`/youth-benefits/programs/${item.id}`}
+        className="mt-3 block text-center text-[13.5px] font-bold text-muted-foreground underline underline-offset-[3px] hover:text-ink"
+      >
+        조건·신청방법 자세히 →
+      </Link>
     </div>
   );
 }
@@ -100,6 +106,12 @@ export function Result({ rec, onRestart }: { rec: RecResult; onRestart: () => vo
                 cta={hero.cta}
                 className="mt-5 h-auto w-full bg-white py-[15px] text-[15px] font-extrabold text-navy hover:bg-white/90"
               />
+              <Link
+                to={`/youth-benefits/programs/${hero.id}`}
+                className="mt-3 block text-center text-[13.5px] font-bold text-white/85 underline underline-offset-[3px] hover:text-white"
+              >
+                조건·신청방법 자세히 →
+              </Link>
             </ResultHero>
             {restEligible.length > 0 && (
               <div className="mt-4 flex flex-col gap-4">
