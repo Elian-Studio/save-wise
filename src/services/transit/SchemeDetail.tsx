@@ -80,6 +80,14 @@ export function SchemeDetail() {
       </section>
 
       <div className="mx-auto max-w-[1080px] px-[18px] pt-9">
+        {/* 종료 예정 안내 배너 — endNotice 있는 제도(기후동행)만 */}
+        {scheme.endNotice && (
+          <div className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 p-5 text-amber-900">
+            <div className="text-[15px] font-extrabold">⚠ 충전 종료 안내</div>
+            <div className="mt-1.5 text-[14.5px] font-medium leading-[1.6]">{scheme.endNotice}</div>
+          </div>
+        )}
+
         {/* 이런 사람 칩 */}
         <div className="flex flex-wrap gap-2">
           {scheme.fit.map((f) => (

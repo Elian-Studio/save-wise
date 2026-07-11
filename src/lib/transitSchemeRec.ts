@@ -1,4 +1,4 @@
-// 패스픽 추천 엔진 — 순수 함수(SSR 결정적). 근거: passpick 디자인 CARDS/recommend 포팅.
+// 패스와이즈 추천 엔진 — 순수 함수(SSR 결정적). 근거: passpick 디자인 CARDS/recommend 포팅.
 // 자격(eligible) → 월 환급/절감액(benefit) → score 순으로 교통 제도를 추천한다.
 // K-패스 계열(kpass/gyeonggi/incheon)은 비율 환급과 기준금액 초과분 환급 중 유리한 쪽 자동 적용
 // (경기도 공지 gg.go.kr, 2026-01-01 시행).
@@ -10,7 +10,6 @@ export interface QuizAnswers {
   age: 'u19' | 'y' | 'y39' | 'mid' | 'sr';
   trips: 'few' | 'mid' | 'many' | 'lots';
   mode: 'metro' | 'wide' | 'gtx' | 'mix';
-  bike: 'often' | 'some' | 'no';
 }
 
 export interface SchemeRecItem {
@@ -54,28 +53,7 @@ export function recommend(a: QuizAnswers): SchemeRecResult {
   const kpassEligible = a.trips !== 'few'; // 월 15회 미만이면 계열 환급 조건 미달
   const out: SchemeRecItem[] = [];
 
-  // 기후동행카드 — 서울 전용
-  if (a.region === 'seoul') {
-    const saving = spend - 62000;
-    let score = saving > 0 ? 90 : 58;
-    if (wideMode) score -= 30;
-    if (a.bike === 'often') score += 4;
-    if (a.trips === 'lots') score += 4;
-    const reasons = ['서울 안에서 주로 다니니까 서울 전용 무제한 정기권이 딱이야'];
-    if (saving > 0) reasons.push(`지금 예상 교통비(약 ${fmt(spend)}원)보다 정기권이 ${fmt(saving)}원 싸`);
-    else reasons.push('교통비가 월 62,000원에서 멈춰서 마음 편히 탈 수 있어');
-    if (a.bike === 'often') reasons.push('따릉이 자주 타면 65,000원권으로 자전거까지 무제한이야');
-    if (youth39) reasons.push('19~39세 청년이라 월 7,000원 더 환급받아');
-    out.push({
-      id: 'climate',
-      score,
-      benefit: Math.max(saving, 0),
-      eligible: true,
-      reasons,
-      savings: saving > 0 ? `한 달에 약 ${fmt(saving)}원 아껴` : '무제한이라 마음 편히 타',
-      note: wideMode ? '신분당선·광역버스엔 적용이 안 돼서 아쉬워' : '서울 밖으로 자주 나가면 애매해져',
-    });
-  }
+  // 기후동행카드는 추천 제외 — 30일권 2026-07-31 충전 종료(서울시 공지). 상세 페이지만 유지.
 
   // K-패스 — 전국. tier: 청년(y)→youth, 어르신(sr)→senior, 그 외 general.
   if (adult) {

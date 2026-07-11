@@ -68,6 +68,19 @@ describe('SchemeDetail 상세 페이지', () => {
     expect(queryAllByRole('link', { name: /신청하러 가기/ })).toHaveLength(0);
   });
 
+  it('climate: 충전 종료 안내 배너가 렌더된다', () => {
+    const { container } = renderAt('/transit/cards/climate');
+    const text = container.textContent ?? '';
+    expect(text).toContain('충전 종료 안내'); // 배너 헤더
+    expect(text).toContain('2026년 7월 31일'); // 선불 30일권 충전 마감
+    expect(text).toContain('2026년 8월 31일'); // 후불 기후동행카드 충전 마감
+  });
+
+  it('kpass: endNotice 없는 제도는 종료 배너를 렌더하지 않는다', () => {
+    const { container } = renderAt('/transit/cards/kpass');
+    expect(container.textContent ?? '').not.toContain('충전 종료 안내');
+  });
+
   it('잘못된 id는 홈(/)으로 리다이렉트', () => {
     const { getByText, container } = renderAt('/transit/cards/nope');
     expect(getByText('TRANSIT_HOME_PROBE')).toBeTruthy();

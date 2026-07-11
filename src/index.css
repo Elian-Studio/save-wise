@@ -9,7 +9,7 @@
    primary·fin-green·fin-blue·muted-foreground는 WCAG AA(4.5:1)를 만족하도록 조정됨. */
 :root {
   --radius: 0.75rem;
-  /* 사이트 전역 표면 = 웜 크림(패스픽 팔레트로 통일). 중립 표면·보더만 데우고
+  /* 사이트 전역 표면 = 웜 크림(패스와이즈 팔레트로 통일). 중립 표면·보더만 데우고
      primary·accent·fin-*·navy 의미색은 유지. 다크(.dark)는 이미 통일돼 변경 없음. */
   --background: #f6f5f0;
   --foreground: #191f28;
@@ -182,7 +182,7 @@ input.range::-moz-range-thumb {
   cursor: pointer;
 }
 
-/* 패스픽 로고 리빌 — 세 점 등장→유영→수렴→정렬, 빛 번짐과 워드마크.
+/* 패스와이즈 로고 리빌 — 세 점 등장→유영→수렴→정렬, 빛 번짐과 워드마크.
    SSR: 마크업이 최종 상태를 렌더, 키프레임(fill both)이 여정을 재생.
    애니메이션 없으면 완성된 로고만 보임. */
 .pp-reveal {
