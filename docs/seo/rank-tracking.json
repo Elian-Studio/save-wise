@@ -412,6 +412,294 @@
         "구글 서치콘솔 인덱싱 상태 확인 필요",
         "K패스 계산기 전용 페이지 미구현 — 구현 시 'K패스 계산기' 계열 재측정"
       ]
+    },
+    {
+      "date": "2026-07-11-2",
+      "context": "같은 날 2차 측정(15:39, 22종 전체). 베이스라인 이후 머지: PR #33(climate title 종료형)·#34(다크모드 fix)·#35(순위 베이스라인)·#36·#37(청년혜택 자격진단+제도별 상세 4페이지, SEO Phase B). 청년지원 5종 키워드는 이번이 베이스라인. 네이버가 홈을 신 title로 재수집한 것이 확인된 시점.",
+      "results": {
+        "교통카드 추천": {
+          "naver": {
+            "rank": 26,
+            "of": 30,
+            "matchedUrl": "https://choicewise.kr/",
+            "note": "신 title '교통카드 추천 — K-패스·경기패스 30초 진단 (2026)'로 재수집됨(설명에 제도 5종+기후동행 충전 종료 안내). 오전 대비 29→26",
+            "top3": [
+              "card-gorilla.com",
+              "tmoney.co.kr(뉴스)",
+              "card-search.naver.com"
+            ]
+          },
+          "google": {
+            "rank": null,
+            "of": 10,
+            "queryUsed": "교통카드 추천 2026",
+            "top3": [
+              "ajd.co.kr",
+              "card-gorilla.com",
+              "card-gorilla.com"
+            ],
+            "note": "tmpay.tmoney 추천 서비스 여전히 상위권. finchecker.kr·family-paybank.com 신규 노출"
+          }
+        },
+        "교통카드 비교": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "shinhancard.com",
+              "help.3o3.co.kr",
+              "banksalad.com"
+            ]
+          }
+        },
+        "기후동행카드 종료": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "opengov.seoul.go.kr",
+              "news.seoul.go.kr(30일권 종료 공지)",
+              "news.seoul.go.kr(운영종료 FAQ)"
+            ],
+            "note": "언론 대량 진입(위키트리·뉴시스·아주경제·더팩트·news1). 블로그 mintlight 9위 유지"
+          },
+          "google": {
+            "rank": null,
+            "of": 10,
+            "top3": [
+              "namu.wiki",
+              "news.seoul.go.kr(운영종료 FAQ)",
+              "news.tf.co.kr"
+            ],
+            "note": "tripsoda.com 4위 유지 — 소형 사이트 진입 가능 SERP 지속"
+          }
+        },
+        "기후동행카드 충전 종료": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "news.seoul.go.kr(페이백 FAQ)",
+              "news.seoul.go.kr(운영종료 FAQ)",
+              "news.seoul.go.kr(기본공통)"
+            ]
+          }
+        },
+        "K패스 기후동행카드 비교": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea.kr",
+              "mediahub.seoul.go.kr",
+              "tossbank.com"
+            ],
+            "note": "lifefit.kr/tools/kpass-climate 20위권 유지"
+          }
+        },
+        "K패스 계산기": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "gg.go.kr(공식 계산기)",
+              "calc.oasiswiki.com",
+              "plcy.kr"
+            ]
+          }
+        },
+        "패스와이즈": {
+          "naver": {
+            "rank": null,
+            "of": 10,
+            "note": "Aon PathWise(보험 계리) 점유 지속 — 변화 없음"
+          }
+        },
+        "choicewise": {
+          "naver": {
+            "rank": 2,
+            "of": 10,
+            "matchedUrl": "https://choicewise.kr/contact",
+            "note": "/contact 신규 인덱스 2위 + /about 4위. 인덱스 2페이지로 증가(total 17→22). /about 스니펫은 여전히 구 '패스픽' — 재수집 필요",
+            "top3": [
+              "scamadviser.com",
+              "choicewise.kr/contact",
+              "academic.naver.com"
+            ]
+          },
+          "google": {
+            "rank": null,
+            "of": 10,
+            "queryUsed": "site:choicewise.kr",
+            "note": "구글 인덱스 여전히 0건. 브랜드 SERP는 choicewise.app 점유"
+          }
+        },
+        "K패스 교통카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea-pass.kr(공식)",
+              "card.kbcard.com",
+              "incheon.go.kr"
+            ]
+          }
+        },
+        "K패스 교통카드 추천": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "card.kbcard.com",
+              "banksalad.com",
+              "blog.naver.com(개인)"
+            ]
+          }
+        },
+        "K패스 체크카드 비교": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "card.kbcard.com",
+              "weolbu.com(커뮤니티)",
+              "tossbank.com"
+            ]
+          }
+        },
+        "청년 교통카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "mediahub.seoul.go.kr",
+              "youth.seoul.go.kr",
+              "youth.seoul.go.kr"
+            ]
+          }
+        },
+        "후불 교통카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "card.kbcard.com",
+              "namu.wiki",
+              "ko.wikipedia.org"
+            ]
+          }
+        },
+        "후불 교통카드 추천": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "ko.wikipedia.org",
+              "banksalad.com",
+              "blog.naver.com(개인)"
+            ]
+          }
+        },
+        "경기패스 카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea-pass.kr(공식)",
+              "gg.go.kr(공식)",
+              "gccity.go.kr(공식)"
+            ]
+          }
+        },
+        "인천 i패스 카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea-pass.kr(공식)",
+              "incheon.go.kr(공식)",
+              "incheon.go.kr(공식)"
+            ]
+          }
+        },
+        "K패스 체크카드 비교 2026": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "ajd.co.kr",
+              "card-gorilla.com",
+              "card-gorilla.com"
+            ],
+            "note": "cha4se 티스토리·네이버블로그 동시 랭크 — 연도형 title 유효 지속"
+          }
+        },
+        "청년지원금": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "myhome.go.kr(월세 자가진단)",
+              "gg.go.kr(청년기본소득)",
+              "bokjiro.go.kr(모의계산)"
+            ],
+            "note": "신규 베이스라인. 정부 포털(온통청년·복지로·고용24) 점유 대형 헤드 — 정면 승부 어려움"
+          }
+        },
+        "국민취업지원제도 조건": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "work24.go.kr(제도안내)",
+              "work24.go.kr(취업지원신청)",
+              "bokjiro.go.kr"
+            ],
+            "note": "신규 베이스라인. 공식 점유이나 gg24.kr·motoday.co.kr·moneyeats.com 등 소형 사이트 중위권 진입 확인 — 진입 가능 SERP"
+          }
+        },
+        "청년월세지원 조건": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "myhome.go.kr(자가진단)",
+              "bokjiro.go.kr(지원사업)",
+              "m.myhome.go.kr"
+            ],
+            "note": "신규 베이스라인. economicsignal.co.kr·gobang.kr·blog.3o3.co.kr 등 소형·콘텐츠 사이트 진입 확인"
+          }
+        },
+        "청년내일저축계좌 조건": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea.kr(정책뉴스)",
+              "mohw.go.kr(보도자료)",
+              "youth.seoul.go.kr"
+            ],
+            "note": "신규 베이스라인. tossbank·welfarehello·minmong 티스토리 등 진입 — '조건' 롱테일은 소형 진입 여지"
+          }
+        },
+        "청년 청약통장": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "molit.go.kr(청년주택드림)",
+              "youthcenter.go.kr",
+              "myhome.go.kr"
+            ],
+            "note": "신규 베이스라인. SERP가 '청년주택드림청약통장' 중심 — 제품명 포함 키워드로 추적 조정 검토"
+          }
+        }
+      },
+      "actions_at_snapshot": [
+        "네이버 서치어드바이저: /about 재수집 요청(구 '패스픽' 스니펫 잔존), 청년혜택 신규 4페이지 수집 요청",
+        "구글 서치콘솔: 인덱싱 0건 지속 — sitemap 제출·색인 요청 확인 필요",
+        "'청년 청약통장' → '청년주택드림 청약통장' 표현형 재검증(데이터랩) 후 키워드 조정 검토"
+      ]
     }
   ]
 }
