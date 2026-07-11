@@ -94,12 +94,12 @@ describe('recommend — 청년 지원금 자격진단', () => {
     expect(ids).not.toContain('chwiup');
   });
 
-  it('월세는 자격을 충족해도 [R] 접수 미확정이라 eligible이 아니라 likely', () => {
+  it('월세는 자격을 충족해도 2026 신규 신청 마감(3.30~5.29)이라 eligible이 아니라 likely', () => {
     const r = recommend(base);
     const wl = find(r.likely, 'wolse');
     expect(wl?.status).toBe('likely');
     expect(wl!.caveat).toBeTruthy();
-    expect(wl!.reasons.some((x) => x.includes('접수') && x.includes('마이홈'))).toBe(true);
+    expect(wl!.reasons.some((x) => x.includes('마감') && x.includes('마이홈'))).toBe(true);
     expect(find(r.eligible, 'wolse')).toBeUndefined();
   });
 

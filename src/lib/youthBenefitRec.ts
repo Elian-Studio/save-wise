@@ -176,7 +176,7 @@ export function recommend(a: QuizAnswers): Result {
           ? `청년가구 소득이 중위 약 ${pct}%로 60% 이하 기준에 들어와요`
           : `청년가구 소득이 중위 약 ${pct}%로 기준선(60%)에 가까워 확인이 필요해요`,
       );
-      reasons.push('2026년 신규 접수 일정이 확정되지 않았어요. 마이홈포털에서 접수 여부를 확인하세요');
+      reasons.push('2026년 신규 신청(3.30~5.29)이 마감됐어요. 추가 모집 여부를 마이홈포털에서 확인하세요');
       push(makeItem('wolse', 'likely', reasons));
     }
   }
