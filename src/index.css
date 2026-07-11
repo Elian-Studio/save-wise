@@ -137,7 +137,7 @@
   /* 접기(progressive disclosure) 요약 헤더 — 기본 닫힘 네이티브 <details>용.
      콘텐츠는 닫혀도 DOM에 남아 프리렌더/크롤 유지. <details className="group">와 함께 사용. */
   summary.disc {
-    @apply flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-lg border border-line bg-secondary px-4 py-3 text-[15px] font-semibold text-navy transition-colors;
+    @apply flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-lg border border-line bg-secondary px-4 py-3 text-[15px] font-semibold text-ink transition-colors;
   }
   summary.disc:hover {
     @apply bg-accent;
