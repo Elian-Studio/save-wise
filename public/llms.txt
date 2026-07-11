@@ -27,7 +27,7 @@
 - [후불 교통카드 총정리](https://choicewise.kr/transit/cards/postpaid) — 충전·조건 없이 찍고 타는 신용·체크카드. 가끔 타는 사람에게 적합.
 - [서비스 소개](https://choicewise.kr/about) — choicewise가 무엇을 하는지, 데이터 출처·갱신 정책·한계 고지.
 - [문의](https://choicewise.kr/contact) — 데이터 오류·제도 변경 제보, 제휴 문의.
-- [개인정보처리방침](https://choicewise.kr/privacy.html)
+- [개인정보처리방침](https://choicewise.kr/privacy)
 
 ## 출처
 
