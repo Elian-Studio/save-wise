@@ -44,9 +44,9 @@ function BenefitCardView({ item, tone }: { item: BenefitItem; tone: 'eligible' |
         )}
       </div>
       <h3 className="mt-2.5 text-[20px] font-extrabold tracking-[-0.02em] text-ink">{item.name}</h3>
-      <div className="mt-1 text-[15px] font-bold text-navy">{item.amountLabel}</div>
+      <div className="mt-1 text-[15px] font-bold text-ink">{item.amountLabel}</div>
       <div className="mt-4">
-        <ReasonList reasons={item.reasons} variant="check" accent="var(--navy)" />
+        <ReasonList reasons={item.reasons} variant="check" accent="var(--ink)" />
       </div>
       {item.caveat && (
         <p className="mt-3 rounded-lg bg-secondary px-3 py-2 text-[13.5px] font-medium text-muted-foreground">
@@ -142,7 +142,7 @@ export function Result({ rec, onRestart }: { rec: RecResult; onRestart: () => vo
               </div>
               <div className="mt-2 text-[17px] font-extrabold text-ink">{r.name}</div>
               <p className="mt-1 text-[14px] font-medium text-muted-foreground">{r.summary}</p>
-              <span className="mt-2 inline-block text-[14px] font-bold text-navy">자세히 보기 →</span>
+              <span className="mt-2 inline-block text-[14px] font-bold text-ink">자세히 보기 →</span>
             </Link>
           ))}
         </div>
