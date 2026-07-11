@@ -26,7 +26,7 @@ export function Contact() {
       <h2 className="mt-9 text-lg font-bold text-ink">회신 안내</h2>
       <p className="mt-3">
         영업일 기준으로 확인 후 회신하도록 노력하고 있습니다. 개인정보 처리에 관한 내용은{' '}
-        <a className="underline hover:text-foreground" href="/privacy.html">
+        <a className="underline hover:text-foreground" href="/privacy">
           개인정보처리방침
         </a>
         을 참고해 주세요.

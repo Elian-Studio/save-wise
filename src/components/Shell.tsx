@@ -59,7 +59,7 @@ export function Shell() {
             서비스는 투자·금융 자문이 아닙니다.
           </p>
           <p className="mt-3 flex items-center gap-3">
-            <a className="inline-block py-1.5 underline hover:text-foreground" href="/privacy.html">
+            <a className="inline-block py-1.5 underline hover:text-foreground" href="/privacy">
               개인정보처리방침
             </a>
             <span aria-hidden="true">·</span>
