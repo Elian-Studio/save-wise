@@ -18,9 +18,14 @@
     { "query": "K패스 교통카드", "intent": "사용자 제안(2026-07-11). 실사용자 검색 패턴 '제품명+교통카드'. 수요 대형(데이터랩 상대치 32~100, K패스 본체급)", "targetPage": "/transit/cards/kpass" },
     { "query": "K패스 교통카드 추천", "intent": "사용자 제안. '교통카드 추천'보다 10~20배 수요(상대치 0.56~2.06)", "targetPage": "/transit/cards/kpass" },
     { "query": "K패스 체크카드 비교", "intent": "사용자 제안. 수요 중형(체크카드 계열 상대치 5.5~20). 카드사별 비교 페이지 부재 — 콘텐츠 갭", "targetPage": "(미구현 — TRANSIT_CARDS 데이터로 제작 가능)" },
-    { "query": "청년 교통카드", "intent": "연령 의도의 실제 검색형(상대치 1.3~6.8). 참고: 사용자 제안 '20대/30대 교통카드'는 데이터랩 수요 ~0(20대 0.004, 30대 무데이터)이라 이 키워드로 대체 추적", "targetPage": "/" }
+    { "query": "청년 교통카드", "intent": "연령 의도의 실제 검색형(상대치 1.3~6.8). 참고: 사용자 제안 '20대/30대 교통카드'는 데이터랩 수요 ~0(20대 0.004, 30대 무데이터)이라 이 키워드로 대체 추적", "targetPage": "/" },
+    { "query": "후불 교통카드", "intent": "제도 5종 전수 적용(사용자 피드백 2차). 대형 헤드(상대치 17~100) — 놓치고 있던 최대 키워드", "targetPage": "/transit/cards/postpaid" },
+    { "query": "후불 교통카드 추천", "intent": "제도 5종 전수 적용. 미드테일(상대치 0.15~1.0)", "targetPage": "/transit/cards/postpaid" },
+    { "query": "경기패스 카드", "intent": "제도 5종 전수 적용. 중형(상대치 0.6~24). '경기패스 체크카드'는 수요 미미(~0.1-3.5)라 미추적", "targetPage": "/transit/cards/gyeonggi" },
+    { "query": "인천 i패스 카드", "intent": "제도 5종 전수 적용. 소중형(상대치 0.4~4)", "targetPage": "/transit/cards/incheon" },
+    { "query": "K패스 체크카드 비교 2026", "intent": "사용자 제시 실검색 예시. 연도 접미 패턴 — SERP 상위 전부 제목에 '2026' 포함, 소형 사이트(티스토리·개인블로그) 진입 확인", "targetPage": "(미구현 — 체크카드 비교 페이지)" }
   ],
-  "keyword_selection_notes": "2026-07-11 사용자 피드백 반영: 키워드는 카테고리어('교통카드 추천')가 아니라 실사용자 검색 패턴(제품명+수식어: 'K패스 교통카드 추천', 'K패스 체크카드 비교')에서 출발한다. 연령 의도는 '20대/30대 교통카드'가 아니라 '청년 교통카드'로 검색됨(데이터랩 검증).",
+  "keyword_selection_notes": "2026-07-11 사용자 피드백 반영: ① 키워드는 카테고리어('교통카드 추천')가 아니라 실사용자 검색 패턴(제품명+수식어: 'K패스 교통카드 추천', 'K패스 체크카드 비교')에서 출발한다. ② 이 패턴은 서비스가 다루는 제도 5종(기후동행·K패스·경기패스·인천I패스·후불카드) 전체에 적용한다 — 예시로 받은 제품 하나에만 적용하지 말 것. 기후동행은 종료 국면이라 발급형 대신 종료형 키워드로 커버. ③ 연도 접미('… 2026')는 실검색 패턴이며 페이지 title의 '(2026)' 표기가 이를 조준한다(연도 갱신 시 title 일괄 갱신 필요). ④ 연령 의도는 '20대/30대 교통카드'가 아니라 '청년 교통카드'로 검색됨(데이터랩 검증).",
   "snapshots": [
     {
       "date": "2026-07-11",
@@ -64,6 +69,21 @@
         },
         "청년 교통카드": {
           "naver": { "rank": null, "of": 30, "top3": ["mediahub.seoul.go.kr", "youth.seoul.go.kr", "youth.seoul.go.kr"], "note": "서울시 청년정책 포털 점유. 지자체별 청년 교통비 지원과 혼재된 SERP" }
+        },
+        "후불 교통카드": {
+          "naver": { "rank": null, "of": 30, "top3": ["card.kbcard.com", "namu.wiki", "ko.wikipedia.org"], "note": "카드사 FAQ·위키 점유. '후불교통카드란' 정보성 의도 중심 — postpaid 상세 페이지 타깃 후보" }
+        },
+        "후불 교통카드 추천": {
+          "naver": { "rank": null, "of": 30, "top3": ["ko.wikipedia.org", "banksalad.com", "blog.naver.com(개인)"], "note": "청소년 후불카드·하이패스와 혼재. ajd.co.kr 등 콘텐츠 사이트 진입" }
+        },
+        "경기패스 카드": {
+          "naver": { "rank": null, "of": 30, "top3": ["korea-pass.kr(공식)", "gg.go.kr(공식)", "gccity.go.kr(공식)"], "note": "공식(경기도·K패스) 점유율 매우 높음 — 정면 승부 어려운 SERP" }
+        },
+        "인천 i패스 카드": {
+          "naver": { "rank": null, "of": 30, "top3": ["korea-pass.kr(공식)", "incheon.go.kr(공식)", "incheon.go.kr(공식)"], "note": "공식 점유. ajd.co.kr 콘텐츠가 중위권 진입" }
+        },
+        "K패스 체크카드 비교 2026": {
+          "naver": { "rank": null, "of": 30, "top3": ["ajd.co.kr", "card-gorilla.com", "card-gorilla.com"], "note": "상위권 전부 제목에 '2026' 포함. 티스토리·개인블로그도 상위 진입 — 연도형 title의 전용 비교 페이지로 승부 가능한 SERP" }
         }
       },
       "actions_at_baseline": [
