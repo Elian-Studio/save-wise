@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Shell } from './components/Shell';
 import { YouthSavings } from './services/youthSavings/YouthSavings';
+import { YouthBenefits } from './services/youthBenefits/YouthBenefits';
 import { Transit } from './services/transit/Transit';
 import { SchemeDetail } from './services/transit/SchemeDetail';
 import { About } from './services/site/About';
@@ -15,6 +16,7 @@ export function AppRoutes() {
       <Route element={<Shell />}>
         <Route path="/" element={<Transit />} />
         <Route path="/youth-savings" element={<YouthSavings />} />
+        <Route path="/youth-benefits" element={<YouthBenefits />} />
         <Route path="/transit/cards/:id" element={<SchemeDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />

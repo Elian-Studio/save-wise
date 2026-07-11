@@ -43,6 +43,9 @@ export function Shell() {
           <NavItem to="/youth-savings" active={pathname === '/youth-savings'}>
             청년적금 갈아타기
           </NavItem>
+          <NavItem to="/youth-benefits" active={pathname === '/youth-benefits'}>
+            청년 지원금
+          </NavItem>
           <ThemeToggle />
         </div>
       </nav>

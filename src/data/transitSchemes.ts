@@ -1,6 +1,7 @@
 // 패스와이즈 교통 제도 단일 출처. passpick 디자인 CARDS 포팅 + TRANSIT_CARDS 연계.
 // 한글 카피는 디자인 원문 그대로. picks는 실존 카드(TRANSIT_CARDS.id) 또는 비-카드 발급수단(external)을 가리킨다.
 import type { QuizAnswers } from '../lib/transitSchemeRec';
+import type { QuizQuestion } from '../components/quiz/Quiz';
 
 export type SchemeId = 'climate' | 'kpass' | 'gyeonggi' | 'incheon' | 'postpaid';
 
@@ -325,17 +326,8 @@ export const SCHEMES: Scheme[] = [
   },
 ];
 
-// 추천 질문 4개. option v는 QuizAnswers의 해당 키 리터럴 유니온과 일치.
-export type QuizQuestion = {
-  [K in keyof QuizAnswers]: {
-    id: K;
-    title: string;
-    hint?: string;
-    options: { v: QuizAnswers[K]; label: string; desc?: string }[];
-  };
-}[keyof QuizAnswers];
-
-export const QUIZ_QUESTIONS: QuizQuestion[] = [
+// 추천 질문 4개. option v는 QuizAnswers의 해당 키 리터럴 유니온과 일치(공용 QuizQuestion 제네릭으로 강제).
+export const QUIZ_QUESTIONS: QuizQuestion<QuizAnswers>[] = [
   {
     id: 'region',
     title: '어디 살아?',
