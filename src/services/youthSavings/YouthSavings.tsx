@@ -103,6 +103,23 @@ export function YouthSavings() {
           </summary>
           <BankRanking I={inputs} />
         </details>
+
+        {/* 은행별 상세 허브로 — 14개 은행 최고금리·우대조건 비교(pSEO 스포크).
+            ponytail: 이 컴포넌트는 테스트에서 Router 없이 단독 렌더되므로 <Link> 대신 내부 <a>. 별도 페이지 이동이라 풀 리로드 허용. */}
+        <a
+          href="/youth-savings/banks"
+          className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-line bg-card px-5 py-4 transition hover:border-navy"
+        >
+          <div>
+            <div className="text-[15px] font-extrabold text-ink">청년미래적금 14개 은행 금리·우대조건 비교 →</div>
+            <div className="mt-0.5 text-[13px] font-medium text-muted-foreground">
+              은행별 최고금리와 급여·카드·도약연계 우대 항목을 한눈에.
+            </div>
+          </div>
+          <span aria-hidden className="text-[20px] text-muted-foreground">
+            ›
+          </span>
+        </a>
         {!isNew && (
           <details className="group mt-7">
             <summary className="disc">

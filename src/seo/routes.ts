@@ -1,5 +1,5 @@
 import type { RouteSeo } from './head';
-import { youthSavingsSeo } from '../services/youthSavings/seo';
+import { youthSavingsSeo, banksHubSeo, bankSeos } from '../services/youthSavings/seo';
 import { youthBenefitsSeo, programSeos } from '../services/youthBenefits/seo';
 import { transitSeo, schemeSeos } from '../services/transit/seo';
 import { aboutSeo, contactSeo } from '../services/site/seo';
@@ -9,6 +9,8 @@ import { aboutSeo, contactSeo } from '../services/site/seo';
 // aboutSeo/contactSeo = 신뢰 페이지(/about, /contact).
 export const ROUTE_SEO: RouteSeo[] = [
   youthSavingsSeo,
+  banksHubSeo,
+  ...bankSeos,
   youthBenefitsSeo,
   ...programSeos,
   transitSeo,
