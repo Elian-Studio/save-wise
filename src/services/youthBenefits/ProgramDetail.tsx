@@ -63,9 +63,42 @@ export function ProgramDetail() {
           </div>
         )}
 
+        {/* 정의 블록 — AI 검색 인용 대상(자기완결 한 문단). 히어로 요약과 별개로 사실 정의를 명확히 노출. */}
+        {guide.definition && (
+          <p className="mb-6 rounded-2xl border-l-4 border-navy bg-muted/40 px-5 py-4 text-[15.5px] font-semibold leading-[1.65] text-ink">
+            {guide.definition}
+          </p>
+        )}
+
+        {/* 핵심 요약 표 — '조건/자격' 검색의 추출 단위. */}
+        {guide.specs && (
+          <div className="mb-9">
+            <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">한눈에 보는 핵심 요건</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-[14.5px]">
+                <tbody>
+                  {guide.specs.map((s) => (
+                    <tr key={s.label} className="border-b border-line">
+                      <th
+                        scope="row"
+                        className="w-[34%] py-3 pr-4 text-left align-top font-extrabold text-ink"
+                      >
+                        {s.label}
+                      </th>
+                      <td className="py-3 align-top font-medium leading-[1.55] text-foreground/90">
+                        {s.value}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* 누가 받을 수 있나 */}
         <div className="mt-2">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">{guide.eligibility.heading}</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">{guide.eligibility.heading}</h2>
           <div className="flex flex-col gap-3">
             {guide.eligibility.paras.map((p) => (
               <p key={p} className="text-[15px] font-medium leading-[1.65] text-foreground/90">
@@ -77,7 +110,7 @@ export function ProgramDetail() {
 
         {/* 신청, 자세히 */}
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">신청, 자세히 보면</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">신청, 자세히 보면</h2>
           <div className="flex flex-col">
             {guide.applyDetail.map((s, i) => (
               <div key={s.step} className="flex items-start gap-3.5 border-b border-line py-3.5">
@@ -97,7 +130,7 @@ export function ProgramDetail() {
 
         {/* 주의할 점 */}
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">주의할 점</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">주의할 점</h2>
           <ul className="flex flex-col gap-2.5">
             {guide.cautions.map((c) => (
               <li key={c} className="flex items-start gap-2.5">
@@ -113,7 +146,7 @@ export function ProgramDetail() {
 
         {/* FAQ */}
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">자주 묻는 질문</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">자주 묻는 질문</h2>
           <div className="flex flex-col gap-3">
             {guide.faq.map((f) => (
               <div key={f.q} className="rounded-2xl border border-line bg-card p-5">

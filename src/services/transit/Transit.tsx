@@ -118,6 +118,20 @@ export function Transit() {
         >
           5개 카드 한눈에 비교하기
         </button>
+        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+          <Link
+            to="/transit/cards/compare/check"
+            className="rounded-full border border-line bg-card px-4 py-2.5 text-[14px] font-semibold text-ink transition hover:-translate-y-px hover:border-navy"
+          >
+            K-패스 체크카드 비교
+          </Link>
+          <Link
+            to="/transit/cards/compare/credit"
+            className="rounded-full border border-line bg-card px-4 py-2.5 text-[14px] font-semibold text-ink transition hover:-translate-y-px hover:border-navy"
+          >
+            K-패스 신용카드 비교
+          </Link>
+        </div>
 
         <HomeGuide onStartQuiz={startQuiz} />
       </div>

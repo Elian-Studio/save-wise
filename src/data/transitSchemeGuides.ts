@@ -6,6 +6,10 @@ import { KPASS, CLIMATE, type AgeTier } from './transitCards';
 import { kpassRefund } from '../lib/transitSchemeRec';
 
 export interface SchemeGuide {
+  // 자기완결 정의 블록(1~2문장) — AI 검색 엔진이 "이 카드/제도 뭐야"에 인용하는 추출 단위. 히어로 아래 노출.
+  definition?: string;
+  // 핵심 요건·혜택 요약 표 — "조건/비교" 검색의 추출 단위. 값은 eligibility 산문·transitSchemes에서만 인용(창작 금지).
+  specs?: { label: string; value: string }[];
   eligibility: { heading: string; paras: string[] };
   applyDetail: { step: string; detail: string }[];
   calcExample: { title: string; rows: { label: string; value: string }[]; note: string };
@@ -45,6 +49,16 @@ function kpassExample(opts: {
 
 export const SCHEME_GUIDES: Record<SchemeId, SchemeGuide> = {
   climate: {
+    definition:
+      '기후동행카드는 서울 지하철·시내버스를 무제한으로 타는 정기권이야. 2026-07-03 서울시 공지로 충전이 종료돼 — 선불 30일권은 2026년 7월 31일, 후불은 8월 31일까지만 충전할 수 있고, 만료 뒤엔 전국 K-패스로 갈아타야 해.',
+    specs: [
+      { label: '서비스', value: '서울 지하철·시내버스 무제한 정기권' },
+      { label: '선불 30일권 충전 마감', value: '2026-07-31' },
+      { label: '후불 충전 마감', value: '2026-08-31' },
+      { label: '이미 충전한 카드', value: '만료일까지 이용 가능' },
+      { label: '청년(19~39세) 환급', value: '6월 충전분까지 (월 7,000원)' },
+      { label: '만료 후 대안', value: '전국 K-패스 전환 (경기·인천은 경기패스·I-패스 자동)' },
+    ],
     eligibility: {
       heading: '이제 어떻게 되나 (충전 종료)',
       paras: [
@@ -105,6 +119,16 @@ export const SCHEME_GUIDES: Record<SchemeId, SchemeGuide> = {
   },
 
   kpass: {
+    definition:
+      'K-패스는 전국 어디서나 쓰는 대중교통 사후 환급 제도야. 만 19세 이상이면 지역과 상관없이 누구나 가입할 수 있고, 월 15번 이상 타면 이용액의 20~53.3%를 다음 달에 돌려받아.',
+    specs: [
+      { label: '대상', value: '만 19세 이상 (지역 무관, 전국)' },
+      { label: '환급률', value: '일반 20% · 청년(19~34세)·어르신(65세+) 30% · 저소득 53.3%' },
+      { label: '환급 조건', value: '월 15회 이상 이용' },
+      { label: '환급 방식', value: '비율 환급 vs 기준금액 초과분 중 유리한 쪽 자동(2026~)' },
+      { label: '지급 시기', value: '다음 달' },
+      { label: '신청', value: 'K-패스 누리집·앱 회원가입 + 제휴 카드 발급' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [
@@ -169,6 +193,16 @@ export const SCHEME_GUIDES: Record<SchemeId, SchemeGuide> = {
   },
 
   gyeonggi: {
+    definition:
+      'The 경기패스는 경기도민을 위한 K-패스 업그레이드야. 경기도 주소로 K-패스에 가입하면 자동 적용되고, 월 15번만 넘기면 횟수 제한 없이 전부 환급 대상이라 많이 탈수록 유리해.',
+    specs: [
+      { label: '대상', value: '경기도 주소 만 19세 이상 (K-패스 가입 시 자동 적용)' },
+      { label: '환급 횟수', value: '무제한 (월 15회 초과분 전부)' },
+      { label: '청년 기준', value: '만 19~39세 30% (K-패스는 34세까지)' },
+      { label: '환급률', value: '일반 20% · 청년/어르신 30% · 3자녀 50% · 저소득 53.3%' },
+      { label: '추가 혜택', value: '6~18세 자녀 연 최대 24만원 교통비 지원' },
+      { label: '신청', value: 'K-패스 회원가입(자동 전환) + 제휴 카드' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [
@@ -232,6 +266,16 @@ export const SCHEME_GUIDES: Record<SchemeId, SchemeGuide> = {
   },
 
   incheon: {
+    definition:
+      '인천 I-패스는 인천시민을 위한 K-패스 업그레이드야. 인천 주소로 K-패스에 가입하면 자동 적용되고, 환급 횟수 제한 없이 청년은 만 39세까지 30%를 돌려받아. 인천↔서울 광역버스·GTX-B도 환급 대상이야.',
+    specs: [
+      { label: '대상', value: '인천 주소 만 19세 이상 (K-패스 가입 시 자동 적용)' },
+      { label: '환급 횟수', value: '무제한 (월 15회 초과분 전부)' },
+      { label: '청년 기준', value: '만 19~39세 30%' },
+      { label: '어르신', value: '65세 이상 30% 보장' },
+      { label: '환급 대상', value: '인천↔서울 광역버스·GTX-B 포함' },
+      { label: '신청', value: 'K-패스 회원가입(자동 전환) + 제휴 카드' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [
@@ -295,6 +339,16 @@ export const SCHEME_GUIDES: Record<SchemeId, SchemeGuide> = {
   },
 
   postpaid: {
+    definition:
+      '후불 교통카드는 충전도 회원가입도 없이 그냥 찍고 타는 신용·체크카드야. 나이·지역 조건이 없어 누구나 쓸 수 있고, 정부 환급 대신 카드사 자체 대중교통 할인(전월 실적 충족 시 5~15%)만 있어.',
+    specs: [
+      { label: '대상', value: '누구나 (나이·지역 조건 없음)' },
+      { label: '정부 환급', value: '없음 (K-패스와 별개)' },
+      { label: '카드사 할인', value: '대중교통 5~15% (전월 실적 충족 시)' },
+      { label: '충전·회원가입', value: '불필요' },
+      { label: '적합 대상', value: '월 15회 미만 이용자, 조건이 번거로운 사람' },
+      { label: '신청', value: '카드사 앱에서 후불교통 신용·체크카드 발급' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [

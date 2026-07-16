@@ -1,7 +1,7 @@
 import type { RouteSeo } from './head';
-import { youthSavingsSeo } from '../services/youthSavings/seo';
+import { youthSavingsSeo, banksHubSeo, bankSeos } from '../services/youthSavings/seo';
 import { youthBenefitsSeo, programSeos } from '../services/youthBenefits/seo';
-import { transitSeo, schemeSeos } from '../services/transit/seo';
+import { transitSeo, schemeSeos, cardCompareSeos } from '../services/transit/seo';
 import { aboutSeo, contactSeo } from '../services/site/seo';
 
 // 프리렌더 대상 라우트 목록(순서 무관). '/'(transit)는 dist/index.html, 나머지는 dist/<path>/index.html.
@@ -9,10 +9,13 @@ import { aboutSeo, contactSeo } from '../services/site/seo';
 // aboutSeo/contactSeo = 신뢰 페이지(/about, /contact).
 export const ROUTE_SEO: RouteSeo[] = [
   youthSavingsSeo,
+  banksHubSeo,
+  ...bankSeos,
   youthBenefitsSeo,
   ...programSeos,
   transitSeo,
   ...schemeSeos,
+  ...cardCompareSeos,
   aboutSeo,
   contactSeo,
 ];

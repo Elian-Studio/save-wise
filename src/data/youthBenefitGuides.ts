@@ -4,6 +4,10 @@
 import type { BenefitId } from './youthBenefits';
 
 export interface BenefitGuide {
+  // 자기완결 정의 블록(1~2문장) — AI 검색 엔진이 "제도명이 뭐야"에 인용하는 추출 단위. 히어로 바로 아래 노출.
+  definition?: string;
+  // 핵심 요건·혜택 요약 표 — "조건/자격" 검색의 추출 단위. 값은 eligibility 산문·youthBenefits.ts에서만 인용(창작 금지).
+  specs?: { label: string; value: string }[];
   eligibility: { heading: string; paras: string[] };
   applyDetail: { step: string; detail: string }[];
   cautions: string[];
@@ -14,6 +18,17 @@ export interface BenefitGuide {
 
 export const BENEFIT_GUIDES: Record<BenefitId, BenefitGuide> = {
   niljeo: {
+    definition:
+      '청년내일저축계좌는 일하는 저소득 청년의 목돈 마련을 돕는 자산형성 통장이야. 만 15~39세 청년이 월 10만원을 저축하면 정부가 월 30만원을 매칭해줘서, 3년 만기까지 유지하면 정부 적립금만 1,080만원이 쌓여.',
+    specs: [
+      { label: '대상 연령', value: '만 15~39세' },
+      { label: '소득 기준', value: '가구 중위소득 50% 이하 + 본인 월 근로·사업소득 10만원 이상' },
+      { label: '본인 저축', value: '월 10만원' },
+      { label: '정부 매칭', value: '월 30만원' },
+      { label: '만기 수령', value: '3년 유지 시 정부 적립금 1,080만원 + 본인 저축·이자' },
+      { label: '신청', value: '복지로 자산형성포털 · 읍면동 주민센터 (모집 기간만)' },
+      { label: '제외 대상', value: '무소득자, 2026년부터 중위 50~100%(차상위초과) 신규 모집 중단' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [
@@ -65,6 +80,17 @@ export const BENEFIT_GUIDES: Record<BenefitId, BenefitGuide> = {
   },
 
   chwiup: {
+    definition:
+      '국민취업지원제도(청년 I유형 선발형)는 미취업 청년에게 구직촉진수당 월 60만원을 6개월간 주면서 취업 지원 서비스를 함께 제공하는 정부 제도야. 만 15~34세 미취업 청년이 대상이고(병역 이행 시 최대 만 37세), 가구 중위소득 120% 이하·재산 5억원 이하 요건을 충족해야 해.',
+    specs: [
+      { label: '대상 연령', value: '만 15~34세 (병역 이행 시 최대 만 37세)' },
+      { label: '소득 기준', value: '가구 기준 중위소득 120% 이하' },
+      { label: '재산 기준', value: '가구 합산 5억원 이하' },
+      { label: '지원 금액', value: '구직촉진수당 월 60만원 (부양가족 1인당 +10만원, 최대 월 100만원)' },
+      { label: '지원 기간', value: '6개월' },
+      { label: '신청', value: '고용24(work24.go.kr) · 상시 접수' },
+      { label: '제외 대상', value: '실업급여·생계급여 수급자, 이미 취업한 사람' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [
@@ -114,6 +140,16 @@ export const BENEFIT_GUIDES: Record<BenefitId, BenefitGuide> = {
   },
 
   jutaek: {
+    definition:
+      '청년 주택드림 청약통장은 우대금리 청약통장에 청년 주택드림 대출까지 연계되는, 내 집 마련을 준비하는 청년용 통장이야. 만 19~34세 무주택 청년(병역기간 최대 6년 차감)이 대상이고, 연소득 5,000만원 이하면 일반 청약통장보다 높은 우대금리를 받아.',
+    specs: [
+      { label: '대상 연령', value: '만 19~34세 (병역 이행 시 최대 6년 차감)' },
+      { label: '소득 기준', value: '연소득 5,000만원 이하 신고소득자(근로·사업·기타)' },
+      { label: '주택 요건', value: '무주택자' },
+      { label: '혜택', value: '일반 청약통장보다 높은 우대금리 + 청약 당첨 시 청년 주택드림 대출 연계' },
+      { label: '가입 기한', value: '2028년 12월 31일까지' },
+      { label: '신청', value: '주택도시기금 수탁은행 창구·앱 (기존 청약통장 전환 가능) · 상시' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [
@@ -163,6 +199,17 @@ export const BENEFIT_GUIDES: Record<BenefitId, BenefitGuide> = {
   },
 
   wolse: {
+    definition:
+      '청년월세 특별지원(2차)은 부모와 따로 사는 무주택 청년의 월세를 덜어주는 제도야. 만 19~34세 무주택 청년이 대상이고, 자격이 되면 월 최대 20만원씩 최대 24개월간 월세를 생애 1회 지원받아.',
+    specs: [
+      { label: '대상 연령', value: '만 19~34세 (병역 이행 시 산입 예외)' },
+      { label: '거주 요건', value: '부모와 별도 거주 + 무주택' },
+      { label: '소득 기준', value: '청년가구 중위소득 60% 이하 + 원가구 중위소득 100% 이하' },
+      { label: '재산 기준', value: '청년가구 1억 2,200만원 이하 · 원가구 4억 7,000만원 이하' },
+      { label: '지원 금액', value: '월 최대 20만원' },
+      { label: '지원 기간', value: '최대 24개월 (생애 1회)' },
+      { label: '신청', value: '마이홈포털(myhome.go.kr) · 주민센터 (2026 신규 3.30~5.29 마감)' },
+    ],
     eligibility: {
       heading: '누가 받을 수 있나',
       paras: [

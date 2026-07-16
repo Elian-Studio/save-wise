@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>choicewise 홈 개편 + 웹진 PRD</title>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+    :root {
+      --bg: #fafaf8;
+      --surface: #ffffff;
+      --ink: #2c2c2a;
+      --ink-soft: #444441;
+      --muted: #73726c;
+      --faint: #888780;
+      --line: #e8e6df;
+      --line-soft: #f2f1ed;
+      --accent: #185fa5;
+      --accent-bg: #e6f1fb;
+      --tip: #2e7d32;
+      --tip-bg: #e8f5e9;
+      --warn: #856404;
+      --warn-bg: #fff3cd;
+      --code-ink: #7b1fa2;
+      --code-bg: #f3e5f5;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --maxw: 940px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .doc {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 64px 28px 140px;
+    }
+
+    .doc-header {
+      margin-bottom: 44px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 34px;
+      font-weight: 750;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 720px;
+    }
+
+    .doc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 550;
+      gap: 6px;
+      padding: 5px 12px;
+    }
+
+    .tag b {
+      color: var(--faint);
+      font-weight: 650;
+    }
+
+    .summary-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin: 28px 0 6px;
+    }
+
+    .summary-card,
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .summary-card {
+      padding: 18px;
+    }
+
+    .summary-card .label {
+      color: var(--faint);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .summary-card .value {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-top: 8px;
+    }
+
+    nav.toc {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      margin: 32px 0 48px;
+      padding: 20px 22px;
+    }
+
+    nav.toc h2 {
+      border: 0;
+      color: var(--ink);
+      font-size: 15px;
+      letter-spacing: 0;
+      margin: 0 0 10px;
+      padding: 0;
+      text-transform: none;
+    }
+
+    nav.toc ol {
+      display: grid;
+      gap: 6px 24px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    h2 {
+      border-bottom: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin: 56px 0 18px;
+      padding-bottom: 8px;
+      scroll-margin-top: 24px;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      color: var(--ink);
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 32px 0 12px;
+      scroll-margin-top: 24px;
+    }
+
+    h4 {
+      color: var(--ink-soft);
+      font-size: 16px;
+      font-weight: 700;
+      margin: 24px 0 8px;
+    }
+
+    p {
+      margin: 14px 0;
+    }
+
+    a {
+      border-bottom: 1px solid var(--accent-bg);
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    ul,
+    ol {
+      margin: 14px 0;
+      padding-left: 26px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    code {
+      background: var(--code-bg);
+      border-radius: 5px;
+      color: var(--code-ink);
+      font-family: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.86em;
+      padding: 2px 6px;
+    }
+
+    pre {
+      background: #1e1e1c;
+      border: 1px solid #2c2c2a;
+      border-radius: var(--radius);
+      color: #e8e6df;
+      font-size: 13.5px;
+      line-height: 1.6;
+      margin: 18px 0;
+      overflow-x: auto;
+      padding: 18px 20px;
+    }
+
+    pre code {
+      background: none;
+      color: inherit;
+      font-size: inherit;
+      padding: 0;
+    }
+
+    .card {
+      margin: 18px 0;
+      padding: 22px 24px;
+    }
+
+    .card > :first-child {
+      margin-top: 0;
+    }
+
+    .card > :last-child {
+      margin-bottom: 0;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin: 20px 0;
+    }
+
+    .callout {
+      background: var(--accent-bg);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      color: #134a82;
+      margin: 20px 0;
+      padding: 14px 18px;
+    }
+
+    .callout.warn {
+      background: var(--warn-bg);
+      border-left-color: var(--warn);
+      color: #6b5103;
+    }
+
+    .callout.tip {
+      background: var(--tip-bg);
+      border-left-color: var(--tip);
+      color: #1f5e23;
+    }
+
+    table {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-collapse: separate;
+      border-radius: var(--radius);
+      border-spacing: 0;
+      margin: 18px 0 24px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line-soft);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f7f7f3;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .steps {
+      counter-reset: step;
+      margin: 18px 0;
+    }
+
+    .step {
+      border-bottom: 1px solid var(--line-soft);
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 30px 1fr;
+      padding: 14px 0;
+    }
+
+    .step:last-child {
+      border-bottom: 0;
+    }
+
+    .step .n {
+      align-items: center;
+      background: var(--accent-bg);
+      border-radius: 50%;
+      color: var(--accent);
+      display: flex;
+      font-size: 13px;
+      font-weight: 750;
+      height: 30px;
+      justify-content: center;
+      width: 30px;
+    }
+
+    .example {
+      background: #f7f7f3;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      margin: 18px 0;
+      padding: 18px 20px;
+    }
+
+    .example .line {
+      display: block;
+      margin: 7px 0;
+    }
+
+    .footer-links {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 780px) {
+      .doc {
+        padding: 42px 18px 96px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .summary-grid,
+      .card-grid,
+      nav.toc ol {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="doc">
+    <header class="doc-header">
+      <div class="eyebrow">Product Requirements Document</div>
+      <h1>choicewise 홈 개편 + 웹진 PRD</h1>
+      <p class="subtitle">첫 화면을 청년 대상 3개 핵심 서비스의 통합 진입면으로 개편하고, 하단에 청년 돈 아끼는 가이드형 웹진을 추가하는 1차 제품 요구사항 문서.</p>
+      <div class="doc-meta">
+        <span class="tag"><b>기준일</b> 2026-07-15</span>
+        <span class="tag"><b>상태</b> Draft</span>
+        <span class="tag"><b>범위</b> 홈 개편 · 통합 진단 · 웹진 1차</span>
+      </div>
+      <section class="summary-grid" aria-label="핵심 요약">
+        <div class="summary-card">
+          <div class="label">Main CTA</div>
+          <div class="value">통합 청년 혜택 진단</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">Service Cards</div>
+          <div class="value">교통카드 · 적금 · 지원금</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">Webzine</div>
+          <div class="value">청년 돈 아끼는 가이드</div>
+        </div>
+      </section>
+    </header>
+
+    <nav class="toc" aria-label="문서 목차">
+      <h2>목차</h2>
+      <ol>
+        <li><a href="#background">배경</a></li>
+        <li><a href="#goals">목표</a></li>
+        <li><a href="#decisions">핵심 결정사항</a></li>
+        <li><a href="#scope">범위</a></li>
+        <li><a href="#users">대상 사용자</a></li>
+        <li><a href="#home-ia">홈 정보구조</a></li>
+        <li><a href="#diagnosis">통합 진단 1차 스펙</a></li>
+        <li><a href="#ux">UX 원칙</a></li>
+        <li><a href="#seo">SEO 요구사항</a></li>
+        <li><a href="#data">데이터·콘텐츠 구조</a></li>
+        <li><a href="#metrics">성공 지표</a></li>
+        <li><a href="#release">릴리스 기준</a></li>
+      </ol>
+    </nav>
+
+    <section id="background">
+      <h2>1. 배경</h2>
+      <p>choicewise는 청년이 복잡한 금융·정책 선택을 빠르게 비교하도록 돕는 계산기형 서비스다. 현재 서비스 축은 다음 3개로 정리된다.</p>
+      <div class="card-grid">
+        <article class="card">
+          <div class="card-title">교통카드 추천</div>
+          <p>K-패스·경기패스 등 교통비 절감 선택</p>
+        </article>
+        <article class="card">
+          <div class="card-title">청년적금 갈아타기</div>
+          <p>청년도약계좌 유지 vs 청년미래적금 전환 판단</p>
+        </article>
+        <article class="card">
+          <div class="card-title">청년지원금</div>
+          <p>받을 가능성이 있는 청년 정책·지원금 확인</p>
+        </article>
+      </div>
+      <p>현재 첫 화면은 교통카드 추천 중심으로 강하게 설계되어 있다. 다음 단계에서는 홈을 단일 서비스 랜딩이 아니라, 청년 사용자가 자신의 상황에 맞는 3개 서비스 중 어디로 가야 하는지 안내하는 <strong>통합 진입면</strong>으로 바꾼다.</p>
+    </section>
+
+    <section id="goals">
+      <h2>2. 목표</h2>
+      <h3>Product Goal</h3>
+      <p>첫 방문자가 본인 상황을 간단히 입력하면 <code>교통카드 추천</code>, <code>청년적금 갈아타기</code>, <code>청년지원금</code> 중 우선 확인할 서비스를 추천받고, 필요한 경우 웹진 콘텐츠로 신뢰를 쌓은 뒤 각 서비스로 이동한다.</p>
+
+      <h3>User Goal</h3>
+      <ul>
+        <li>내가 지금 가장 먼저 확인해야 할 청년 혜택 영역을 30초 안에 안다.</li>
+        <li>복잡한 제도명을 몰라도 교통비, 적금, 지원금 중 어디서 돈을 아낄 수 있는지 이해한다.</li>
+        <li>최신 가이드성 콘텐츠를 통해 다시 방문할 이유를 얻는다.</li>
+      </ul>
+
+      <h3>Business Goal</h3>
+      <ul>
+        <li>홈 이탈률을 줄이고 3개 핵심 서비스로의 진입을 분산한다.</li>
+        <li>검색 유입을 웹진 콘텐츠로 넓힌다.</li>
+        <li><code>choicewise = 청년 돈 아끼는 선택 도구</code>라는 포지션을 강화한다.</li>
+      </ul>
+    </section>
+
+    <section id="decisions">
+      <h2>3. 핵심 결정사항</h2>
+      <div class="callout tip">
+        <strong>1차 방향</strong>
+        <p>홈은 상세 계산보다 먼저 사용자가 어디로 가야 하는지 정리해주는 역할에 집중한다.</p>
+      </div>
+      <ul>
+        <li>홈 메인 CTA는 <strong>통합 청년 혜택 진단</strong>으로 둔다.</li>
+        <li>CTA 아래에는 3개 서비스 카드를 배치한다.</li>
+        <li>통합 진단 1차 버전은 상세 계산이 아니라 <strong>3개 서비스 진입 우선순위 추천</strong>만 제공한다.</li>
+        <li>진단 입력은 과도한 개인정보 없이 <code>나이</code>, <code>거주지</code>, <code>월 교통 이용</code>, <code>소득/취업 상태</code>, <code>저축 상품 보유 여부</code>로 제한한다.</li>
+        <li>웹진은 홈 하단에 <strong>청년 돈 아끼는 가이드</strong> 성격으로 두고 최신 글 3~4개를 노출한다.</li>
+      </ul>
+    </section>
+
+    <section id="scope">
+      <h2>4. 범위</h2>
+      <div class="card-grid">
+        <article class="card">
+          <div class="card-title">In Scope</div>
+          <ul>
+            <li>홈 첫 화면 정보구조 개편</li>
+            <li>통합 청년 혜택 진단 CTA 및 진단 결과 진입 설계</li>
+            <li>3개 서비스 카드 노출</li>
+            <li>웹진 최신 글 3~4개 홈 노출</li>
+            <li>웹진 글 상세 페이지로 이어질 수 있는 기본 데이터 구조 설계</li>
+            <li>개인정보 최소화 및 면책 문구</li>
+            <li>모바일 우선 반응형 구조</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="card-title">Out of Scope</div>
+          <ul>
+            <li>회원가입, 로그인, 저장된 개인 프로필</li>
+            <li>주민등록번호, 계좌정보, 정확한 소득 증빙 등 민감정보 입력</li>
+            <li>3개 서비스 전체를 하나의 통합 계산기로 합치는 작업</li>
+            <li>청년지원금별 최종 신청 가능 여부 확정 판정</li>
+            <li>웹진 CMS, 관리자 글쓰기 화면</li>
+            <li>댓글, 좋아요, 북마크 등 커뮤니티 기능</li>
+            <li>광고 영역 재설계</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="users">
+      <h2>5. 대상 사용자</h2>
+      <h3>Primary</h3>
+      <p>만 19~34세 청년. 교통비, 적금, 정책지원금을 확인하고 싶지만 어떤 제도부터 봐야 할지 모르는 사용자.</p>
+
+      <h3>Secondary</h3>
+      <p>만 35~39세 청년성 제도 경계 사용자. 경기패스·인천 I-패스, 일부 청년지원금처럼 기준이 39세까지 확장되는 제도를 확인하려는 사용자.</p>
+
+      <h3>User Problems</h3>
+      <ul>
+        <li>"K-패스, 경기패스, 청년미래적금, 지원금 이름은 들어봤는데 내게 맞는지 모르겠다."</li>
+        <li>"정책 글은 많은데 실제로 내가 먼저 확인할 순서를 모르겠다."</li>
+        <li>"여러 서비스가 있어도 첫 화면에서 어디를 눌러야 할지 모르겠다."</li>
+      </ul>
+    </section>
+
+    <section id="home-ia">
+      <h2>6. 홈 정보구조</h2>
+
+      <h3>6.1 Hero</h3>
+      <p>목적: 첫 화면에서 choicewise의 정체성과 핵심 행동을 즉시 전달한다.</p>
+      <div class="card">
+        <div class="card-title">필수 요소</div>
+        <ul>
+          <li>H1: 청년 돈 아끼는 선택, 30초 만에 먼저 볼 것부터</li>
+          <li>Supporting copy: 교통비, 적금, 지원금을 한 번에 훑고 지금 확인할 서비스를 추천한다.</li>
+          <li>Primary CTA: 통합 청년 혜택 진단 시작</li>
+          <li>Secondary CTA: 3개 서비스 바로 보기</li>
+          <li>신뢰 고지: 공개 자료 기반 참고용, 최종 신청 전 공식 기관 확인 필요</li>
+        </ul>
+      </div>
+
+      <h3>6.2 통합 진단 진입</h3>
+      <p>목적: 사용자가 서비스명을 몰라도 자기 상황 기반으로 진입하게 한다.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <div>CTA 클릭 시 홈 내 퀴즈 섹션 또는 <code>/guide</code> 성격의 진단 화면으로 이동한다.</div>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <div>5개 질문에 답하면 3개 서비스 우선순위를 보여준다.</div>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <div>결과는 "먼저 확인", "함께 보면 좋음", "나중에 확인" 3단계로 분류한다.</div>
+        </div>
+        <div class="step">
+          <div class="n">4</div>
+          <div>각 결과에는 한 줄 이유와 CTA를 붙인다.</div>
+        </div>
+      </div>
+      <div class="example">
+        <span class="line"><strong>먼저 확인:</strong> 교통카드 추천</span>
+        <span class="line"><strong>이유:</strong> 수도권 거주 + 월 15회 이상 이용 가능성이 높아 교통비 환급 확인 우선</span>
+        <span class="line"><strong>CTA:</strong> 내 교통카드 찾기</span>
+      </div>
+
+      <h3>6.3 서비스 카드</h3>
+      <p>목적: 진단 없이 직접 들어오려는 사용자를 위한 명확한 선택지 제공.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>카드</th>
+            <th>핵심 문구</th>
+            <th>CTA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>교통카드 추천</td>
+            <td>K-패스·경기패스·후불카드 중 내 교통 패턴에 맞는 선택</td>
+            <td>교통카드 추천받기</td>
+          </tr>
+          <tr>
+            <td>청년적금 갈아타기</td>
+            <td>도약계좌를 유지할지, 미래적금으로 전환할지 비교</td>
+            <td>적금 갈아타기 계산</td>
+          </tr>
+          <tr>
+            <td>청년지원금</td>
+            <td>내가 받을 가능성이 있는 지원금과 정책을 먼저 확인</td>
+            <td>지원금 진단하기</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>각 카드는 1개 주요 CTA만 둔다.</li>
+        <li>수치·제도명은 검증된 데이터 문서와 코드의 단일 출처를 따른다.</li>
+        <li>신청 마감, 접수 예정, 종료 제도는 카드 안에서 과장하지 않는다.</li>
+      </ul>
+
+      <h3>6.4 웹진 영역</h3>
+      <p>목적: 검색 유입과 재방문을 만들고, 서비스 사용 전후의 이해를 돕는다.</p>
+      <div class="card">
+        <div class="card-title">섹션명</div>
+        <p>청년 돈 아끼는 가이드</p>
+      </div>
+      <ul>
+        <li>홈 하단에 최신 글 3~4개 노출</li>
+        <li>카드에는 <code>카테고리</code>, <code>제목</code>, <code>요약</code>, <code>업데이트일</code>, <code>읽는 시간</code>, <code>관련 서비스</code>를 표시</li>
+        <li>첫 버전은 정적 데이터 기반으로 시작한다.</li>
+      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>카테고리</th>
+            <th>제목 후보</th>
+            <th>연결 서비스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>교통비</td>
+            <td>K-패스와 경기패스, 35세 이후엔 뭐가 달라질까</td>
+            <td>교통카드 추천</td>
+          </tr>
+          <tr>
+            <td>적금</td>
+            <td>청년미래적금 2차 접수 전 확인할 5가지</td>
+            <td>청년적금 갈아타기</td>
+          </tr>
+          <tr>
+            <td>지원금</td>
+            <td>청년지원금은 왜 신청기간이 제일 중요할까</td>
+            <td>청년지원금</td>
+          </tr>
+          <tr>
+            <td>공통</td>
+            <td>월급 들어오면 먼저 확인할 청년 혜택 체크리스트</td>
+            <td>통합 진단</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout warn">
+        <strong>콘텐츠 운영 원칙</strong>
+        <p>공식 출처 확인 전 금액·일정 단정 금지. 종료된 제도는 "이미 종료"로 명확히 표시한다.</p>
+      </div>
+    </section>
+
+    <section id="diagnosis">
+      <h2>7. 통합 진단 1차 스펙</h2>
+
+      <h3>7.1 입력</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>key</th>
+            <th>질문</th>
+            <th>예시 옵션</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>age</code></td>
+            <td>만 나이가 어떻게 되나요?</td>
+            <td>18세 이하, 19~24세, 25~29세, 30~34세, 35~39세, 40세 이상</td>
+          </tr>
+          <tr>
+            <td><code>region</code></td>
+            <td>주로 어디에 살거나 출발하나요?</td>
+            <td>서울, 경기, 인천, 그 외</td>
+          </tr>
+          <tr>
+            <td><code>transitUsage</code></td>
+            <td>대중교통을 한 달에 얼마나 타나요?</td>
+            <td>거의 안 탐, 15회 미만, 15~40회, 40회 이상</td>
+          </tr>
+          <tr>
+            <td><code>incomeJob</code></td>
+            <td>현재 소득/취업 상태는 어떤가요?</td>
+            <td>학생/무직, 구직 중, 재직 중, 소득 있음·상세 모름</td>
+          </tr>
+          <tr>
+            <td><code>savingsStatus</code></td>
+            <td>청년도약계좌나 청년미래적금을 보유/관심 있나요?</td>
+            <td>도약계좌 보유, 미래적금 관심, 둘 다 없음/모름</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>7.2 추천 로직 방향</h3>
+      <p>정확한 자격 판정이 아니라 <strong>서비스 우선순위 추천</strong>이다.</p>
+      <ul>
+        <li><code>transitUsage &gt;= 15회</code>이면 교통카드 추천 우선도를 높인다.</li>
+        <li><code>region</code>이 경기/인천이면 교통카드 추천 이유에 지역형 패스를 포함한다.</li>
+        <li><code>savingsStatus</code>가 도약계좌 보유 또는 미래적금 관심이면 청년적금 갈아타기 우선도를 높인다.</li>
+        <li><code>incomeJob</code>이 구직 중, 학생/무직, 소득 있음·상세 모름이면 청년지원금 우선도를 높인다.</li>
+        <li><code>age</code>가 19~34세이면 3개 서비스 모두 기본 적합도를 높인다.</li>
+        <li><code>age</code>가 35~39세이면 경기/인천 교통카드와 일부 지원금 확인 가능성을 안내하되, 적금/지원금은 상세 화면에서 확인하도록 보수적으로 표현한다.</li>
+        <li><code>age</code>가 40세 이상이면 청년 특화 혜택은 제한될 수 있음을 표시하고, 교통카드 추천은 일반 이용자로 연결한다.</li>
+      </ul>
+
+      <h3>7.3 결과 화면</h3>
+      <ul>
+        <li>추천 순위 1~3위</li>
+        <li>서비스별 한 줄 이유</li>
+        <li>서비스 CTA</li>
+        <li>"정확한 금액·자격은 각 서비스에서 다시 계산" 고지</li>
+        <li>다시 진단하기</li>
+      </ul>
+      <div class="example">
+        <span class="line">"먼저 볼 것: 교통카드 추천"</span>
+        <span class="line">"월 15회 이상 탈 가능성이 있어 K-패스 계열 환급부터 확인하는 게 좋아요."</span>
+        <span class="line">"다음: 청년지원금"</span>
+        <span class="line">"소득/취업 상태에 따라 확인할 지원금이 있을 수 있어요."</span>
+      </div>
+    </section>
+
+    <section id="ux">
+      <h2>8. UX 원칙</h2>
+      <ul>
+        <li>첫 화면은 설명보다 행동을 우선한다.</li>
+        <li>카드형 나열은 3개 서비스 선택지에만 제한하고, 과도한 장식 섹션은 만들지 않는다.</li>
+        <li>모바일에서 CTA, 진단 질문, 서비스 카드가 한 화면 흐름으로 자연스럽게 이어져야 한다.</li>
+        <li>사용자가 제도명을 몰라도 이해할 수 있는 생활 언어를 쓴다.</li>
+        <li>단정적 금융·정책 자문처럼 보이지 않도록 "추천", "가능성", "확인" 표현을 쓴다.</li>
+      </ul>
+    </section>
+
+    <section id="seo">
+      <h2>9. SEO 요구사항</h2>
+      <div class="card-grid">
+        <article class="card">
+          <div class="card-title">홈 타깃</div>
+          <ul>
+            <li>청년 혜택 추천</li>
+            <li>청년 돈 아끼는 법</li>
+            <li>청년 지원금 조회</li>
+            <li>청년 교통카드 추천</li>
+            <li>청년미래적금 갈아타기</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="card-title">웹진 타깃</div>
+          <ul>
+            <li>제도명 + 조건</li>
+            <li>제도명 + 신청기간</li>
+            <li>제도명 + 2026</li>
+            <li>청년 + 생활비 절약</li>
+            <li>K-패스/경기패스/청년미래적금/청년지원금 관련 롱테일</li>
+          </ul>
+        </article>
+      </div>
+      <p>홈 title은 단일 서비스보다 통합 포지션을 반영한다. 웹진 글은 각 글의 검색 의도에 맞춘 독립 title/description을 가진다.</p>
+    </section>
+
+    <section id="data">
+      <h2>10. 데이터·콘텐츠 구조</h2>
+
+      <h3>10.1 Webzine Article</h3>
+      <pre><code>type WebzineArticle = {
+  id: string;
+  title: string;
+  description: string;
+  category: 'transit' | 'savings' | 'benefits' | 'common';
+  relatedService: 'transit' | 'youth-savings' | 'youth-benefits' | 'home-diagnosis';
+  updatedAt: string;
+  readMinutes: number;
+  href: string;
+  sourceStatus: 'verified' | 'needs-review';
+};</code></pre>
+
+      <h3>10.2 Diagnosis Result</h3>
+      <pre><code>type HomeDiagnosisResult = {
+  service: 'transit' | 'youth-savings' | 'youth-benefits';
+  rank: 1 | 2 | 3;
+  priority: 'primary' | 'secondary' | 'later';
+  reason: string;
+  ctaLabel: string;
+  href: string;
+};</code></pre>
+    </section>
+
+    <section id="metrics">
+      <h2>11. 성공 지표</h2>
+      <h3>Launch Metrics</h3>
+      <ul>
+        <li>홈에서 통합 진단 CTA 클릭률</li>
+        <li>홈에서 3개 서비스 카드 클릭률</li>
+        <li>진단 완료율</li>
+        <li>진단 결과에서 각 서비스 CTA 클릭률</li>
+        <li>웹진 카드 클릭률</li>
+      </ul>
+
+      <h3>Quality Metrics</h3>
+      <ul>
+        <li>모바일 첫 화면에서 메인 CTA가 스크롤 없이 보이는지</li>
+        <li>5문항 진단을 30초 안에 완료할 수 있는지</li>
+        <li>결과 문구가 자격 확정처럼 오해되지 않는지</li>
+        <li>종료·마감 제도 문구가 최신 데이터와 맞는지</li>
+      </ul>
+    </section>
+
+    <section id="release">
+      <h2>12. 릴리스 기준</h2>
+      <div class="card">
+        <div class="card-title">1차 릴리스 완료 조건</div>
+        <ul>
+          <li>홈 Hero에 통합 청년 혜택 진단 CTA가 노출된다.</li>
+          <li>3개 서비스 카드가 홈에서 명확히 보인다.</li>
+          <li>5문항 진단을 완료하면 3개 서비스 우선순위가 나온다.</li>
+          <li>각 추천 결과가 기존 서비스 경로로 연결된다.</li>
+          <li>웹진 최신 글 3~4개가 홈 하단에 노출된다.</li>
+          <li>모바일/데스크톱에서 텍스트 겹침, CTA 잘림, 카드 overflow가 없다.</li>
+          <li>공식 출처 재확인이 필요한 수치·일정은 단정하지 않는다.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="open-questions">
+      <h2>13. Open Questions</h2>
+      <ul>
+        <li>통합 진단을 홈 내부 섹션으로 둘지, 별도 경로로 둘지 결정 필요.</li>
+        <li>웹진 상세 페이지를 1차 릴리스에 포함할지, 홈 노출 카드만 먼저 둘지 결정 필요.</li>
+        <li>홈 title을 기존 교통카드 SEO 중심에서 통합 청년 혜택 중심으로 바꿀지 결정 필요.</li>
+        <li>웹진 콘텐츠 발행 주기와 운영 책임자 결정 필요.</li>
+      </ul>
+    </section>
+
+    <section id="references">
+      <h2>14. 참고</h2>
+      <ul>
+        <li>현재 서비스: <a href="https://choicewise.kr/">https://choicewise.kr/</a></li>
+        <li>기존 청년지원금 스펙: <code>docs/youth-benefits-spec.md</code></li>
+        <li>기존 청년적금 계산 스펙: <code>docs/calc-spec.md</code></li>
+        <li>기존 교통카드 계산 스펙: <code>docs/transit-card-spec.md</code></li>
+      </ul>
+    </section>
+
+    <p class="footer-links">Source: <code>docs/prd-home-webzine.md</code></p>
+  </main>
+</body>
+</html>

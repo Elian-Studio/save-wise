@@ -88,6 +88,42 @@ export function SchemeDetail() {
           </div>
         )}
 
+        {/* 정의 블록 — AI 검색 인용 대상(자기완결 한 문단). */}
+        {guide.definition && (
+          <p
+            className="mb-6 rounded-2xl bg-muted/40 px-5 py-4 text-[15.5px] font-semibold leading-[1.65] text-ink"
+            style={{ borderLeft: `4px solid ${scheme.color}` }}
+          >
+            {guide.definition}
+          </p>
+        )}
+
+        {/* 핵심 요약 표 — '조건/비교' 검색의 추출 단위. */}
+        {guide.specs && (
+          <div className="mb-9">
+            <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">한눈에 보는 핵심 요건</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-[14.5px]">
+                <tbody>
+                  {guide.specs.map((s) => (
+                    <tr key={s.label} className="border-b border-line">
+                      <th
+                        scope="row"
+                        className="w-[34%] py-3 pr-4 text-left align-top font-extrabold text-ink"
+                      >
+                        {s.label}
+                      </th>
+                      <td className="py-3 align-top font-medium leading-[1.55] text-foreground/90">
+                        {s.value}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* 이런 사람 칩 */}
         <div className="flex flex-wrap gap-2">
           {scheme.fit.map((f) => (
@@ -117,7 +153,7 @@ export function SchemeDetail() {
 
         {/* 발급 카드/방식 픽 */}
         <div className="mt-9">
-          <div className="mb-1 text-[17px] font-extrabold text-ink">{scheme.pick.title}</div>
+          <h2 className="mb-1 text-[17px] font-extrabold text-ink">{scheme.pick.title}</h2>
           <div className="mb-4 text-[14.5px] font-medium leading-[1.5] text-muted-foreground">
             {scheme.pick.hint}
           </div>
@@ -181,7 +217,7 @@ export function SchemeDetail() {
 
         {/* 발급 스텝 */}
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">발급은 이렇게</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">발급은 이렇게</h2>
           <div className="flex flex-col">
             {scheme.steps.map((step, i) => (
               <div
@@ -204,7 +240,7 @@ export function SchemeDetail() {
 
         {/* 심층 가이드 — 누가/신청 상세/계산 예시/주의/FAQ */}
         <div className="mt-11">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">{guide.eligibility.heading}</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">{guide.eligibility.heading}</h2>
           <div className="flex flex-col gap-3">
             {guide.eligibility.paras.map((p) => (
               <p key={p} className="text-[15px] font-medium leading-[1.65] text-foreground/90">
@@ -215,7 +251,7 @@ export function SchemeDetail() {
         </div>
 
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">신청, 자세히 보면</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">신청, 자세히 보면</h2>
           <div className="flex flex-col">
             {guide.applyDetail.map((s, i) => (
               <div key={s.step} className="flex items-start gap-3.5 border-b border-line py-3.5">
@@ -237,7 +273,7 @@ export function SchemeDetail() {
         </div>
 
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">얼마나 돌려받을까</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">얼마나 돌려받을까</h2>
           <div className="rounded-2xl border border-line bg-card p-5.5">
             <div className="text-base font-extrabold text-ink">{guide.calcExample.title}</div>
             <div className="mt-3.5 flex flex-col">
@@ -269,7 +305,7 @@ export function SchemeDetail() {
         </div>
 
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">주의할 점</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">주의할 점</h2>
           <ul className="flex flex-col gap-2.5">
             {guide.cautions.map((c) => (
               <li key={c} className="flex items-start gap-2.5">
@@ -285,7 +321,7 @@ export function SchemeDetail() {
         </div>
 
         <div className="mt-9">
-          <div className="mb-3.5 text-[17px] font-extrabold text-ink">자주 묻는 질문</div>
+          <h2 className="mb-3.5 text-[17px] font-extrabold text-ink">자주 묻는 질문</h2>
           <div className="flex flex-col gap-3">
             {guide.faq.map((f) => (
               <div key={f.q} className="rounded-2xl border border-line bg-card p-5">

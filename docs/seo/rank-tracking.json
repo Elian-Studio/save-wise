@@ -146,306 +146,38 @@
       "query": "청년미래적금 계산기",
       "intent": "도구 의도(상대치 ~0.2, 소형). title '계산기' 정조준이나 SERP가 계산기 경쟁으로 매우 혼잡(fundfinpro·ezloan·finuts·lifefit·everycalc 등 10+)",
       "targetPage": "/youth-savings"
+    },
+    {
+      "query": "청도계 청미적 계산기",
+      "intent": "2026-07-16 추가. 첫 실 클릭 데이터(네이버 웹마스터) 최다 클릭(9클릭·CTR 81.8%). 축약 실검색(청도계=청년도약계좌, 청미적=청년미래적금)",
+      "targetPage": "/youth-savings"
+    },
+    {
+      "query": "청미적 갈아타기",
+      "intent": "2026-07-16 추가. 축약형 갈아타기 실검색(네이버 6클릭). SERP는 fmkorea·dcinside 등 커뮤니티 글 중심",
+      "targetPage": "/youth-savings"
+    },
+    {
+      "query": "청년미래적금 갈아타기 계산기",
+      "intent": "2026-07-16 추가. '계산기' 접미 실검색(네이버 5클릭·구글 2클릭). 서비스 핵심 의도 정조준",
+      "targetPage": "/youth-savings"
+    },
+    {
+      "query": "청년도약계좌 갈아타기 계산기",
+      "intent": "2026-07-16 추가. 도약계좌 보유자 유입 실검색(네이버 3클릭·구글 1클릭)",
+      "targetPage": "/youth-savings"
+    },
+    {
+      "query": "모두의카드 추천",
+      "intent": "2026-07-16 추가. 네이버 웹마스터 8클릭이나 웹문서 API 30위 내 부재 — 정체·매칭 페이지 조사 필요(홈이 K패스 '모두의 카드' 언급). 통합검색/딥랭크 유입 추정",
+      "targetPage": "(조사 필요)"
     }
   ],
-  "keyword_selection_notes": "2026-07-11 사용자 피드백 반영: ① 키워드는 카테고리어('교통카드 추천')가 아니라 실사용자 검색 패턴(제품명+수식어: 'K패스 교통카드 추천', 'K패스 체크카드 비교')에서 출발한다. ② 이 패턴은 서비스가 다루는 제도 5종(기후동행·K패스·경기패스·인천I패스·후불카드) 전체에 적용한다 — 예시로 받은 제품 하나에만 적용하지 말 것. 기후동행은 종료 국면이라 발급형 대신 종료형 키워드로 커버. ③ 연도 접미('… 2026')는 실검색 패턴이며 페이지 title의 '(2026)' 표기가 이를 조준한다(연도 갱신 시 title 일괄 갱신 필요). ④ 연령 의도는 '20대/30대 교통카드'가 아니라 '청년 교통카드'로 검색됨(데이터랩 검증). ⑤ 제도형 서비스(youth-benefits)는 '제도명+조건/자격/신청'이 실수요 — 서비스명형('청년지원금 조회', '내가 받을 수 있는 지원금')은 수요 ~0. / 2026-07-11 3차: 사용자 지적으로 3번째 서비스(청년미래적금 계산기, /youth-savings) 키워드 6종 추가 — 데이터랩 검증(헤드=100 기준 조건 7.5 > 갈아타기 3.1 > 은행 2.1 > 도약계좌 갈아타기 1.2 > 계산기 0.2). '금리'(0.4)·'도약계좌 해지'(0.2)는 수요 미미/의도 불일치로 제외.",
+  "keyword_selection_notes": "2026-07-11 사용자 피드백 반영: ① 키워드는 카테고리어('교통카드 추천')가 아니라 실사용자 검색 패턴(제품명+수식어: 'K패스 교통카드 추천', 'K패스 체크카드 비교')에서 출발한다. ② 이 패턴은 서비스가 다루는 제도 5종(기후동행·K패스·경기패스·인천I패스·후불카드) 전체에 적용한다 — 예시로 받은 제품 하나에만 적용하지 말 것. 기후동행은 종료 국면이라 발급형 대신 종료형 키워드로 커버. ③ 연도 접미('… 2026')는 실검색 패턴이며 페이지 title의 '(2026)' 표기가 이를 조준한다(연도 갱신 시 title 일괄 갱신 필요). ④ 연령 의도는 '20대/30대 교통카드'가 아니라 '청년 교통카드'로 검색됨(데이터랩 검증). ⑤ 제도형 서비스(youth-benefits)는 '제도명+조건/자격/신청'이 실수요 — 서비스명형('청년지원금 조회', '내가 받을 수 있는 지원금')은 수요 ~0. / 2026-07-11 3차: 사용자 지적으로 3번째 서비스(청년미래적금 계산기, /youth-savings) 키워드 6종 추가 — 데이터랩 검증(헤드=100 기준 조건 7.5 > 갈아타기 3.1 > 은행 2.1 > 도약계좌 갈아타기 1.2 > 계산기 0.2). '금리'(0.4)·'도약계좌 해지'(0.2)는 수요 미미/의도 불일치로 제외. / 2026-07-16: 첫 실 클릭 데이터(네이버 서치어드바이저 콘텐츠 노출/클릭) 기반으로 실 유입 축약형·계산기형 키워드 5종 추가(청도계 청미적 계산기·청미적 갈아타기·청년미래적금 갈아타기 계산기·청년도약계좌 갈아타기 계산기·모두의카드 추천). 실 검색이 축약어(청도계/청미적)와 '계산기' 접미를 강하게 쓴다는 것이 클릭 데이터로 확인됨.",
   "snapshots": [
     {
       "date": "2026-07-11",
-      "context": "베이스라인. PR #32(패스와이즈 리네임 + 기후동행 종료 콘텐츠) 프로덕션 배포 당일. PR #33(climate title 종료형)·#34(다크모드 fix) 미머지. 네이버 인덱스는 아직 구('패스픽'/'총정리') 캐시 상태. 사이트는 신생(2026-07 오픈)이라 인덱스 절대량 자체가 적음.",
-      "results": {
-        "교통카드 추천": {
-          "naver": {
-            "rank": 29,
-            "of": 30,
-            "matchedUrl": "https://choicewise.kr/",
-            "note": "구 title '교통카드 추천 — 기후동행·K-패스 30초 진단'으로 인덱스됨",
-            "top3": [
-              "card-gorilla.com",
-              "tmoney.co.kr(뉴스)",
-              "card-search.naver.com"
-            ]
-          },
-          "google": {
-            "rank": null,
-            "of": 10,
-            "queryUsed": "교통카드 추천 2026",
-            "top3": [
-              "ajd.co.kr",
-              "card-gorilla.com",
-              "card-gorilla.com"
-            ],
-            "note": "티머니 추천 서비스(tmpay.tmoney.co.kr)가 8위"
-          }
-        },
-        "교통카드 비교": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "shinhancard.com",
-              "help.3o3.co.kr",
-              "banksalad.com"
-            ]
-          }
-        },
-        "기후동행카드 종료": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "opengov.seoul.go.kr",
-              "news.seoul.go.kr(30일권 종료 공지)",
-              "news.seoul.go.kr(운영종료 FAQ)"
-            ],
-            "note": "서울시 공식·언론이 점유. 개인 블로그(mintlight)도 9위 진입"
-          },
-          "google": {
-            "rank": null,
-            "of": 10,
-            "top3": [
-              "namu.wiki",
-              "news.seoul.go.kr",
-              "news.tf.co.kr"
-            ],
-            "note": "소형 사이트 tripsoda.com이 4위 — 신생 사이트도 진입 가능한 SERP라는 증거"
-          }
-        },
-        "기후동행카드 충전 종료": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "news.seoul.go.kr(페이백 FAQ)",
-              "news.seoul.go.kr(운영종료 FAQ)",
-              "news.seoul.go.kr(모바일카드)"
-            ]
-          }
-        },
-        "K패스 기후동행카드 비교": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "korea.kr",
-              "mediahub.seoul.go.kr",
-              "tossbank.com"
-            ],
-            "note": "동종 비교 계산기 lifefit.kr/tools/kpass-climate가 21위 — 도구형 페이지 진입 사례"
-          }
-        },
-        "K패스 계산기": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "gg.go.kr(공식 계산기)",
-              "calc.oasiswiki.com",
-              "plcy.kr"
-            ],
-            "note": "영세 계산기 다수 랭크(batgo, dagesan, polyfitapp, thorkit, coreant, github.io) — 진입 가능하나 이미 혼잡. 차별점은 이중 환급(비율vs초과분) 정확 계산 + 제도 추천 연계"
-          }
-        },
-        "패스와이즈": {
-          "naver": {
-            "rank": null,
-            "of": 10,
-            "note": "SERP 전체가 Aon PathWise(보험 계리 B2B 솔루션) 기사 — 소비자 교통 서비스 충돌 없음, 브랜드 검색 선점 여지 큼"
-          }
-        },
-        "choicewise": {
-          "naver": {
-            "rank": 3,
-            "of": 10,
-            "matchedUrl": "https://choicewise.kr/about",
-            "note": "인덱스된 유일 페이지가 /about. 스니펫이 구 '패스픽' 표기 — 재수집 필요"
-          },
-          "google": {
-            "rank": null,
-            "of": 10,
-            "queryUsed": "site:choicewise.kr",
-            "note": "구글 인덱스 미확인(0건). 브랜드 SERP는 동명 해외 서비스 choicewise.app이 점유"
-          }
-        },
-        "K패스 교통카드": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "korea-pass.kr(공식)",
-              "card.kbcard.com",
-              "incheon.go.kr"
-            ],
-            "note": "공식·카드사·지자체가 점유하는 대형 헤드 키워드"
-          }
-        },
-        "K패스 교통카드 추천": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "card.kbcard.com",
-              "banksalad.com",
-              "blog.naver.com(개인)"
-            ],
-            "note": "상위 30 중 네이버 블로그가 12+개 — 블로그 채널로 진입 가능성 높은 SERP"
-          }
-        },
-        "K패스 체크카드 비교": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "card.kbcard.com",
-              "weolbu.com(커뮤니티)",
-              "tossbank.com"
-            ],
-            "note": "블로그·커뮤니티 다수 랭크. 카드사별 체크카드 비교 페이지(TRANSIT_CARDS 기반) 콘텐츠 갭"
-          }
-        },
-        "청년 교통카드": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "mediahub.seoul.go.kr",
-              "youth.seoul.go.kr",
-              "youth.seoul.go.kr"
-            ],
-            "note": "서울시 청년정책 포털 점유. 지자체별 청년 교통비 지원과 혼재된 SERP"
-          }
-        },
-        "후불 교통카드": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "card.kbcard.com",
-              "namu.wiki",
-              "ko.wikipedia.org"
-            ],
-            "note": "카드사 FAQ·위키 점유. '후불교통카드란' 정보성 의도 중심 — postpaid 상세 페이지 타깃 후보"
-          }
-        },
-        "후불 교통카드 추천": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "ko.wikipedia.org",
-              "banksalad.com",
-              "blog.naver.com(개인)"
-            ],
-            "note": "청소년 후불카드·하이패스와 혼재. ajd.co.kr 등 콘텐츠 사이트 진입"
-          }
-        },
-        "경기패스 카드": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "korea-pass.kr(공식)",
-              "gg.go.kr(공식)",
-              "gccity.go.kr(공식)"
-            ],
-            "note": "공식(경기도·K패스) 점유율 매우 높음 — 정면 승부 어려운 SERP"
-          }
-        },
-        "인천 i패스 카드": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "korea-pass.kr(공식)",
-              "incheon.go.kr(공식)",
-              "incheon.go.kr(공식)"
-            ],
-            "note": "공식 점유. ajd.co.kr 콘텐츠가 중위권 진입"
-          }
-        },
-        "K패스 체크카드 비교 2026": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "ajd.co.kr",
-              "card-gorilla.com",
-              "card-gorilla.com"
-            ],
-            "note": "상위권 전부 제목에 '2026' 포함. 티스토리·개인블로그도 상위 진입 — 연도형 title의 전용 비교 페이지로 승부 가능한 SERP"
-          }
-        },
-        "청년지원금": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "myhome.go.kr(자가진단)",
-              "gg.go.kr(청년기본소득)",
-              "bokjiro.go.kr(모의계산)"
-            ],
-            "note": "측정 시점 /youth-benefits 미배포. 1위가 마이홈 '자가진단', 복지로 '모의계산'도 상위 — 진단·계산 도구가 랭크되는 SERP로 서비스 유형 정합"
-          }
-        },
-        "국민취업지원제도 조건": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "work24.go.kr(공식)",
-              "work24.go.kr",
-              "bokjiro.go.kr"
-            ],
-            "note": "공식 상위 + 블로그·소형 사이트(gg24.kr, moneyeats, motoday, valuelife) 중위권 다수 — 진입 가능"
-          }
-        },
-        "청년월세지원 조건": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "myhome.go.kr(자가진단)",
-              "bokjiro.go.kr",
-              "myhome.go.kr(모바일)"
-            ],
-            "note": "공식·지자체·블로그 혼합. 측정 중 2026 신규 신청 3.30~5.29 마감 사실 확인(복지로 공지) → 데이터 갱신 반영"
-          }
-        },
-        "청년내일저축계좌 조건": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "korea.kr(정책뉴스)",
-              "mohw.go.kr(보도자료)",
-              "youth.seoul.go.kr"
-            ],
-            "note": "정부 채널 점유. 토스뱅크·뱅샐 아티클, 티스토리도 진입. 모집기(5월) 시즌성"
-          }
-        },
-        "청년 청약통장": {
-          "naver": {
-            "rank": null,
-            "of": 30,
-            "top3": [
-              "molit.go.kr(공식)",
-              "youthcenter.go.kr",
-              "myhome.go.kr"
-            ],
-            "note": "국토부·은행 상품 페이지 점유. kbthink·welfarehello·zippoom 등 콘텐츠 진입"
-          }
-        }
-      },
-      "actions_at_baseline": [
-        "PR #33: climate 상세 title '기후동행카드 충전 종료 — 마감 일정·기존 카드·K-패스 전환 (2026)' + 종료 keywords (머지 대기)",
-        "네이버 서치어드바이저 수집 재요청 필요(/, /transit/cards/climate) — 운영 계정 접근 필요",
-        "구글 서치콘솔 인덱싱 상태 확인 필요",
-        "K패스 계산기 전용 페이지 미구현 — 구현 시 'K패스 계산기' 계열 재측정"
-      ]
-    },
-    {
-      "date": "2026-07-11-2",
-      "context": "같은 날 2차 측정(15:39, 22종 전체). 베이스라인 이후 머지: PR #33(climate title 종료형)·#34(다크모드 fix)·#35(순위 베이스라인)·#36·#37(청년혜택 자격진단+제도별 상세 4페이지, SEO Phase B). 청년지원 5종 키워드는 이번이 베이스라인. 네이버가 홈을 신 title로 재수집한 것이 확인된 시점.",
+      "context": "베이스라인(정본). 같은 날 3회 측정(오전 22종 초기 + 15:39 22종 전체 재측정 + 16:03 youth-savings 6종)을 단일 노드로 통합함 — 시계열 라인그래프 연속성 확보 목적. 값은 그날 최신 상태 기준(교통카드 추천은 네이버가 홈을 신 title로 재수집한 26위 반영). 이 시점 사이트는 신생(2026-07 오픈)이라 인덱스 절대량이 적어 대부분 미노출(null). 머지된 SEO 변경: PR #32(패스와이즈 리네임+기후동행 종료 콘텐츠)·#33(climate title 종료형)·#34(다크모드)·#35(순위 베이스라인)·#36·#37(청년혜택 자격진단+제도별 상세 4페이지). youth-savings 6종은 이날이 베이스라인.",
       "results": {
         "교통카드 추천": {
           "naver": {
@@ -723,18 +455,7 @@
             ],
             "note": "신규 베이스라인. SERP가 '청년주택드림청약통장' 중심 — 제품명 포함 키워드로 추적 조정 검토"
           }
-        }
-      },
-      "actions_at_snapshot": [
-        "네이버 서치어드바이저: /about 재수집 요청(구 '패스픽' 스니펫 잔존), 청년혜택 신규 4페이지 수집 요청",
-        "구글 서치콘솔: 인덱싱 0건 지속 — sitemap 제출·색인 요청 확인 필요",
-        "'청년 청약통장' → '청년주택드림 청약통장' 표현형 재검증(데이터랩) 후 키워드 조정 검토"
-      ]
-    },
-    {
-      "date": "2026-07-11-3",
-      "context": "3차 측정(16:03) — 청년미래적금 계산기(/youth-savings) 키워드 6종 신규 추가분만 측정(베이스라인). 기존 22종은 2026-07-11-2 참조.",
-      "results": {
+        },
         "청년미래적금": {
           "naver": {
             "rank": null,
@@ -809,9 +530,622 @@
         }
       },
       "actions_at_snapshot": [
-        "/youth-savings 네이버 서치어드바이저 수집 요청(현재 웹문서 미인덱스로 추정 — 30위 내 부재)",
-        "12월 2차 접수 전(11월경) 청년미래적금 키워드 수요 회복 모니터링",
-        "갈아타기 SERP의 직접 경쟁자 y-savings-calc.netlify.app 관찰 — 동일 제안(유지vs전환 비교)"
+        "네이버 서치어드바이저: /about 재수집 요청(구 '패스픽' 스니펫 잔존), 청년혜택 신규 4페이지·/youth-savings 수집 요청",
+        "구글 서치콘솔: 인덱싱 0건 지속 — sitemap 제출·색인 요청 확인 필요",
+        "'청년 청약통장' → '청년주택드림 청약통장' 표현형 재검증 후 키워드 조정 검토",
+        "12월 2차 접수 전(11월경) 청년미래적금 키워드 수요 회복 모니터링"
+      ]
+    },
+    {
+      "date": "2026-07-16",
+      "context": "직전 스냅샷(2026-07-11 시리즈, 전부 미인덱스) 이후 첫 재측정. 이 사이 머지: PR #39(순위 스냅샷 커밋)·#40/#42(푸터 문서 갱신). 처음으로 실 성과 데이터(네이버 서치어드바이저 콘텐츠 노출/클릭 + 구글 서치콘솔) 확보 — realData 블록 참조. 사이트가 실제 인덱싱되어 클릭/노출 발생 중. 신규 키워드 5종(축약형·계산기형) 이번이 베이스라인. 핵심 변화: youth-savings 페이지가 갈아타기 계산기 키워드에서 6~8위 진입, youth-benefits chwiup 페이지가 '국민취업지원제도 조건' 21위 진입, 구글 색인 개시(0건→climate 1건).",
+      "results": {
+        "교통카드 추천": {
+          "naver": {
+            "rank": 30,
+            "of": 30,
+            "matchedUrl": "https://choicewise.kr/",
+            "note": "신 title '교통카드 추천 — K-패스·경기패스 30초 진단 (2026)' 유지. 07-11-2 26위 → 30위(▼4). SERP 상단 card-gorilla·현대카드 콘텐츠 강화, 신규 경쟁 없음",
+            "top3": [
+              "card-gorilla.com",
+              "tmoney.co.kr(뉴스)",
+              "card-search.naver.com"
+            ]
+          },
+          "google": {
+            "rank": null,
+            "of": 10,
+            "queryUsed": "교통카드 추천 2026",
+            "top3": [
+              "ajd.co.kr",
+              "card-gorilla.com(2904)",
+              "card-gorilla.com(3788)"
+            ],
+            "note": "finchecker.kr·family-paybank.com 신규 콘텐츠 진입. tmpay.tmoney 추천 서비스 여전"
+          }
+        },
+        "교통카드 비교": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "shinhancard.com",
+              "help.3o3.co.kr",
+              "banksalad.com"
+            ]
+          }
+        },
+        "기후동행카드 종료": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "opengov.seoul.go.kr",
+              "news.seoul.go.kr(30일권 종료 안내)",
+              "news.seoul.go.kr(운영종료 FAQ)"
+            ],
+            "note": "서울시 공식·언론 점유 지속. blog.naver mintlight 9위권 유지"
+          },
+          "google": {
+            "rank": null,
+            "of": 10,
+            "top3": [
+              "news.seoul.go.kr(운영종료 FAQ)",
+              "namu.wiki",
+              "news.seoul.go.kr(30일권 종료)"
+            ],
+            "note": "tripsoda.com 4위 유지 — 소형 사이트 진입 가능 SERP 지속. hankyung·ajunews 신규"
+          }
+        },
+        "기후동행카드 충전 종료": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "news.seoul.go.kr(페이백 FAQ)",
+              "news.seoul.go.kr(운영종료 FAQ)",
+              "news.seoul.go.kr(모바일카드)"
+            ]
+          }
+        },
+        "K패스 기후동행카드 비교": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea.kr",
+              "mediahub.seoul.go.kr",
+              "tossbank.com"
+            ],
+            "note": "lifefit.kr/tools/kpass-climate 20위권 유지"
+          }
+        },
+        "K패스 계산기": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "gg.go.kr(환급금 계산기)",
+              "calc.oasiswiki.com",
+              "plcy.kr"
+            ],
+            "note": "영세 계산기 다수 유지(batgo·dagesan·polyfitapp·thorkit·coreant·github.io). plcy '모두의카드 K패스 비교' 8위"
+          }
+        },
+        "패스와이즈": {
+          "naver": {
+            "rank": null,
+            "of": 10,
+            "note": "Aon PathWise(보험 계리 B2B) 점유 지속 — 변화 없음"
+          }
+        },
+        "choicewise": {
+          "naver": {
+            "rank": 2,
+            "of": 10,
+            "matchedUrl": "https://choicewise.kr/contact",
+            "note": "/contact 2위 + /about 4위 유지(07-11-2와 동일). /about 스니펫 여전히 구 '패스픽' 표기 — 재수집 필요. 총 인덱스 25건",
+            "top3": [
+              "scamadviser.com(choicewise.app)",
+              "choicewise.kr/contact",
+              "academic.naver.com"
+            ]
+          },
+          "google": {
+            "rank": 1,
+            "of": 10,
+            "queryUsed": "site:choicewise.kr",
+            "matchedUrl": "https://choicewise.kr/transit/cards/climate",
+            "note": "구글 색인 개시! 07-11 0건 → climate 페이지 1건 노출. 브랜드 SERP는 여전히 choicewise.app 경쟁"
+          }
+        },
+        "K패스 교통카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea-pass.kr(공식)",
+              "card.kbcard.com",
+              "kotsa.or.kr"
+            ]
+          }
+        },
+        "K패스 교통카드 추천": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "card.kbcard.com",
+              "banksalad.com",
+              "blog.naver.com(ekdud0706)"
+            ],
+            "note": "상위 30 중 네이버 블로그 다수 유지 — 블로그 채널 진입 여지"
+          }
+        },
+        "K패스 체크카드 비교": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "card-gorilla.com(4277)",
+              "card.kbcard.com",
+              "weolbu.com"
+            ]
+          }
+        },
+        "청년 교통카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "mediahub.seoul.go.kr",
+              "youth.seoul.go.kr",
+              "youth.seoul.go.kr"
+            ]
+          }
+        },
+        "후불 교통카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "card.kbcard.com",
+              "namu.wiki(후불교통카드)",
+              "ko.wikipedia.org"
+            ]
+          }
+        },
+        "후불 교통카드 추천": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "banksalad.com",
+              "capitalize.kr",
+              "blog.naver.com(juri17)"
+            ]
+          }
+        },
+        "경기패스 카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea-pass.kr(공식)",
+              "gg.go.kr(공식)",
+              "gccity.go.kr(공식)"
+            ]
+          }
+        },
+        "인천 i패스 카드": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea-pass.kr(공식)",
+              "incheon.go.kr(공식)",
+              "incheon.go.kr(공식)"
+            ]
+          }
+        },
+        "K패스 체크카드 비교 2026": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "ajd.co.kr",
+              "card-gorilla.com(4277)",
+              "card-gorilla.com(3788)"
+            ],
+            "note": "cha4se.tistory 6위(제목에 '2026') — 연도형 title 유효 지속. 소형 사이트 진입 가능 SERP"
+          }
+        },
+        "청년지원금": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "myhome.go.kr(청년월세 자가진단)",
+              "gg.go.kr(청년기본소득)",
+              "bokjiro.go.kr(모의계산)"
+            ],
+            "note": "정부 포털 대형 헤드 점유 지속"
+          }
+        },
+        "국민취업지원제도 조건": {
+          "naver": {
+            "rank": 21,
+            "of": 30,
+            "matchedUrl": "https://choicewise.kr/youth-benefits/programs/chwiup",
+            "note": "신규 진입! 07-11-2 null → 21위. chwiup 상세 페이지 인덱스됨. 신 title '국민취업지원제도 (청년 I유형) 조건·자격·신청방법 (2026)'. 첫 youth-benefits 페이지 랭크",
+            "top3": [
+              "work24.go.kr(제도안내)",
+              "work24.go.kr(취업지원신청)",
+              "bokjiro.go.kr"
+            ]
+          }
+        },
+        "청년월세지원 조건": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "myhome.go.kr(자가진단)",
+              "bokjiro.go.kr(지원사업)",
+              "m.myhome.go.kr"
+            ],
+            "note": "economicsignal·gobang·blog.3o3 등 소형 진입 유지"
+          }
+        },
+        "청년내일저축계좌 조건": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea.kr(정책뉴스)",
+              "mohw.go.kr(보도자료)",
+              "youth.seoul.go.kr"
+            ],
+            "note": "tossbank·welfarehello·minmong 티스토리 진입 유지"
+          }
+        },
+        "청년 청약통장": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "molit.go.kr(청년주택드림)",
+              "youthcenter.go.kr",
+              "myhome.go.kr"
+            ],
+            "note": "SERP '청년주택드림청약통장' 중심 지속 — 표현형 재검토 대상"
+          }
+        },
+        "청년미래적금": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "fill4young.kinfa.or.kr(서금원 공식)",
+              "korea.kr(정책뉴스)",
+              "kinfa.or.kr"
+            ],
+            "note": "공식·정책뉴스·은행 점유 대형 헤드"
+          }
+        },
+        "청년미래적금 조건": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "bokjiro.go.kr",
+              "bokjiro.go.kr(내일저축)",
+              "kinfa.or.kr"
+            ],
+            "note": "cwtr·mediasearch·wikitree 등 소형·언론 진입"
+          }
+        },
+        "청년미래적금 갈아타기": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea.kr(정책뉴스)",
+              "korea.kr(비교 기사)",
+              "fsc.go.kr"
+            ],
+            "note": "y-savings-calc.netlify.app 17위권·noname github 전환계산기 진입 유지"
+          }
+        },
+        "청년미래적금 은행": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea.kr",
+              "korea.kr(금리 공개)",
+              "kinfa.or.kr"
+            ],
+            "note": "card-gorilla 4278(은행별 금리비교) 진입"
+          }
+        },
+        "청년도약계좌 갈아타기": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "korea.kr(비교)",
+              "korea.kr(유지vs갈아타기)",
+              "youthcenter.go.kr"
+            ],
+            "note": "y-savings-calc·noname github 도구형 진입 유지"
+          }
+        },
+        "청년미래적금 계산기": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "fundfinpro.com",
+              "finuts.co.kr",
+              "ezloan.io"
+            ],
+            "note": "계산기 전용 사이트 10+ 점유 지속(devcomma·polyfitapp·lifefit·everycalc·jptcalc·k-calc·fincalc·moamoang 등). 신규 경쟁 safemoneyinsight·mirae-savings-lab.netlify. choicewise 미노출"
+          }
+        },
+        "청도계 청미적 계산기": {
+          "naver": {
+            "rank": 8,
+            "of": 30,
+            "matchedUrl": "https://choicewise.kr/",
+            "note": "신규 키워드 베이스라인. 홈이 8위 노출(총 결과 46건으로 매우 희소한 SERP). 실 최다클릭 키워드(9클릭). 주의: 매칭 페이지가 /youth-savings가 아닌 홈 — 축약어 SERP는 fmkorea 커뮤니티 글 중심",
+            "top3": [
+              "arca.live(블루아카이브 청휘석)",
+              "fmkorea(청도계vs청미적)",
+              "moduncalc.com"
+            ]
+          }
+        },
+        "청미적 갈아타기": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "blog.naver.com(lazyjaee)",
+              "dcinside.com(나스닥갤)",
+              "fmkorea.com"
+            ],
+            "note": "신규 키워드 베이스라인. SERP 전체가 fmkorea·dcinside·instiz·theqoo 커뮤니티 글 — choicewise 30위 내 부재. 축약형 커뮤니티 의도 강함"
+          }
+        },
+        "청년미래적금 갈아타기 계산기": {
+          "naver": {
+            "rank": 6,
+            "of": 30,
+            "matchedUrl": "https://choicewise.kr/youth-savings",
+            "note": "신규 키워드 베이스라인. /youth-savings 6위 진입! 실 클릭 확인(네이버 5·구글 2). 직접 경쟁 y-savings-calc 1위·the-better-side 3위·rabbithabbit 4위",
+            "top3": [
+              "y-savings-calc.netlify.app",
+              "noname github(전환계산기)",
+              "the-better-side.com"
+            ]
+          }
+        },
+        "청년도약계좌 갈아타기 계산기": {
+          "naver": {
+            "rank": 8,
+            "of": 30,
+            "matchedUrl": "https://choicewise.kr/youth-savings",
+            "note": "신규 키워드 베이스라인. /youth-savings 8위 진입! 실 클릭 확인(네이버 3·구글 1). finda 계산기 2위 등 도구 경쟁",
+            "top3": [
+              "y-savings-calc.netlify.app",
+              "finda.co.kr",
+              "blog.naver.com(ekdud0706)"
+            ]
+          }
+        },
+        "모두의카드 추천": {
+          "naver": {
+            "rank": null,
+            "of": 30,
+            "top3": [
+              "blog.naver.com(dltmf4210)",
+              "card-gorilla.com(모두의카드 태그)",
+              "brunch.co.kr(cardgorilla)"
+            ],
+            "note": "신규 키워드 베이스라인. 웹마스터 8클릭이나 웹문서 API 30위 내 부재 — 통합검색/딥랭크 유입 추정. '모두의카드'는 K패스 정액권 브랜드, 홈이 언급하나 웹문서 랭크 미확인. 조사 필요"
+          }
+        }
+      },
+      "realData": {
+        "source": "네이버 서치어드바이저 콘텐츠 노출/클릭(최근 30일 기준, 갱신 2026-07-15) + 구글 서치콘솔(일별). 사용자 제공. 이 지표는 rank method(API 순번)와 다른 실 성과 신호 — 시계열은 rank 기준을 유지하고 realData는 참고용",
+        "naver_webmaster": {
+          "period": "최근 30일 (PC+Mobile)",
+          "clicks": 90,
+          "impressions": 1100,
+          "ctr": 8.3,
+          "top_keywords": [
+            {
+              "query": "청도계 청미적 계산기",
+              "clicks": 9,
+              "impressions": 11,
+              "ctr": 81.8
+            },
+            {
+              "query": "모두의카드 추천",
+              "clicks": 8,
+              "impressions": 42,
+              "ctr": 19.0
+            },
+            {
+              "query": "청미적 갈아타기",
+              "clicks": 6,
+              "impressions": 21,
+              "ctr": 28.6
+            },
+            {
+              "query": "청년미래적금 갈아타기 계산기",
+              "clicks": 5,
+              "impressions": 72,
+              "ctr": 6.9
+            },
+            {
+              "query": "청년도약계좌 갈아타기 계산기",
+              "clicks": 3,
+              "impressions": 65,
+              "ctr": 4.6
+            },
+            {
+              "query": "청년도약계좌 미래적금 비교 계산기",
+              "clicks": 3,
+              "impressions": 12,
+              "ctr": 25.0
+            },
+            {
+              "query": "청년도약 갈아타기 계산기",
+              "clicks": 3,
+              "impressions": 4,
+              "ctr": 75.0
+            },
+            {
+              "query": "청년도약계좌 비교계산기",
+              "clicks": 3,
+              "impressions": 4,
+              "ctr": 75.0
+            },
+            {
+              "query": "청도계 청미적 비교 계산기",
+              "clicks": 3,
+              "impressions": 3,
+              "ctr": 100.0
+            },
+            {
+              "query": "청년미래적금 계산기",
+              "clicks": 2,
+              "impressions": 137,
+              "ctr": 1.5
+            }
+          ],
+          "top_pages": [
+            {
+              "url": "https://choicewise.kr/",
+              "clicks": 73,
+              "impressions": 917,
+              "ctr": 8.0
+            },
+            {
+              "url": "https://choicewise.kr/transit",
+              "clicks": 12,
+              "impressions": 76,
+              "ctr": 15.8
+            },
+            {
+              "url": "https://choicewise.kr/youth-savings",
+              "clicks": 4,
+              "impressions": 67,
+              "ctr": 6.0
+            },
+            {
+              "url": "https://choicewise.kr/about",
+              "clicks": 1,
+              "impressions": 8,
+              "ctr": 12.5
+            },
+            {
+              "url": "https://choicewise.kr/transit/cards/climate",
+              "clicks": 0,
+              "impressions": 10,
+              "ctr": 0.0
+            },
+            {
+              "url": "https://choicewise.kr/youth-benefits/programs/jutaek",
+              "clicks": 0,
+              "impressions": 6,
+              "ctr": 0.0
+            }
+          ]
+        },
+        "google_search_console": {
+          "note": "일별 클릭/노출. 노출 램프업(7/11 68 → 7/12 143 → 7/13 110), 클릭 1~2/일",
+          "daily": [
+            {
+              "date": "2026-06-29",
+              "clicks": 3,
+              "impressions": 7
+            },
+            {
+              "date": "2026-07-01",
+              "clicks": 5,
+              "impressions": 9
+            },
+            {
+              "date": "2026-07-10",
+              "clicks": 0,
+              "impressions": 9
+            },
+            {
+              "date": "2026-07-11",
+              "clicks": 1,
+              "impressions": 68
+            },
+            {
+              "date": "2026-07-12",
+              "clicks": 2,
+              "impressions": 143
+            },
+            {
+              "date": "2026-07-13",
+              "clicks": 2,
+              "impressions": 110
+            }
+          ],
+          "top_queries": [
+            {
+              "query": "청년미래적금 갈아타기 계산기",
+              "clicks": 2,
+              "impressions": 4
+            },
+            {
+              "query": "청년도약계좌 갈아타기 계산기",
+              "clicks": 1,
+              "impressions": 4
+            },
+            {
+              "query": "k패스 카드 추천",
+              "clicks": 1,
+              "impressions": 3
+            },
+            {
+              "query": "기후동행 종료",
+              "clicks": 1,
+              "impressions": 2
+            },
+            {
+              "query": "청년도약계좌 청년미래적금 갈아타기 계산기",
+              "clicks": 1,
+              "impressions": 2
+            },
+            {
+              "query": "기후동행카드 종료",
+              "clicks": 0,
+              "impressions": 18
+            }
+          ]
+        },
+        "signals": [
+          "실 트래픽 드라이버는 youth-savings 계열(청미적/청도계 갈아타기·계산기). 홈이 클릭 73(전체 90의 81%)이나 노출 대비 CTR 8%로, 실검색은 '갈아타기 계산기' 축약형이 주도",
+          "실검색이 축약어(청도계/청미적)와 '계산기' 접미를 강하게 씀 — API rank로도 확인(청년미래적금 갈아타기 계산기 6위, 청년도약계좌 갈아타기 계산기 8위)",
+          "'모두의카드 추천'은 웹마스터 8클릭이나 웹문서 API 30위 밖 — 통합검색 유입 추정, 매칭 페이지 조사 필요",
+          "transit 페이지(/transit 12클릭·CTR 15.8%)가 노출 대비 효율 높음 — 교통 콘텐츠 실수요 존재",
+          "구글 노출이 7/11부터 급증(68→143→110) — 색인 반영 시작, site: 확인도 climate 1건 노출로 교차 검증됨"
+        ]
+      },
+      "actions_at_snapshot": [
+        "/youth-savings 갈아타기 계산기 키워드 6~8위 안착 — 상위(y-savings-calc 1위) 추월 위한 콘텐츠/속도 점검",
+        "'모두의카드 추천' 매칭 페이지 조사(웹마스터 8클릭 유입원 규명) — 통합검색/특정 서브페이지 확인",
+        "/about 스니펫 구 '패스픽' 표기 재수집 요청(네이버 서치어드바이저) 여전히 미해결",
+        "구글 색인 확대 모니터링 — 현재 climate만 확인, 홈·youth-savings 색인 여부 서치콘솔 확인",
+        "청도계 청미적 계산기 매칭이 홈 → /youth-savings로 개선되는지 관찰(의도 정합성)"
       ]
     }
   ]
