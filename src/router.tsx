@@ -7,6 +7,7 @@ import { YouthBenefits } from './services/youthBenefits/YouthBenefits';
 import { ProgramDetail } from './services/youthBenefits/ProgramDetail';
 import { Transit } from './services/transit/Transit';
 import { SchemeDetail } from './services/transit/SchemeDetail';
+import { CardCompare } from './services/transit/CardCompare';
 import { About } from './services/site/About';
 import { Contact } from './services/site/Contact';
 
@@ -23,6 +24,7 @@ export function AppRoutes() {
         <Route path="/youth-savings/banks/:id" element={<BankDetail />} />
         <Route path="/youth-benefits" element={<YouthBenefits />} />
         <Route path="/youth-benefits/programs/:id" element={<ProgramDetail />} />
+        <Route path="/transit/cards/compare/:type" element={<CardCompare />} />
         <Route path="/transit/cards/:id" element={<SchemeDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />

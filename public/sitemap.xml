@@ -163,6 +163,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://choicewise.kr/transit/cards/compare/check</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://choicewise.kr/transit/cards/compare/credit</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://choicewise.kr/about</loc>
     <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>
