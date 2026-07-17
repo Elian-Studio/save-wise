@@ -147,7 +147,7 @@ export function GuideArticlePage() {
           <div className="flex flex-col gap-3">
             {body.faq.map((f) => (
               <div key={f.q} className="rounded-2xl border border-line bg-card p-5">
-                <div className="text-[15px] font-extrabold text-ink">Q. {f.q}</div>
+                <div className="text-[15px] font-extrabold text-ink">Q. {renderRich(f.q)}</div>
                 <div className="mt-1.5 text-[14.5px] font-medium leading-[1.65] text-muted-foreground">
                   {renderRich(f.a)}
                 </div>

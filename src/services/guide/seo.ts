@@ -71,6 +71,7 @@ export const articleSeos: RouteSeo[] = GUIDE_ARTICLES.map((a) => {
         '@type': 'Article',
         headline: a.title,
         description: stripMdLinks(a.description),
+        image: `${SITE}/og.jpg`,
         datePublished: a.updatedAt,
         dateModified: a.updatedAt,
         author: ORG,
