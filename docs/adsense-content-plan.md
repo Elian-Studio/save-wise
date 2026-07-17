@@ -59,6 +59,14 @@
    - [ ] 바이라인·출처 링크가 전 기사에 라이브
    - (수정 없이 즉시 재요청 금지 — 반복 거절 이력은 불리)
 
+## 기술 부채 이월 (2026-07-17 코드 리뷰 잔여 → S2에서 처리)
+
+- faqPageLd·BreadcrumbList JSON-LD 공용 헬퍼로 통합 (현재 3~4곳 복제, guide/transit/youthBenefits/youthSavings seo.ts)
+- 가이드 카드 마크업 공용 컴포넌트화 (Transit 홈 스트립 ↔ GuideList 이미 드리프트: h2/div, 패딩·폰트)
+- sitemap.xml을 prerender.mjs의 ROUTE_SEO 루프에서 생성 (~10줄, 수동 동기화 누락 방지)
+- 내비 활성 판정 통일 (가이드만 접두사 매치, 타 섹션 서브라우트는 미점등)
+- **애드센스 승인 후**: index.html 전역 adsbygoogle 스니펫 제거하고 AdSlot 지연 로드 복원 (심사 기간엔 사이트 전역 스니펫 필요 — 의도적 유지)
+
 ## 애드센스 소유권 확인 상태
 
 - 메타 태그(`google-adsense-account`), ads.txt, 코드 스니펫(2026-07-16 추가) 3종 모두 배포됨 → 콘솔에서 확인만 누르면 됨. 정책 거절과는 별개 트랙.
