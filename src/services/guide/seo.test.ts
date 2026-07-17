@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, it, expect } from 'vitest';
 import { guideListSeo, articleSeos } from './seo';
 import { ROUTE_SEO } from '@/seo/routes';
@@ -20,6 +21,13 @@ describe('가이드 SEO 파생(guideListSeo, articleSeos)', () => {
 
   it('아티클마다 seo가 하나씩 파생된다', () => {
     expect(articleSeos).toHaveLength(GUIDE_ARTICLES.length);
+  });
+
+  it('sitemap.xml에 /guide와 모든 아티클 URL이 있다(수동 sitemap 드리프트 가드)', () => {
+    const sitemap = readFileSync('public/sitemap.xml', 'utf8');
+    for (const p of [guideListSeo.path, ...articleSeos.map((s) => s.path)]) {
+      expect(sitemap, p).toContain(`<loc>https://choicewise.kr${p}</loc>`);
+    }
   });
 
   it('각 articleSeo description은 ≤155자이고 마크다운 링크 문법이 없다', () => {

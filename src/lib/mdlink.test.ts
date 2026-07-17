@@ -40,6 +40,17 @@ describe('parseMdLinks — 가이드 마크다운 링크 파서', () => {
   it('라벨 속 대괄호는 미지원 — 리터럴로 남는다(문서화된 한계)', () => {
     expect(parseMdLinks('[[중요]링크](/x)')).toEqual(['[[중요]링크](/x)']);
   });
+
+  it('비허용 스킴(javascript:/data:/프로토콜 상대)은 링크로 승격하지 않는다', () => {
+    expect(parseMdLinks('[x](javascript:alert(1))')).toEqual(['[x](javascript:alert(1))']);
+    expect(parseMdLinks('[x](data:text/html,hi)')).toEqual(['[x](data:text/html,hi)']);
+    expect(parseMdLinks('[x](//evil.example)')).toEqual(['[x](//evil.example)']);
+    expect(parseMdLinks('앞 [ok](/safe) 뒤 [bad](javascript:x)')).toEqual([
+      '앞 ',
+      { label: 'ok', href: '/safe' },
+      ' 뒤 [bad](javascript:x)',
+    ]);
+  });
 });
 
 describe('stripMdLinks — JSON-LD·meta용 플레인 텍스트', () => {
@@ -51,5 +62,9 @@ describe('stripMdLinks — JSON-LD·meta용 플레인 텍스트', () => {
 
   it('링크가 없으면 원문 그대로다', () => {
     expect(stripMdLinks('평범한 답변')).toBe('평범한 답변');
+  });
+
+  it('비허용 스킴은 렌더와 동일하게 리터럴 유지(화면·JSON-LD 불일치 방지)', () => {
+    expect(stripMdLinks('[x](javascript:alert(1))')).toBe('[x](javascript:alert(1))');
   });
 });
