@@ -31,6 +31,8 @@ let adsenseLoaderAdded = false;
 function ensureAdsenseLoader(client: string) {
   if (adsenseLoaderAdded) return;
   adsenseLoaderAdded = true;
+  // index.html에 소유권 확인용 스니펫이 이미 있으면 중복 로드하지 않음
+  if (document.querySelector('script[src^="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) return;
   const s = document.createElement('script');
   s.async = true;
   s.crossOrigin = 'anonymous';
