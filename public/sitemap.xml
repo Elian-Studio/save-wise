@@ -175,6 +175,24 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://choicewise.kr/guide</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://choicewise.kr/guide/cheongdogye-vs-cheongmijeok</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://choicewise.kr/guide/moduui-card</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://choicewise.kr/about</loc>
     <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>

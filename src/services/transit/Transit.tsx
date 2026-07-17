@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { SCHEMES, QUIZ_QUESTIONS } from '../../data/transitSchemes';
+import { GUIDE_ARTICLES, GUIDE_CATEGORY_LABEL } from '../../data/guides';
 import { recommend, type QuizAnswers } from '../../lib/transitSchemeRec';
 import { Quiz } from '@/components/quiz/Quiz';
 import { Result } from './Result';
@@ -134,6 +135,45 @@ export function Transit() {
         </div>
 
         <HomeGuide onStartQuiz={startQuiz} />
+
+        {/* 웹진 가이드 — 최신 아티클 카드 + 전체 보기 */}
+        <section className="mx-auto mt-24 w-full max-w-[880px] text-left">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 className="text-[clamp(24px,3.5vw,32px)] font-extrabold tracking-[-0.03em] text-ink">
+              청년 돈 아끼는 가이드
+            </h2>
+            <Link
+              to="/guide"
+              className="text-[14px] font-semibold text-muted-foreground underline underline-offset-[3px] hover:text-ink"
+            >
+              전체 보기 →
+            </Link>
+          </div>
+          <div className="mt-5 grid gap-3.5" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))' }}>
+            {GUIDE_ARTICLES.slice(0, 4).map((a) => (
+              <Link
+                key={a.slug}
+                to={`/guide/${a.slug}`}
+                className="rounded-2xl border border-line bg-card p-5 transition hover:-translate-y-px hover:border-navy"
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-fin-blue-soft px-2.5 py-1 text-[12px] font-extrabold text-fin-blue">
+                    {GUIDE_CATEGORY_LABEL[a.category]}
+                  </span>
+                  <span className="text-[12.5px] font-semibold text-muted-foreground">
+                    {a.updatedAt} · {a.readMinutes}분
+                  </span>
+                </div>
+                <div className="mt-2.5 text-[16.5px] font-extrabold leading-[1.35] tracking-[-0.02em] text-ink">
+                  {a.title}
+                </div>
+                <p className="mt-1.5 text-[13.5px] font-medium leading-[1.55] text-muted-foreground">
+                  {a.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
 
       {/* 퀴즈 */}

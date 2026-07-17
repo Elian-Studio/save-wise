@@ -8,6 +8,8 @@ import { ProgramDetail } from './services/youthBenefits/ProgramDetail';
 import { Transit } from './services/transit/Transit';
 import { SchemeDetail } from './services/transit/SchemeDetail';
 import { CardCompare } from './services/transit/CardCompare';
+import { GuideList } from './services/guide/GuideList';
+import { GuideArticlePage } from './services/guide/GuideArticlePage';
 import { About } from './services/site/About';
 import { Contact } from './services/site/Contact';
 
@@ -26,6 +28,8 @@ export function AppRoutes() {
         <Route path="/youth-benefits/programs/:id" element={<ProgramDetail />} />
         <Route path="/transit/cards/compare/:type" element={<CardCompare />} />
         <Route path="/transit/cards/:id" element={<SchemeDetail />} />
+        <Route path="/guide" element={<GuideList />} />
+        <Route path="/guide/:slug" element={<GuideArticlePage />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Navigate to="/" replace />} />
