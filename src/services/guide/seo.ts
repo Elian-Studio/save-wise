@@ -1,17 +1,19 @@
 import type { RouteSeo } from '../../seo/head';
 import { GUIDE_ARTICLES } from '../../data/guides';
+import { stripMdLinks } from '../../lib/mdlink';
 
 const SITE = 'https://choicewise.kr';
 const ORG = { '@type': 'Organization', name: 'choicewise', url: SITE };
 
 // transit/seo.ts의 faqPageLd와 동일 형태(그쪽은 미export라 로컬 재정의). 화면 FAQ와 mainEntity 일치.
+// 본문 마크다운 링크 문법이 답변에 쓰여도 JSON-LD엔 라벨만 남긴다(화면 renderRich와 동일 문법 소스).
 const faqPageLd = (faq: { q: string; a: string }[]): object => ({
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: faq.map((f) => ({
     '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
+    name: stripMdLinks(f.q),
+    acceptedAnswer: { '@type': 'Answer', text: stripMdLinks(f.a) },
   })),
 });
 
@@ -60,7 +62,7 @@ export const articleSeos: RouteSeo[] = GUIDE_ARTICLES.map((a) => {
   return {
     path: `/guide/${a.slug}`,
     title: a.title,
-    description: a.description.slice(0, 155),
+    description: stripMdLinks(a.description).slice(0, 155),
     keywords: a.keywords,
     canonical: url,
     jsonLd: [
@@ -68,7 +70,7 @@ export const articleSeos: RouteSeo[] = GUIDE_ARTICLES.map((a) => {
         '@context': 'https://schema.org',
         '@type': 'Article',
         headline: a.title,
-        description: a.description,
+        description: stripMdLinks(a.description),
         datePublished: a.updatedAt,
         dateModified: a.updatedAt,
         author: ORG,

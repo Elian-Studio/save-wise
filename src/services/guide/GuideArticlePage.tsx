@@ -1,33 +1,28 @@
 import { useEffect, type ReactNode } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { getGuide, GUIDE_CATEGORY_LABEL } from '../../data/guides';
+import { parseMdLinks } from '../../lib/mdlink';
 import { Button } from '@/components/ui/button';
 
 // 본문 문자열 안의 마크다운 링크 [라벨](href)를 실제 링크로 렌더. '/'로 시작하면 내부(Link), 그 외 외부(a).
-const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
+// 파싱은 src/lib/mdlink.ts 단일 출처(순수·테스트 대상) — 여기선 토큰을 React 노드로 매핑만 한다.
 const linkCls = 'font-semibold text-fin-blue underline underline-offset-2 hover:opacity-80';
 function renderRich(text: string): ReactNode {
-  const parts = text.split(LINK_RE); // [텍스트, 라벨, href, 텍스트, 라벨, href, ...]
-  if (parts.length === 1) return text;
-  const out: ReactNode[] = [];
-  for (let i = 0; i < parts.length; i += 3) {
-    if (parts[i]) out.push(parts[i]);
-    const label = parts[i + 1];
-    const href = parts[i + 2];
-    if (label == null || href == null) continue;
-    out.push(
-      href.startsWith('/') ? (
-        <Link key={i} to={href} className={linkCls}>
-          {label}
-        </Link>
-      ) : (
-        <a key={i} href={href} target="_blank" rel="noopener noreferrer" className={linkCls}>
-          {label}
-        </a>
-      ),
-    );
-  }
-  return out;
+  const tokens = parseMdLinks(text);
+  if (tokens.length === 1 && typeof tokens[0] === 'string') return text;
+  return tokens.map((t, i) =>
+    typeof t === 'string' ? (
+      t
+    ) : t.href.startsWith('/') ? (
+      <Link key={i} to={t.href} className={linkCls}>
+        {t.label}
+      </Link>
+    ) : (
+      <a key={i} href={t.href} target="_blank" rel="noopener noreferrer" className={linkCls}>
+        {t.label}
+      </a>
+    ),
+  );
 }
 
 // 가이드 아티클 상세(/guide/:slug). SchemeDetail/ProgramDetail의 섹션 마크업·토큰을 그대로 따른다.
@@ -104,10 +99,10 @@ export function GuideArticlePage() {
                           scope="row"
                           className="w-[38%] py-3 pr-4 text-left align-top font-extrabold text-ink"
                         >
-                          {row.label}
+                          {renderRich(row.label)}
                         </th>
                         <td className="py-3 align-top font-medium leading-[1.55] text-foreground/90">
-                          {row.value}
+                          {renderRich(row.value)}
                         </td>
                       </tr>
                     ))}
