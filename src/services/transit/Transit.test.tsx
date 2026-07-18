@@ -67,7 +67,7 @@ describe('패스와이즈 Transit', () => {
   it('홈 제도 칩 5개는 각 상세 경로로 링크된다', () => {
     const { getByRole } = at();
     const cases: [RegExp, string][] = [
-      [/기후동행카드/, '/transit/cards/climate'],
+      [/^기후동행카드$/, '/transit/cards/climate'],
       [/^K-패스$/, '/transit/cards/kpass'],
       [/The 경기패스/, '/transit/cards/gyeonggi'],
       [/인천 I-패스/, '/transit/cards/incheon'],

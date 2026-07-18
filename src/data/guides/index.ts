@@ -1,11 +1,16 @@
 import type { GuideArticle } from './types';
 import { cheongdogyeVsCheongmijeok } from './cheongdogye-vs-cheongmijeok';
 import { moduuiCard } from './moduui-card';
+import { climateCardEnding } from './climate-card-ending';
 
 export type { GuideArticle, GuideCategory, GuideSection } from './types';
 
 // 가이드 아티클 단일 출처. updatedAt 내림차순 정렬(최신 우선).
-export const GUIDE_ARTICLES: GuideArticle[] = [cheongdogyeVsCheongmijeok, moduuiCard].sort(
+export const GUIDE_ARTICLES: GuideArticle[] = [
+  cheongdogyeVsCheongmijeok,
+  moduuiCard,
+  climateCardEnding,
+].sort(
   (a, b) => b.updatedAt.localeCompare(a.updatedAt),
 );
 
