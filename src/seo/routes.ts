@@ -2,6 +2,7 @@ import type { RouteSeo } from './head';
 import { youthSavingsSeo, banksHubSeo, bankSeos } from '../services/youthSavings/seo';
 import { youthBenefitsSeo, programSeos } from '../services/youthBenefits/seo';
 import { transitSeo, schemeSeos, cardCompareSeos } from '../services/transit/seo';
+import { guideListSeo, articleSeos } from '../services/guide/seo';
 import { aboutSeo, contactSeo } from '../services/site/seo';
 
 // 프리렌더 대상 라우트 목록(순서 무관). '/'(transit)는 dist/index.html, 나머지는 dist/<path>/index.html.
@@ -16,6 +17,8 @@ export const ROUTE_SEO: RouteSeo[] = [
   transitSeo,
   ...schemeSeos,
   ...cardCompareSeos,
+  guideListSeo,
+  ...articleSeos,
   aboutSeo,
   contactSeo,
 ];

@@ -46,6 +46,9 @@ export function Shell() {
           <NavItem to="/youth-benefits" active={pathname === '/youth-benefits'}>
             청년 지원금
           </NavItem>
+          <NavItem to="/guide" active={pathname === '/guide' || pathname.startsWith('/guide/')}>
+            가이드
+          </NavItem>
           <ThemeToggle />
         </div>
       </nav>

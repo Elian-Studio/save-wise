@@ -135,7 +135,7 @@ export function ProgramDetail() {
             {guide.cautions.map((c) => (
               <li key={c} className="flex items-start gap-2.5">
                 <span
-                  className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-navy"
+                  className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-navy dark:bg-white/40"
                   aria-hidden="true"
                 />
                 <span className="text-[14.5px] font-medium leading-[1.55] text-foreground/90">{c}</span>
