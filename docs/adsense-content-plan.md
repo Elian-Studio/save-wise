@@ -16,7 +16,7 @@
 | 1 | 1 | 청도계 vs 청미적 — 갈아타기, 계산기로 3분 만에 판단하는 법 (2026) | 청도계 청미적 계산기 | /youth-savings | 실클릭 9+7+5회, 최강 실수요 | S1 |
 | 2 | 1 | 모두의카드 추천 — K-패스 '모두의카드'는 뭐고 누구에게 맞나 | 모두의카드 추천 | /, /transit/cards/kpass | 8클릭인데 대응 페이지 없음(갭) | S1 |
 | 3 | 1 | 기후동행카드 충전 종료, 이제 뭘 써야 하나 — K-패스 전환 총정리 | 기후동행카드 종료 | /transit/cards/climate, kpass | 2026-07-31 충전 종료, 시의성 | **발행 07-18** (GSC 노출 42/클릭 1 실측으로 S2→당김) |
-| 4 | 1 | 청년미래적금 2차 접수 전 확인할 5가지 | 청년미래적금 2차 접수 | /youth-savings, 은행 페이지 | PRD 후보, 12월 스파이크 전 에이징 | S2 |
+| 4 | 1 | 청년미래적금 2차 접수 전 확인할 5가지 | 청년미래적금 2차 접수 | /youth-savings, 은행 페이지 | PRD 후보, 12월 스파이크 전 에이징 | **발행 07-18** |
 | 5 | 2 | 청년미래적금 은행별 우대금리 3축 정리 | 청년미래적금 은행 | 은행 14 전부 | 얇은 은행 페이지 링크 주입기 | S3 |
 | 6 | 2 | 국민취업지원제도 조건 총정리 2026 — 1·2유형 차이 | 국민취업지원제도 조건 | programs/chwiup | 이미 네이버 #21, 톱10 목표 | S4 |
 | 7 | 2 | K-패스 vs 경기패스, 35세 이후엔 뭐가 달라질까 | K패스 경기패스 비교 | cards/kpass, gyeonggi | PRD 후보, 35–39 페르소나 | S4 |
@@ -33,8 +33,8 @@
 | 대상 | 현재 | 작업 | 목표 | 세션 |
 |---|---|---|---|---|
 | 은행 상세 14 (/youth-savings/banks/*) | ~700자, 템플릿만 | `src/data/bankGuides.ts` 신설(SchemeGuide 패턴: definition·specs·조건 해설·"맞는 사람/안 맞는 사람" 판정·FAQ) + BankDetail 섹션 렌더 + FinancialProduct·FAQPage JSON-LD | ≥2,000자, 고유 60% | S3(배치1: ibk·kb·nh·shinhan·woori·hana·kakao) / S5(배치2: 나머지 7 — 사실상 동일하면 pseo-strategy 규칙대로 hub-only+noindex 폴백) |
-| 은행 허브 (/youth-savings/banks) | 414자 | 선택 가이드 산문(2·3그룹 차이, 우대 3축) + FAQ | ~1,500자 | S2 |
-| 비교 2 (/transit/cards/compare/*) | ~723자 | 선택 가이드(전월실적 함정, 체크vs신용) + 카드별 한줄 코멘트 + FAQ | ≥1,500자 | S2 |
+| 은행 허브 (/youth-savings/banks) | 414자 | 선택 가이드 산문(2·3그룹 차이, 우대 3축) + FAQ | ~1,500자 | **완료 07-18** (본문 3,140자) |
+| 비교 2 (/transit/cards/compare/*) | ~723자 | 선택 가이드(전월실적 함정, 체크vs신용) + 카드별 한줄 코멘트 + FAQ | ≥1,500자 | **완료 07-18** (check 2,870자·credit 3,345자) |
 
 ## E-E-A-T (YMYL 금융 콘텐츠 신뢰 신호) — S1부터 적용
 
@@ -61,11 +61,12 @@
 
 ## 기술 부채 이월 (2026-07-17 코드 리뷰 잔여 → S2에서 처리)
 
-- faqPageLd·BreadcrumbList JSON-LD 공용 헬퍼로 통합 (현재 3~4곳 복제, guide/transit/youthBenefits/youthSavings seo.ts)
-- 가이드 카드 마크업 공용 컴포넌트화 (Transit 홈 스트립 ↔ GuideList 이미 드리프트: h2/div, 패딩·폰트)
-- sitemap.xml을 prerender.mjs의 ROUTE_SEO 루프에서 생성 (~10줄, 수동 동기화 누락 방지)
-- 내비 활성 판정 통일 (가이드만 접두사 매치, 타 섹션 서브라우트는 미점등)
+- ~~faqPageLd·BreadcrumbList JSON-LD 공용 헬퍼로 통합~~ **완료 07-18** (`src/seo/jsonld.ts`)
+- ~~가이드 카드 마크업 공용 컴포넌트화~~ **완료 07-18** (`src/components/ArticleCard.tsx`)
+- ~~sitemap 드리프트 방지~~ **완료 07-18** — 생성기 대신 `src/seo/routes.test.ts`가 ROUTE_SEO 전 경로의 sitemap 존재를 가드 (생성기는 lastmod 무결성 때문에 의도적 미채택)
+- ~~내비 활성 판정 통일~~ **완료 07-18** (전 항목 접두사 매치)
 - **애드센스 승인 후**: index.html 전역 adsbygoogle 스니펫 제거하고 AdSlot 지연 로드 복원 (심사 기간엔 사이트 전역 스니펫 필요 — 의도적 유지)
+- (S3 이월) AdSlot 클라이언트 ID 다중 출처 단일화, 기사 상세 og:type=article 검토
 
 ## 애드센스 소유권 확인 상태
 
