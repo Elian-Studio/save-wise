@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { GUIDE_ARTICLES, GUIDE_CATEGORY_LABEL } from '../../data/guides';
+import { GUIDE_ARTICLES } from '../../data/guides';
+import { ArticleCard } from '../../components/ArticleCard';
 
 // 가이드 목록(/guide). 아티클 메타 카드 리스트.
 export function GuideList() {
@@ -30,26 +31,7 @@ export function GuideList() {
       <div className="mx-auto max-w-[880px] px-[18px] pt-9">
         <div className="flex flex-col gap-3.5">
           {GUIDE_ARTICLES.map((a) => (
-            <Link
-              key={a.slug}
-              to={`/guide/${a.slug}`}
-              className="rounded-2xl border border-line bg-card p-5.5 transition hover:-translate-y-px hover:border-navy"
-            >
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="rounded-full bg-fin-blue-soft px-2.5 py-1 text-[12.5px] font-extrabold text-fin-blue">
-                  {GUIDE_CATEGORY_LABEL[a.category]}
-                </span>
-                <span className="text-[13px] font-semibold text-muted-foreground">
-                  {a.updatedAt} · {a.readMinutes}분 읽기
-                </span>
-              </div>
-              <h2 className="mt-2.5 text-[19px] font-extrabold leading-[1.35] tracking-[-0.02em] text-ink">
-                {a.title}
-              </h2>
-              <p className="mt-2 text-[14.5px] font-medium leading-[1.6] text-muted-foreground">
-                {a.description}
-              </p>
-            </Link>
+            <ArticleCard key={a.slug} article={a} />
           ))}
         </div>
       </div>

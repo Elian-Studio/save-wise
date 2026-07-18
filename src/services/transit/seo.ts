@@ -3,17 +3,7 @@ import { SCHEMES } from '../../data/transitSchemes';
 import { SCHEME_GUIDES, HOME_FAQ } from '../../data/transitSchemeGuides';
 import { TRANSIT_CARDS, type CardType, type TransitCard } from '../../data/transitCards';
 import { cardBenefit } from '../../lib/cardCompare';
-
-// 가시 렌더 FAQ와 동일 Q&A를 FAQPage 구조화 데이터로. mainEntity가 화면 콘텐츠와 일치해야 함.
-const faqPageLd = (faq: { q: string; a: string }[]): object => ({
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faq.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-});
+import { faqPageLd, breadcrumbLd } from '../../seo/jsonld';
 
 export const transitSeo: RouteSeo = {
   path: '/',
@@ -66,14 +56,10 @@ export const schemeSeos: RouteSeo[] = SCHEMES.map((s) => {
         url,
         inLanguage: 'ko-KR',
       },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: '홈', item: 'https://choicewise.kr/' },
-          { '@type': 'ListItem', position: 2, name: s.name, item: url },
-        ],
-      },
+      breadcrumbLd([
+        { name: '홈', item: 'https://choicewise.kr/' },
+        { name: s.name, item: url },
+      ]),
       faqPageLd(SCHEME_GUIDES[s.id].faq),
     ],
   };
@@ -114,15 +100,11 @@ const cardCompareSeo = (type: CardType): RouteSeo => {
         url,
         inLanguage: 'ko-KR',
       },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: '홈', item: 'https://choicewise.kr/' },
-          { '@type': 'ListItem', position: 2, name: 'K-패스', item: 'https://choicewise.kr/transit/cards/kpass' },
-          { '@type': 'ListItem', position: 3, name: `${label}카드 비교`, item: url },
-        ],
-      },
+      breadcrumbLd([
+        { name: '홈', item: 'https://choicewise.kr/' },
+        { name: 'K-패스', item: 'https://choicewise.kr/transit/cards/kpass' },
+        { name: `${label}카드 비교`, item: url },
+      ]),
       {
         '@context': 'https://schema.org',
         '@type': 'ItemList',
