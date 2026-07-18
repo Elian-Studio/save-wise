@@ -1,6 +1,23 @@
 import type { RouteSeo } from '../../seo/head';
 import { BANKS } from '../../data/banks';
 import { bankMaxRate, bankPrefLines } from '../../lib/bankPage';
+import { faqPageLd, breadcrumbLd } from '../../seo/jsonld';
+
+// 가시 렌더 FAQ = FAQPage 구조화 데이터. 화면 Q&A와 1:1 일치해야 함.
+const YOUTH_SAVINGS_FAQ: { q: string; a: string }[] = [
+  {
+    q: '도약계좌 없이 청년미래적금만 신규로 가입해도 되나요?',
+    a: '네. 청년미래적금은 단독 신규 가입이 가능합니다(접수는 연 2회 — 1차는 2026-07-03 마감, 다음 접수 2026년 12월 예정). 도약계좌 보유자가 받는 ‘도약 연계’ 우대는, 신규 가입자도 대부분 은행에서 ‘첫거래(예적금 미보유)’ 조건으로 동일하게 받을 수 있습니다(해당 은행 직전 6개월~1년 예적금이 없는 첫거래 기준 — 기존 예적금이 있으면 빠질 수 있음).',
+  },
+  {
+    q: '청년도약계좌에서 청년미래적금으로 갈아타면 기존 혜택을 잃나요?',
+    a: '청년미래적금에 먼저 가입·계좌개설한 뒤 청년도약계좌를 ‘특별중도해지’하면 기존 납입분의 정부기여금과 비과세가 손실 없이 환급됩니다. 순서를 어겨 도약계좌를 먼저 해지하면 혜택이 사라집니다.',
+  },
+  {
+    q: '청년미래적금 우대형(정부기여금 12%) 조건은 무엇인가요?',
+    a: '중소기업 신규취업자(전년도 최초 취업 + 현재 중소기업 재직 등)가 대표적입니다. 일반형은 납입액의 6%, 우대형은 12%를 정부가 매월 매칭 지급합니다.',
+  },
+];
 
 // 청년적금 계산기 — 이제 서브 경로(/youth-savings), 홈(/)은 패스와이즈 교통카드 추천.
 export const youthSavingsSeo: RouteSeo = {
@@ -12,36 +29,7 @@ export const youthSavingsSeo: RouteSeo = {
     '청년미래적금, 청년도약계좌, 청년미래적금 갈아타기, 청년도약계좌 갈아타기, 청년미래적금 은행, 청년미래적금 금리, 갈아타기 계산기, 정부기여금',
   canonical: 'https://choicewise.kr/youth-savings',
   jsonLd: [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: '도약계좌 없이 청년미래적금만 신규로 가입해도 되나요?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: '네. 청년미래적금은 단독 신규 가입이 가능합니다(접수는 연 2회 — 1차는 2026-07-03 마감, 다음 접수 2026년 12월 예정). 도약계좌 보유자가 받는 ‘도약 연계’ 우대는, 신규 가입자도 대부분 은행에서 ‘첫거래(예적금 미보유)’ 조건으로 동일하게 받을 수 있습니다(해당 은행 직전 6개월~1년 예적금이 없는 첫거래 기준 — 기존 예적금이 있으면 빠질 수 있음).',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: '청년도약계좌에서 청년미래적금으로 갈아타면 기존 혜택을 잃나요?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: '청년미래적금에 먼저 가입·계좌개설한 뒤 청년도약계좌를 ‘특별중도해지’하면 기존 납입분의 정부기여금과 비과세가 손실 없이 환급됩니다. 순서를 어겨 도약계좌를 먼저 해지하면 혜택이 사라집니다.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: '청년미래적금 우대형(정부기여금 12%) 조건은 무엇인가요?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: '중소기업 신규취업자(전년도 최초 취업 + 현재 중소기업 재직 등)가 대표적입니다. 일반형은 납입액의 6%, 우대형은 12%를 정부가 매월 매칭 지급합니다.',
-          },
-        },
-      ],
-    },
+    faqPageLd(YOUTH_SAVINGS_FAQ),
     {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
@@ -58,6 +46,26 @@ export const youthSavingsSeo: RouteSeo = {
 };
 
 const HUB_URL = 'https://choicewise.kr/youth-savings/banks';
+
+// 은행 허브 가시 FAQ = FAQPage 구조화 데이터. BanksHub 화면 Q&A와 1:1 일치해야 함.
+export const BANKS_HUB_FAQ: { q: string; a: string }[] = [
+  {
+    q: '청년미래적금 최고금리가 은행마다 8%·7%로 갈리는 이유는?',
+    a: '기본금리 5%·36개월·비과세는 14개 은행이 똑같고, 차이는 기관우대 상한입니다. KB국민·신한·하나·우리·NH농협·IBK기업·우체국은 상한이 3%p라 조건을 다 채우면 명목 최고 8%, 수협·iM뱅크·BNK부산·광주·전북·BNK경남·카카오뱅크는 2%p라 최고 7%입니다. 여기에 공통우대(총급여 3,600만원 이하 0.5%p·청년 재무상담 0.2%p)가 상한 범위 안에서 더해집니다.',
+  },
+  {
+    q: '우대금리는 어떤 조건을 채워야 받나요?',
+    a: '크게 세 축입니다. ① 급여이체 — 해당 은행 입출금 계좌로 급여를 일정 횟수·금액 이상 받기, ② 카드·실적 — 그 은행 신용/체크카드를 월 일정액 이상 쓰기, ③ 첫거래·도약연계 — 직전 6개월~1년 그 은행 예적금이 없거나 청년도약계좌를 연계. 조건과 %p는 은행마다 달라 각 은행 상세에서 은행연합회 공시 원문으로 확인해야 합니다.',
+  },
+  {
+    q: '최고금리가 가장 높은 은행을 고르면 되나요?',
+    a: '아니요. 표의 최고금리는 그 은행 우대를 전부 충족했을 때 값입니다. 급여계좌를 옮길 수 없거나 카드 실적을 못 채우면 그 %p는 빠져, 명목 8% 은행이 실제로는 6%대가 되기도 합니다. 내가 실제로 충족할 우대만 반영한 실질금리로 비교해야 하고, 계산기에 조건을 넣으면 자동으로 그렇게 계산합니다.',
+  },
+  {
+    q: '케이뱅크·토스뱅크로도 가입할 수 있나요?',
+    a: '케이뱅크는 청년미래적금에 참여하지 않습니다. 토스뱅크는 2026년 12월 별도 출시 예정이라 현재 비교 대상 14개 은행에는 포함되지 않습니다.',
+  },
+];
 
 // 은행별 상세(/youth-savings/banks/:id) SEO. BANKS 단일 출처 + 엔진 최고금리에서 파생.
 export const bankSeos: RouteSeo[] = BANKS.map((bank) => {
@@ -106,15 +114,11 @@ export const bankSeos: RouteSeo[] = BANKS.map((bank) => {
         url,
         inLanguage: 'ko-KR',
       },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: '홈', item: 'https://choicewise.kr/youth-savings' },
-          { '@type': 'ListItem', position: 2, name: '미래적금 은행', item: HUB_URL },
-          { '@type': 'ListItem', position: 3, name: bank.name, item: url },
-        ],
-      },
+      breadcrumbLd([
+        { name: '홈', item: 'https://choicewise.kr/youth-savings' },
+        { name: '미래적금 은행', item: HUB_URL },
+        { name: bank.name, item: url },
+      ]),
     ],
   };
 });
@@ -129,6 +133,7 @@ export const banksHubSeo: RouteSeo = {
     '청년미래적금 은행, 청년미래적금 은행 비교, 청년미래적금 금리 비교, 청년미래적금 최고금리, 청년미래적금 우대조건, 미래적금 은행별 금리',
   canonical: HUB_URL,
   jsonLd: [
+    faqPageLd(BANKS_HUB_FAQ),
     {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
@@ -140,13 +145,9 @@ export const banksHubSeo: RouteSeo = {
         url: `${HUB_URL}/${bank.id}`,
       })),
     },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: '홈', item: 'https://choicewise.kr/youth-savings' },
-        { '@type': 'ListItem', position: 2, name: '미래적금 은행', item: HUB_URL },
-      ],
-    },
+    breadcrumbLd([
+      { name: '홈', item: 'https://choicewise.kr/youth-savings' },
+      { name: '미래적금 은행', item: HUB_URL },
+    ]),
   ],
 };

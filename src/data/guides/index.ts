@@ -2,6 +2,7 @@ import type { GuideArticle } from './types';
 import { cheongdogyeVsCheongmijeok } from './cheongdogye-vs-cheongmijeok';
 import { moduuiCard } from './moduui-card';
 import { climateCardEnding } from './climate-card-ending';
+import { cheongmijeok2ndRound } from './cheongmijeok-2nd-round';
 
 export type { GuideArticle, GuideCategory, GuideSection } from './types';
 
@@ -10,6 +11,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   cheongdogyeVsCheongmijeok,
   moduuiCard,
   climateCardEnding,
+  cheongmijeok2ndRound,
 ].sort(
   (a, b) => b.updatedAt.localeCompare(a.updatedAt),
 );

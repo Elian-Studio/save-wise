@@ -37,16 +37,16 @@ export function Shell() {
           <Link to="/" className="mr-2 font-extrabold tracking-tight text-ink">
             choicewise
           </Link>
-          <NavItem to="/" active={pathname === '/'}>
+          <NavItem to="/" active={pathname === '/' || pathname.startsWith('/transit')}>
             교통카드 추천
           </NavItem>
-          <NavItem to="/youth-savings" active={pathname === '/youth-savings'}>
+          <NavItem to="/youth-savings" active={pathname.startsWith('/youth-savings')}>
             청년적금 갈아타기
           </NavItem>
-          <NavItem to="/youth-benefits" active={pathname === '/youth-benefits'}>
+          <NavItem to="/youth-benefits" active={pathname.startsWith('/youth-benefits')}>
             청년 지원금
           </NavItem>
-          <NavItem to="/guide" active={pathname === '/guide' || pathname.startsWith('/guide/')}>
+          <NavItem to="/guide" active={pathname.startsWith('/guide')}>
             가이드
           </NavItem>
           <ThemeToggle />

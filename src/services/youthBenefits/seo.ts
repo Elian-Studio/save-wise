@@ -1,6 +1,7 @@
 import type { RouteSeo } from '../../seo/head';
 import { BENEFITS, type BenefitId } from '../../data/youthBenefits';
 import { BENEFIT_GUIDES } from '../../data/youthBenefitGuides';
+import { faqPageLd, breadcrumbLd } from '../../seo/jsonld';
 
 // 가시 렌더 FAQ = FAQPage 구조화 데이터. 홈 화면에 그대로 노출되는 Q&A와 1:1 일치해야 함.
 export const YOUTH_FAQ: { q: string; a: string }[] = [
@@ -17,16 +18,6 @@ export const YOUTH_FAQ: { q: string; a: string }[] = [
     a: '있어. 청년도약계좌는 2025년 12월에 신규 가입이 종료됐고(기존 보유자는 청년미래적금 갈아타기만 가능), 청년내일채움공제와 청년재직자 내일채움공제는 일몰되어 신규 가입이 불가능해. 오래된 블로그가 살아있는 것처럼 안내하는 경우가 많아 결과 화면에서 종료 제도를 따로 표시해.',
   },
 ];
-
-const faqPageLd = (faq: { q: string; a: string }[]): object => ({
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faq.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-});
 
 export const youthBenefitsSeo: RouteSeo = {
   path: '/youth-benefits',
@@ -91,20 +82,11 @@ export const programSeos: RouteSeo[] = BENEFITS.map((b) => {
         url,
         inLanguage: 'ko-KR',
       },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: '홈', item: 'https://choicewise.kr/' },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: '청년 지원금 자격진단',
-            item: 'https://choicewise.kr/youth-benefits',
-          },
-          { '@type': 'ListItem', position: 3, name: b.name, item: url },
-        ],
-      },
+      breadcrumbLd([
+        { name: '홈', item: 'https://choicewise.kr/' },
+        { name: '청년 지원금 자격진단', item: 'https://choicewise.kr/youth-benefits' },
+        { name: b.name, item: url },
+      ]),
       faqPageLd(guide.faq),
     ],
   };
