@@ -290,10 +290,11 @@ figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; text-align: 
 <main class="doc">
 <header class="doc-header">
 <h1>choicewise.kr 검색엔진 색인 요청 체크리스트</h1>
-<p class="subtitle">구글 서치콘솔 · 네이버 서치어드바이저 — 전체 14페이지 (2026-07-11 기준)</p>
-<div class="doc-meta"><span class="tag"><b>작성일</b> 2026-07-11</span><span class="tag"><b>유형</b> 작업 체크리스트</span></div>
+<p class="subtitle">구글 서치콘솔 · 네이버 서치어드바이저 — 전체 34페이지 (2026-07-18 갱신)</p>
+<div class="doc-meta"><span class="tag"><b>작성일</b> 2026-07-11</span><span class="tag"><b>갱신</b> 2026-07-18 (가이드 웹진 + pSEO 추가)</span><span class="tag"><b>유형</b> 작업 체크리스트</span></div>
 </header>
 <nav class="toc"><div class="toc-title">목차</div><ul>
+<li class="lvl-2"><a href="#0718-추가분">🆕 2026-07-18 추가분 — 가이드 웹진 + pSEO (오늘 요청할 것)</a></li>
 <li class="lvl-2"><a href="#현재-상태-요약">현재 상태 요약</a></li>
 <li class="lvl-2"><a href="#구글-서치콘솔-해야-할-일">구글 서치콘솔 — 해야 할 일</a></li>
 <li class="lvl-2"><a href="#색인-요청-url-목록-복사용-우선순위순">색인 요청 URL 목록 (복사용 · 우선순위순)</a></li>
@@ -301,11 +302,24 @@ figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; text-align: 
 <li class="lvl-2"><a href="#이후-확인-방법">이후 확인 방법</a></li>
 </ul></nav>
 <div class="callout callout-note"><span class="ico">📌</span><div class="body"><p>이 문서는 choicewise.kr 전체 14개 페이지의 검색엔진 색인 요청 작업을 위한 체크리스트입니다. 네이버는 2026-07-11 기준 대부분 요청 완료, <strong>구글 서치콘솔은 인덱스 0건 상태라 최우선 작업</strong>입니다.</p></div></div>
+<h2 id="0718-추가분">🆕 2026-07-18 추가분 — 가이드 웹진 + pSEO (오늘 요청할 것)</h2>
+<div class="callout callout-note"><span class="ico">📌</span><div class="body"><p>2026-07-11 이후 배포된 신규 페이지: <strong>가이드 웹진 3</strong>(07-18 배포, 애드센스 재심사 게이트가 이 페이지들 색인에 걸려 있음), <strong>K-패스 카드 비교 2</strong>(07-15), <strong>청년미래적금 은행 상세 14</strong>(07-14). sitemap.xml엔 전부 반영돼 있으므로 <b>재제출 확인 + 아래 P1만 수동 요청</b>하면 됩니다 (구글 하루 할당량 ~10건).</p></div></div>
+<table><thead><tr><th>#</th><th>URL</th><th style="text-align:center">우선순위</th><th style="text-align:center">네이버</th><th style="text-align:center">구글</th></tr></thead><tbody>
+<tr><td>N1</td><td><code>https://choicewise.kr/guide/cheongdogye-vs-cheongmijeok</code></td><td style="text-align:center"><span class="badge badge-danger">P1</span> 실클릭 키워드(청도계 청미적 계산기)</td><td style="text-align:center">☐</td><td style="text-align:center">☐</td></tr>
+<tr><td>N2</td><td><code>https://choicewise.kr/guide/moduui-card</code></td><td style="text-align:center"><span class="badge badge-danger">P1</span> 실클릭 키워드(모두의카드 추천, 대응 페이지 첫 생성)</td><td style="text-align:center">☐</td><td style="text-align:center">☐</td></tr>
+<tr><td>N3</td><td><code>https://choicewise.kr/guide</code></td><td style="text-align:center"><span class="badge badge-danger">P1</span> 웹진 허브</td><td style="text-align:center">☐</td><td style="text-align:center">☐</td></tr>
+<tr><td>N4</td><td><code>https://choicewise.kr/transit/cards/compare/check</code></td><td style="text-align:center"><span class="badge badge-danger">P1</span> K패스 체크카드 비교(추적 키워드)</td><td style="text-align:center">☐</td><td style="text-align:center">☐</td></tr>
+<tr><td>N5</td><td><code>https://choicewise.kr/transit/cards/compare/credit</code></td><td style="text-align:center"><span class="badge badge-warn">P2</span></td><td style="text-align:center">☐</td><td style="text-align:center">☐</td></tr>
+<tr><td>N6</td><td><code>https://choicewise.kr/youth-savings/banks</code></td><td style="text-align:center"><span class="badge badge-warn">P2</span> 은행 허브</td><td style="text-align:center">☐</td><td style="text-align:center">☐</td></tr>
+<tr><td>N7</td><td><code>https://choicewise.kr/youth-savings/banks/kakao</code></td><td style="text-align:center"><span class="badge badge-warn">P2</span> 롱테일 브랜드 검색(카카오뱅크)</td><td style="text-align:center">☐</td><td style="text-align:center">☐</td></tr>
+<tr><td>N8</td><td>은행 상세 나머지 13개 (<code>/youth-savings/banks/*</code>)</td><td style="text-align:center"><span class="badge badge-muted">P3</span> sitemap 자동 발견에 맡김</td><td style="text-align:center">—</td><td style="text-align:center">—</td></tr>
+</tbody></table>
+<div class="callout callout-tip"><span class="ico">💡</span><div class="body"><p>애드센스 재심사 게이트(<code>docs/adsense-content-plan.md</code>): <b>가이드 N1~N3 색인이 재심사 요청의 선행 조건</b>입니다. 오늘 할당량은 N1~N4에 먼저 쓰고, 남으면 아래 기존 표의 미완료 P1을 이어서 요청하세요. 완료하면 이 표의 ☐를 직접 체크 표시로 바꿔 기록해 주세요.</p></div></div>
 <h2 id="현재-상태-요약">현재 상태 요약</h2>
 <div class="kpi-grid">
   <div class="kpi">
-    <div class="num">14</div>
-    <div class="label">전체 페이지 (sitemap 등록)</div>
+    <div class="num">34</div>
+    <div class="label">전체 페이지 (sitemap 등록, 07-18 기준)</div>
   </div>
   <div class="kpi">
     <div class="num">2+</div>
