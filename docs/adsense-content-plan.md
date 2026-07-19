@@ -17,7 +17,7 @@
 | 2 | 1 | 모두의카드 추천 — K-패스 '모두의카드'는 뭐고 누구에게 맞나 | 모두의카드 추천 | /, /transit/cards/kpass | 8클릭인데 대응 페이지 없음(갭) | S1 |
 | 3 | 1 | 기후동행카드 충전 종료, 이제 뭘 써야 하나 — K-패스 전환 총정리 | 기후동행카드 종료 | /transit/cards/climate, kpass | 2026-07-31 충전 종료, 시의성 | **발행 07-18** (GSC 노출 42/클릭 1 실측으로 S2→당김) |
 | 4 | 1 | 청년미래적금 2차 접수 전 확인할 5가지 | 청년미래적금 2차 접수 | /youth-savings, 은행 페이지 | PRD 후보, 12월 스파이크 전 에이징 | **발행 07-18** |
-| 5 | 2 | 청년미래적금 은행별 우대금리 3축 정리 | 청년미래적금 은행 | 은행 14 전부 | 얇은 은행 페이지 링크 주입기 | S3 |
+| 5 | 2 | 청년미래적금 은행별 우대금리 3축 정리 | 청년미래적금 은행 | 은행 14 전부 | 얇은 은행 페이지 링크 주입기 | **발행 07-19** (표에서 14행 전부 링크) |
 | 6 | 2 | 국민취업지원제도 조건 총정리 2026 — 1·2유형 차이 | 국민취업지원제도 조건 | programs/chwiup | 이미 네이버 #21, 톱10 목표 | S4 |
 | 7 | 2 | K-패스 vs 경기패스, 35세 이후엔 뭐가 달라질까 | K패스 경기패스 비교 | cards/kpass, gyeonggi | PRD 후보, 35–39 페르소나 | S4 |
 | 8 | 2 | 청년지원금은 왜 신청기간이 제일 중요할까 — 2026 일정 모음 | 청년지원금 신청기간 | programs 4개 전부 | PRD 후보, 시즌성 | S4 |
@@ -32,7 +32,7 @@
 
 | 대상 | 현재 | 작업 | 목표 | 세션 |
 |---|---|---|---|---|
-| 은행 상세 14 (/youth-savings/banks/*) | ~700자, 템플릿만 | `src/data/bankGuides.ts` 신설(SchemeGuide 패턴: definition·specs·조건 해설·"맞는 사람/안 맞는 사람" 판정·FAQ) + BankDetail 섹션 렌더 + FinancialProduct·FAQPage JSON-LD | ≥2,000자, 고유 60% | S3(배치1: ibk·kb·nh·shinhan·woori·hana·kakao) / S5(배치2: 나머지 7 — 사실상 동일하면 pseo-strategy 규칙대로 hub-only+noindex 폴백) |
+| 은행 상세 14 (/youth-savings/banks/*) | ~700자, 템플릿만 | `src/data/bankGuides.ts` 신설(SchemeGuide 패턴: definition·specs·조건 해설·"맞는 사람/안 맞는 사람" 판정·FAQ) + BankDetail 섹션 렌더 + FinancialProduct·FAQPage JSON-LD | ≥2,000자, 고유 60% | **배치1 완료 07-19** (7개 전부 가시텍스트 2,015~2,130자, verdict 고유성 검증) / S5(배치2: 나머지 7 — 사실상 동일하면 hub-only+noindex 폴백) |
 | 은행 허브 (/youth-savings/banks) | 414자 | 선택 가이드 산문(2·3그룹 차이, 우대 3축) + FAQ | ~1,500자 | **완료 07-18** (본문 3,140자) |
 | 비교 2 (/transit/cards/compare/*) | ~723자 | 선택 가이드(전월실적 함정, 체크vs신용) + 카드별 한줄 코멘트 + FAQ | ≥1,500자 | **완료 07-18** (check 2,870자·credit 3,345자) |
 
