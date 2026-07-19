@@ -69,9 +69,9 @@ describe('패스와이즈 Transit', () => {
     const cases: [RegExp, string][] = [
       [/^기후동행카드$/, '/transit/cards/climate'],
       [/^K-패스$/, '/transit/cards/kpass'],
-      [/The 경기패스/, '/transit/cards/gyeonggi'],
-      [/인천 I-패스/, '/transit/cards/incheon'],
-      [/후불 교통카드/, '/transit/cards/postpaid'],
+      [/^The 경기패스$/, '/transit/cards/gyeonggi'],
+      [/^인천 I-패스$/, '/transit/cards/incheon'],
+      [/^후불 교통카드$/, '/transit/cards/postpaid'],
     ];
     for (const [name, href] of cases) {
       expect(getByRole('link', { name }).getAttribute('href')).toBe(href);
