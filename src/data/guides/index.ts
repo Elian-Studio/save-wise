@@ -3,6 +3,7 @@ import { cheongdogyeVsCheongmijeok } from './cheongdogye-vs-cheongmijeok';
 import { moduuiCard } from './moduui-card';
 import { climateCardEnding } from './climate-card-ending';
 import { cheongmijeok2ndRound } from './cheongmijeok-2nd-round';
+import { bankPreferentialRates } from './bank-preferential-rates';
 
 export type { GuideArticle, GuideCategory, GuideSection } from './types';
 
@@ -12,6 +13,7 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   moduuiCard,
   climateCardEnding,
   cheongmijeok2ndRound,
+  bankPreferentialRates,
 ].sort(
   (a, b) => b.updatedAt.localeCompare(a.updatedAt),
 );
