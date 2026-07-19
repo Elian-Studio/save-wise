@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { BANKS, getBank, NON_PARTICIPATING_NOTE, type Bank } from '../../data/banks';
+import { getBankGuide } from '../../data/bankGuides';
 import { MIRAE, DATA_AS_OF, SOURCES } from '../../data/products';
 import { bankMaxRate, bankEstimate, bankPrefLines } from '../../lib/bankPage';
 import { fmtMoney, pct } from '../../lib/format';
@@ -32,6 +33,7 @@ export function BankDetail() {
   const gen = bankEstimate(bank, 'gen');
   const pref = bankEstimate(bank, 'pref');
   const related = relatedBanks(bank);
+  const guide = getBankGuide(bank.id);
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -79,6 +81,13 @@ export function BankDetail() {
           </Link>{' '}
           › <span className="text-ink">{bank.name}</span>
         </nav>
+
+        {/* 정의 블록 — AI 검색 인용 대상(자기완결 한 문단). 가이드 있는 은행만. */}
+        {guide && (
+          <p className="mb-8 rounded-2xl border-l-4 border-navy bg-muted/40 px-5 py-4 text-[15.5px] font-semibold leading-[1.65] text-ink">
+            {guide.definition}
+          </p>
+        )}
 
         {/* 우대금리 구성 표 — 이 페이지의 고유 콘텐츠 */}
         <h2 className="mb-1 text-[17px] font-extrabold text-ink">{bank.name} 우대금리 구성</h2>
@@ -169,9 +178,10 @@ export function BankDetail() {
         </p>
 
         {/* 도약계좌 보유자라면 */}
+        {/* 소프트 그린 배경은 다크에서도 밝게 유지 → 반전되는 ink/foreground 대신 비반전 navy 텍스트 */}
         <div className="mt-11 rounded-2xl border border-line bg-fin-green-soft p-5.5">
-          <div className="text-base font-extrabold text-ink">청년도약계좌 보유자라면</div>
-          <p className="mt-1.5 text-[14.5px] font-medium leading-[1.6] text-foreground/90">
+          <div className="text-base font-extrabold text-navy">청년도약계좌 보유자라면</div>
+          <p className="mt-1.5 text-[14.5px] font-medium leading-[1.6] text-navy/80">
             {bank.switchPref != null
               ? `${bank.name}은 도약계좌 연계가입 우대(${pp(bank.switchPref)})가 있어 갈아타기 시 유리할 수 있어요. `
               : `${bank.name}은 도약 연계 우대는 없지만, 내 소득·잔여기간에 따라 갈아타기가 유리할 수 있어요. `}
@@ -181,6 +191,71 @@ export function BankDetail() {
             <Link to="/youth-savings">갈아타기 계산기 열기 →</Link>
           </Button>
         </div>
+
+        {/* 심층 가이드 — 조건 해설·맞는 사람/안 맞는 사람·주의·FAQ. 가이드 있는 은행만. */}
+        {guide && (
+          <>
+            <h2 className="mt-11 mb-3.5 text-[17px] font-extrabold text-ink">
+              {bank.name} 우대조건, 누가 채우기 쉬운가
+            </h2>
+            <p className="text-[15px] font-medium leading-[1.7] text-foreground/90">{guide.conditions}</p>
+
+            <h2 className="mt-11 mb-3.5 text-[17px] font-extrabold text-ink">이 은행이 맞는 사람 · 아닌 사람</h2>
+            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))' }}>
+              <div className="rounded-2xl border border-line bg-fin-green-soft p-5.5">
+                <div className="mb-3 text-[15px] font-extrabold text-navy">✅ 맞는 사람</div>
+                <ul className="flex flex-col gap-2.5">
+                  {guide.verdict.fit.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5">
+                      <span
+                        className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-navy"
+                        aria-hidden="true"
+                      />
+                      <span className="text-[14.5px] font-medium leading-[1.55] text-navy/80">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-line bg-card p-5.5">
+                <div className="mb-3 text-[15px] font-extrabold text-ink">⚠ 안 맞는 사람</div>
+                <ul className="flex flex-col gap-2.5">
+                  {guide.verdict.unfit.map((u) => (
+                    <li key={u} className="flex items-start gap-2.5">
+                      <span
+                        className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-navy dark:bg-white/40"
+                        aria-hidden="true"
+                      />
+                      <span className="text-[14.5px] font-medium leading-[1.55] text-foreground/90">{u}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <h2 className="mt-11 mb-3.5 text-[17px] font-extrabold text-ink">가입 전 주의할 점</h2>
+            <ul className="flex flex-col gap-2.5">
+              {guide.cautions.map((c) => (
+                <li key={c} className="flex items-start gap-2.5">
+                  <span
+                    className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-navy dark:bg-white/40"
+                    aria-hidden="true"
+                  />
+                  <span className="text-[14.5px] font-medium leading-[1.55] text-foreground/90">{c}</span>
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="mt-11 mb-3.5 text-[17px] font-extrabold text-ink">자주 묻는 질문</h2>
+            <div className="flex flex-col gap-3">
+              {guide.faq.map((f) => (
+                <div key={f.q} className="rounded-2xl border border-line bg-card p-5">
+                  <div className="text-[15px] font-extrabold text-ink">Q. {f.q}</div>
+                  <div className="mt-1.5 text-[14.5px] font-medium leading-[1.6] text-muted-foreground">{f.a}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* 관련 은행 */}
         <h2 className="mt-11 mb-3.5 text-[17px] font-extrabold text-ink">관련 은행 비교</h2>
