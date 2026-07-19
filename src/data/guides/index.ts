@@ -4,6 +4,9 @@ import { moduuiCard } from './moduui-card';
 import { climateCardEnding } from './climate-card-ending';
 import { cheongmijeok2ndRound } from './cheongmijeok-2nd-round';
 import { bankPreferentialRates } from './bank-preferential-rates';
+import { chwiupConditions } from './chwiup-conditions';
+import { kpassVsGyeonggiPass } from './kpass-vs-gyeonggi-pass';
+import { benefitsApplicationWindows } from './benefits-application-windows';
 
 export type { GuideArticle, GuideCategory, GuideSection } from './types';
 
@@ -14,6 +17,9 @@ export const GUIDE_ARTICLES: GuideArticle[] = [
   climateCardEnding,
   cheongmijeok2ndRound,
   bankPreferentialRates,
+  chwiupConditions,
+  kpassVsGyeonggiPass,
+  benefitsApplicationWindows,
 ].sort(
   (a, b) => b.updatedAt.localeCompare(a.updatedAt),
 );
