@@ -205,6 +205,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://choicewise.kr/guide/bank-preferential-rates</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://choicewise.kr/about</loc>
     <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>

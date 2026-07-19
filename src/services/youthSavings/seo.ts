@@ -1,5 +1,6 @@
 import type { RouteSeo } from '../../seo/head';
 import { BANKS } from '../../data/banks';
+import { getBankGuide } from '../../data/bankGuides';
 import { bankMaxRate, bankPrefLines } from '../../lib/bankPage';
 import { faqPageLd, breadcrumbLd } from '../../seo/jsonld';
 
@@ -119,6 +120,8 @@ export const bankSeos: RouteSeo[] = BANKS.map((bank) => {
         { name: '미래적금 은행', item: HUB_URL },
         { name: bank.name, item: url },
       ]),
+      // 가이드 있는 7개 은행만 FAQPage 추가 — 화면 렌더 FAQ와 1:1 일치.
+      ...(getBankGuide(bank.id) ? [faqPageLd(getBankGuide(bank.id)!.faq)] : []),
     ],
   };
 });
